@@ -1,0 +1,68 @@
+python RiverBasin.py --conversion=ShapeToGeoJSON --bbox="-107.74566, -105.65277, 51.544626, 52.72631" --input_filename=HydroRIVERS_v10_na_shp/HydroRIVERS_v10_na.shp --output_filename=jeoJSON_na_30s_saskatoon.json
+python RiverBasin.py --conversion=ShapeToGeoJSON --bbox="-104.85076, -104.351577, 50.288023, 50.602852" --input_filename=HydroRIVERS_v10_na_shp/HydroRIVERS_v10_na.shp --output_filename=jeoJSON_na_30s_regina.json
+python RiverBasin.py --conversion=ShapeToGeoJSON --bbox="-109.775391, -101.601563,  49.0522703, 55.4414794" --input_filename=HydroRIVERS_v10_na_shp/HydroRIVERS_v10_na.shp --output_filename=jeoJSON_na_30_saskatchewan_lower_half.json
+
+
+python RiverBasin.py --start=web-socket --server=127.0.0.1 --port=5678
+python RiverBasin.py --start=web-server --port=8000 --input_filename=index.html
+python RiverBasin.py --start=web-server --port=8000 --input_filename=default.html
+
+
+python RiverBasin.py --param=1 --color_list="#e31a1c, #ff7f00, #6a3d9a, #1f78b4, #33a02c, #fb9a99, #fdbf6f, #cab2d6, #a6cee3, #b2df8a" --json_file=jeoJSON_na_30s_saskatoon.json --server=127.0.0.1 --port=5678
+python RiverBasin.py --param=1 --color_list="#e31a1c, #ff7f00, #6a3d9a, #1f78b4, #33a02c, #fb9a99, #fdbf6f, #cab2d6, #a6cee3, #b2df8a" --json_file=jeoJSON_na_30s_regina.json --server=127.0.0.1 --port=5678
+python RiverBasin.py --param=1 --refresh=True --server=127.0.0.1 --port=5678
+
+python RiverBasin.py --param=1 --color_list="#e31a1c, #ff7f00, #6a3d9a, #1f78b4, #33a02c, #fb9a99, #fdbf6f, #cab2d6, #a6cee3, #b2df8a" --json_file=jeoJSON_na_30_saskatchewan_lower_half.json --server=127.0.0.1 --port=5678
+
+python RiverBasin.py --param=1 --color_list="#000000, #08306b, #08519c, #2171b5, #4292c6, #6baed6, #9ecae1, #c6dbef, #deebf7, #f7fbff" --json_file=jeoJSON_na_30_saskatchewan_lower_half.json --server=127.0.0.1 --port=5678
+
+
+Qualitative color:  #e31a1c, #ff7f00, #6a3d9a, #1f78b4, #33a02c, #fb9a99, #fdbf6f, #cab2d6, #a6cee3, #b2df8a
+Sequential color : #000000, #08306b, #08519c, #2171b5, #4292c6, #6baed6, #9ecae1, #c6dbef, #deebf7, #f7fbff 
+
+
+
+
+%%%% #Markup# %%%%
+# Your mark-up code goes here
+
+%%%% #Code# %%%%
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Data for plotting
+t = np.arange(0.0, 2.0, 0.01)
+s = 1 + np.sin(2 * np.pi * t)
+
+fig, ax = plt.subplots()
+ax.plot(t, s)
+
+ax.set(xlabel='time (s)', ylabel='voltage (mV)',
+       title='About as simple as it gets, folks')
+ax.grid()
+
+fig.savefig("test.png")
+
+x1 = np.linspace(0.0, 5.0)
+x2 = np.linspace(0.0, 2.0)
+
+y1 = np.cos(2 * np.pi * x1) * np.exp(-x1)
+y2 = np.cos(2 * np.pi * x2)
+
+fig, (ax1, ax2) = plt.subplots(2, 1)
+fig.suptitle('A tale of 2 subplots')
+
+ax1.plot(x1, y1, 'o-')
+ax1.set_ylabel('Damped oscillation')
+
+ax2.plot(x2, y2, '.-')
+ax2.set_xlabel('time (s)')
+ax2.set_ylabel('Undamped')
+fig.savefig("test1.png")
+
+%%%% #Chart# %%%%
+# Add your generated charts here
+addToChart('test.png',2)
+addToChart('test1.png',1)
+
