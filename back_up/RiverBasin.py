@@ -202,9 +202,7 @@ if __name__ == "__main__":
         if port.isnumeric():            
             with socketserver.TCPServer(("", int(port)), handler_object) as httpd:
                 print("Serving web-server at : http://localhost:" + port)
-                if input_filename == '':
-                    input_filename = 'index.html'
-                webbrowser.open("http://localhost:" + port + '/' + input_filename)
+                webbrowser.open("http://localhost:" + port )
                 httpd.serve_forever()
         else:
             print("Please, provide a valid port number !!")

@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>Python Command</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     
@@ -11,7 +12,10 @@
         <div class="container">
             <h1>Advanced VIS</h1>
             <div>
-                <button type="button" class="btn btn-outline-success" id="run_all"><i class="bi bi-caret-right-fill"></i>Run</button>
+                <button type="button" class="btn btn-outline-success" id="run_all">
+                    <i class="bi bi-play-fill"></i> Run Everything</button>
+                <button type="button" class="btn btn-outline-success" id="run_code"><i class="bi bi-arrow-down-right"></i> Run Code</button>
+                <button type="button" class="btn btn-outline-success" id="run_chart"><i class="bi bi-graph-up"></i> Run Chart</button>
                 <!--
                 <button type="button" class="btn btn-outline-info" id="run_all"><i class="bi bi-caret-right-fill"></i>Add to Chart</button> 
                 <button type="button" class="btn btn-outline-danger" id="run_all"><i class="bi bi-caret-right-fill"></i> Clear Console</button>
@@ -25,7 +29,7 @@
                 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Write your code here:</label>
-                    <textarea id="input_code" class="form-control" rows="30" >
+                    <textarea id="input_code" class="form-control" rows="30" style="font-size: 14px;">
 %%%% #Markup# %%%%
 # Your mark-up code goes here
 
@@ -42,7 +46,7 @@ fig, ax = plt.subplots()
 ax.plot(t, s)
 
 ax.set(xlabel='time (s)', ylabel='voltage (mV)',
-       title='About as simple as it gets, folks')
+        title='About as simple as it gets')
 ax.grid()
 
 fig.savefig("test.png")
@@ -66,8 +70,8 @@ fig.savefig("test1.png")
 
 %%%% #Chart# %%%%
 # Add your generated charts here
-addToChart('test.png',2)
-addToChart('test1.png',1)
+addToChart('Time vs Voltage', 'test.png',2)
+addToChart('Subplots', 'test1.png',1)                                                                                            
                         
                     </textarea>
                 </div>
@@ -76,29 +80,29 @@ addToChart('test1.png',1)
 
               <div class="col-sm">
                 <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Console output: </label>
-                    <span id="connection_info" class="badge bg-warning text-dark">Connecting ...</span>
-                    <span id="status_info" class=""></span>
-                    
-                    <textarea id="output_console" disabled class="form-control" rows="15" style="font-size:12px"></textarea>
-
-                    <div class="card border-success" style="margin-top: 10px;">
+                    <div>
+                        <span id="connection_info" class="badge bg-warning text-dark">Connecting ...</span>
+                        <span id="status_info" class=""></span>
+                    </div>
+                    <div class="card border-success" style="margin-top:10px; font-size:0.8em">
                         <div class="card-header bg-transparent border-success text-success">
                             <h5 class="card-title">Charts</h5>
                         </div>
-                        <div class="card-body text-success">
+                        <div class="card-body text-success" style="min-height: 350px;">
                           <div class="card-text">
-
                             <ul class="nav nav-tabs" id="chartTab" role="tablist">
                             </ul>
                             <div class="tab-content" id="chartTabContent">
                             </div>
-
-
                           </div>
-                        </div>
-                        
+                        </div>                        
                     </div>
+
+                    <label for="exampleFormControlTextarea1" class="form-label">Console output: </label>
+                    
+                    
+                    <textarea id="output_console" disabled class="form-control" rows="10" style="font-size:12px"></textarea> 
+                                       
                 </div>
               </div>
             </div>
@@ -115,6 +119,9 @@ addToChart('test1.png',1)
             var chartTabContent = document.querySelector('#chartTabContent');
 
             var run_all = document.querySelector('#run_all');
+            var run_code = document.querySelector('#run_code');
+            var run_chart = document.querySelector('#run_chart');
+
 
            /*
             input_code.value = "%%%% #Markup# %%%%\n";
@@ -152,29 +159,77 @@ addToChart('test1.png',1)
                 websocket.send(JSON.stringify(sending_data));
             }
 
+            run_code.onclick = function (event) {
+                var d = new Date();
+                output_console.value += "-----------------------------------------";
+                output_console.value += "-----------------------------------------\n";
+                output_console.value += d + '\n';
+
+                status_info.setAttribute("class", "badge bg-warning text-dark");
+                status_info.innerHTML = "Running ...";
+
+                var total_code_array = input_code.value.split('%%%%');
+
+                var sending_data = {};
+
+                for(var i=0; i< total_code_array.length; i++)
+                {
+                    if(total_code_array[i].includes('#Code#'))
+                        sending_data['code'] = total_code_array[i+1];                    
+                }
+
+                websocket.send(JSON.stringify(sending_data));
+            }
+
+            run_chart.onclick = function (event) {
+                var d = new Date();
+                output_console.value += "-----------------------------------------";
+                output_console.value += "-----------------------------------------\n";
+                output_console.value += d + '\n';
+
+                status_info.setAttribute("class", "badge bg-warning text-dark");
+                status_info.innerHTML = "Running ...";
+
+                var total_code_array = input_code.value.split('%%%%');
+
+                var sending_data = {};
+
+                for(var i=0; i< total_code_array.length; i++)
+                {
+                    if(total_code_array[i].includes('#Chart#'))
+                        sending_data['chart'] = total_code_array[i+1];                    
+                }
+
+                websocket.send(JSON.stringify(sending_data));
+            }
+
             websocket.onmessage = function (event) {
                 console.log(event);
                 d = JSON.parse(event.data);
+                
+
                 if(d.error){
                     status_info.setAttribute("class", "badge bg-danger");
                     status_info.innerHTML = "Error in code";
                     output_console.value += d.error;
                 }
-                else if(d.output){
+                if(d.output){
                     status_info.setAttribute("class", "badge bg-success");
                     status_info.innerHTML = "Code executed";
                     output_console.value += d.output;
                 }
-                else if(d.chart){
+                if(d.chart != ''){ 
+                    d.chart = JSON.parse(d.chart.replaceAll("\'", "\""));                   
                     status_info.setAttribute("class", "badge bg-success");
                     status_info.innerHTML = "Code executed";
-                    output_console.value += "Chart has been updated";
+                    output_console.value += "Chart has been updated\n";
+
                     str_html = "";
                     str1_html = "";
 
                     for(var i=0; i<d.chart.length; i++)
                     {
-                        pname = d.chart[i].name.replace('.','')
+                        fname = d.chart[i].name.replaceAll(' ','')
                         order = d.chart[i].order
 
                         str_html += "<li class='nav-item' role='presentation'>";
@@ -183,27 +238,42 @@ addToChart('test1.png',1)
                         else
                             str_html += "<button class='nav-link'";
 
-                        str_html += " id='" + pname + "_" + order + "_tab";
-                        str_html += "' data-bs-toggle='tab' data-bs-target='#" + pname + "_" + order  + "' type='button' role='tab'";
-                        str_html += "aria-controls='"+ pname + "_" + order  +"' aria-selected='true'>"+ d.chart[i].name +"</button>";
+                        str_html += " id='" + fname + "_" + order + "_tab";
+                        str_html += "' data-bs-toggle='tab' data-bs-target='#" + fname + "_" + order  + "' type='button' role='tab'";
+                        str_html += "aria-controls='"+ fname + "_" + order  +"' aria-selected='true'>"+ d.chart[i].name +"</button>";
                         str_html += "</li>";
                     
                         str1_html += "<div class='tab-pane fade show";
                         if(i==0)
                             str1_html += " active";
-                        str1_html += "' id='"+ pname + "_" + order  +"' role='tabpanel' aria-labelledby='" + pname + "_" + order + "_tab" +"'>";
-                        str1_html += "<img src='" + d.chart[i].path + "' /></div>";
+                        str1_html += "' id='"+ fname + "_" + order  +"' role='tabpanel' aria-labelledby='" + fname + "_" + order + "_tab" +"'>";
+                        if (d.chart[i].type == "image")
+                            str1_html += "<img src='" + d.chart[i].path + "' />";
+                        else if (d.chart[i].type == "iframe"){
+                            str1_html += "<a href='" + d.chart[i].path + "' target='_blank'>Open in new tab</a>";
+                            str1_html += "<iframe src='" + d.chart[i].path + "' width='600px' height='400px'/>";                            
+                        }
+                            
+                        str1_html += "</div>";
                         
                     }
                     chartTab.innerHTML = str_html;
                     chartTabContent.innerHTML = str1_html;
                     
                 }
+                if(!d.error && !d.code && !d.chart)
+                {
+                    status_info.setAttribute("class", "badge bg-success");
+                    status_info.innerHTML = "Code executed";
+                    output_console.value += "Code executed succesfully\n";
+                }
+                /*
                 else{
                     status_info.setAttribute("class", "badge bg-success");
                     status_info.innerHTML = "Code executed";
-                    output_console.value += "Code execution finishes without console output."
+                    output_console.value += "Code execution finishes without console output.\n"
                 }
+                */
             };
             websocket.onopen = function (event) {
                 output_console.value = "Version: ";
