@@ -151,8 +151,9 @@ addToChart('Subplots', 'test1.png',1)
                         sending_data['markup'] = total_code_array[i+1];
                     else if(total_code_array[i].includes('#Code#'))
                         sending_data['code'] = total_code_array[i+1];
-                    else if(total_code_array[i].includes('#Chart#'))
+                    else if(total_code_array[i].includes('#Chart#')){
                         sending_data['chart'] = total_code_array[i+1];
+                    }                        
                     
                 }
 
@@ -204,7 +205,7 @@ addToChart('Subplots', 'test1.png',1)
             }
 
             websocket.onmessage = function (event) {
-                console.log(event);
+                //console.log(event);
                 d = JSON.parse(event.data);
                 
 
@@ -229,36 +230,44 @@ addToChart('Subplots', 'test1.png',1)
 
                     for(var i=0; i<d.chart.length; i++)
                     {
-                        fname = d.chart[i].name.replaceAll(' ','')
-                        order = d.chart[i].order
+                        if(d.chart[i].to.includes('master'))
+                        {
+                            fname = d.chart[i].name.replaceAll(' ','')
+                            order = d.chart[i].order
 
-                        str_html += "<li class='nav-item' role='presentation'>";
-                        if(i==0)
-                            str_html += "<button class='nav-link active'";
-                        else
-                            str_html += "<button class='nav-link'";
+                            str_html += "<li class='nav-item' role='presentation'>";
+                            if(i==0)
+                                str_html += "<button class='nav-link active'";
+                            else
+                                str_html += "<button class='nav-link'";
 
-                        str_html += " id='" + fname + "_" + order + "_tab";
-                        str_html += "' data-bs-toggle='tab' data-bs-target='#" + fname + "_" + order  + "' type='button' role='tab'";
-                        str_html += "aria-controls='"+ fname + "_" + order  +"' aria-selected='true'>"+ d.chart[i].name +"</button>";
-                        str_html += "</li>";
-                    
-                        str1_html += "<div class='tab-pane fade show";
-                        if(i==0)
-                            str1_html += " active";
-                        str1_html += "' id='"+ fname + "_" + order  +"' role='tabpanel' aria-labelledby='" + fname + "_" + order + "_tab" +"'>";
-                        if (d.chart[i].type == "image")
-                            str1_html += "<img src='" + d.chart[i].path + "' />";
-                        else if (d.chart[i].type == "iframe"){
-                            str1_html += "<a href='" + d.chart[i].path + "' target='_blank'>Open in new tab</a>";
-                            str1_html += "<iframe src='" + d.chart[i].path + "' width='600px' height='400px'/>";                            
-                        }
-                            
-                        str1_html += "</div>";
+                            str_html += " id='" + fname + "_tab";
+                            str_html += "' data-bs-toggle='tab' data-bs-target='#" + fname + "' type='button' role='tab'";
+                            str_html += "aria-controls='"+ fname +"' aria-selected='true'>"+ d.chart[i].name +"</button>";
+                            str_html += "</li>";
                         
+                            str1_html += "<div class='tab-pane fade show";
+                            if(i==0)
+                                str1_html += " active";
+                            str1_html += "' id='"+ fname +"' role='tabpanel' aria-labelledby='" + fname + "_tab" +"'>";
+                            if (d.chart[i].type == "image")
+                                str1_html += "<img src='" + d.chart[i].path + "' />";
+                            else if (d.chart[i].type == "iframe"){
+                                str1_html += "<a href='" + d.chart[i].path + "' target='_blank'>Open in new tab</a>";
+                                str1_html += "<iframe src='" + d.chart[i].path + "' width='600px' height='400px'></iframe>";                            
+                            }
+                                
+                            str1_html += "</div>";
+                        }
+                                                
                     }
-                    chartTab.innerHTML = str_html;
-                    chartTabContent.innerHTML = str1_html;
+
+                    if(str_html != '' && str1_html != '')
+                    {
+                        chartTab.innerHTML = str_html;
+                        chartTabContent.innerHTML = str1_html;
+                    }
+                    
                     
                 }
                 if(!d.error && !d.code && !d.chart)

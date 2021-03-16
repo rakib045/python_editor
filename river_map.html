@@ -60,9 +60,42 @@
         }
         return params;
     };
+    color_list = [];    
+    var default_color_list = ["#e31a1c", "#ff7f00", "#6a3d9a", "#1f78b4", "#33a02c", "#fb9a99", "#fdbf6f", "#cab2d6", "#a6cee3", "#b2df8a"];
+    var geojsons = "";
 
     var params = getParams(window.location.href);
+    if(params.name)
+        sessionStorage.setItem("chart_name", params.name);
+    
+        if(params.colorlist == undefined){
+        color_list = default_color_list;
+    }
+    else{
+        colors = params.colorlist.split(',');
+        for(var i=0; i< colors.length; i++)
+        {
+            color_list.push(colors[i]);
+        }
+    }
+    sessionStorage.setItem("colorlist", color_list);
+
+    if(params.geojson != undefined){
+        jsons = params.geojson.split(',');
+        for(var i=0; i< jsons.length; i++)
+        {
+            if(i != 0)
+                geojsons += ",";
+
+            geojsons += jsons[i];
+            //drawMap(geojsons[i], color_list);
+        }
+    }
+    sessionStorage.setItem("geojson", geojsons);
+
 	//var mymap = L.map('mapid').setView([52.123582, -106.66214], 9);
+
+    
 
     var map_div = document.querySelector('#mapid');
     width_height_str = 'width: ' + (this.innerWidth-20) + "; height: " + (this.innerHeight-20);
@@ -105,7 +138,8 @@
         "Streets": streets
     };
 
-    color_list = [];
+    
+    //var demo_color_list_seq = ["#ffffff", "#08306b", "#08519c", "#2171b5", "#4292c6", "#6baed6", "#9ecae1", "#c6dbef", "#deebf7", "#f7fbff" ];
 
     L.control.layers(baseLayers, overlayMaps).addTo(map);
 
@@ -120,80 +154,121 @@
         return div;
     }
 
-    
 
-    /*
-    var websocket = new WebSocket("ws://127.0.0.1:5678/");
+    drawMap();
+    
+    var websocket = new WebSocket("ws://127.0.0.1:6789/");
     websocket.onmessage = function (event) {
-        data = JSON.parse(event.data);
-        console.log(data);
-        if(data.refresh)
-            location.reload();
+        d = JSON.parse(event.data);
+        console.log(d);
+        if(d.chart){
+            d.chart = JSON.parse(d.chart.replaceAll("\'", "\""));
+            for(var index=0; index<d.chart.length; index++)
+            {
+                chart_name = sessionStorage.getItem("chart_name");
+                if(d.chart[index].to.includes(chart_name)){
+
+                    if(d.chart[index].hasOwnProperty('colorlist')){
+                        sessionStorage.removeItem("colorlist");
+                        color_list = [];
+                        colors = d.chart[index].colorlist.split(',');
+                        for(var i=0; i< colors.length; i++)
+                        {
+                            color_list.push(colors[i]);
+                        }
+
+                        sessionStorage.setItem("colorlist", color_list);
+                    }
+                    if(d.chart[index].hasOwnProperty('geojson')){
+                        geojsons = sessionStorage.getItem("geojson").split(',');
+                        jsons = d.chart[index].geojson.split(',');
+                        for(var i=0; i< jsons.length; i++)
+                        {
+                            if(!geojsons.includes(jsons[i]))
+                                geojsons.push(jsons[i]);
+                        }
+                        var geojson_str = "";
+                        for(var j=0; j< geojsons.length; j++)
+                        {
+                            if(j != 0)
+                                geojson_str += ",";
+                            geojson_str += geojsons[j];
+                        }
+                        
+                        sessionStorage.removeItem("geojson");
+                        sessionStorage.setItem("geojson", geojson_str);
+                    }
+                    if(d.chart[index].hasOwnProperty('draw') && d.chart[index].draw == 1){
+                        drawMap();
+                    }
+
+                }
+            }
+        }
         
-        drawMap(data.json_file, data.color_list);
+        //drawMap(data.json_file, data.color_list);
     }; 
-    */
+    
 
     
-    
-    var demo_color_list = ["#e31a1c", "#ff7f00", "#6a3d9a", "#1f78b4", "#33a02c", "#fb9a99", "#fdbf6f", "#cab2d6", "#a6cee3", "#b2df8a"];
-    //var demo_color_list_seq = ["#ffffff", "#08306b", "#08519c", "#2171b5", "#4292c6", "#6baed6", "#9ecae1", "#c6dbef", "#deebf7", "#f7fbff" ];
-    //demo_color_sequential = [];
 
-    //drawMap("jeoJSON_na_30s_saskatoon.json", demo_color_list);
-    //drawMap("jeoJSON_na_30_saskatchewan.json", demo_color_list);
-    geojsons = params.geojson.split(',');
-    for(var i=0; i< geojsons.length; i++)
-    {
-        drawMap(geojsons[i], demo_color_list);
-    }
+    function drawMap(){
+        color_list = sessionStorage.getItem("colorlist").split(',');
+        json_list_str = sessionStorage.getItem("geojson");
+        if(json_list_str != "")
+        {
+            json_list = json_list_str.split(',');
+            if(json_list.length > 0){
 
-    function drawMap(json_path, c_list){
-        color_list = c_list;
-        if(json_path != ''){
-            fetch(json_path)
-                .then(function(response){
-                    return response.json();
-                })
-                .then(function(data){
-                    //console.log(data);
-                    
-                    L.geoJSON(data, {
-                        style: function (feature) {
-                            cus_color = color_list[feature.properties.ORD_FLOW - 1];
-                            return {color: cus_color};
-                        },
-                        onEachFeature: function(feature, layer){
-                            //console.log(feature);
-                            layers[feature.properties.ORD_FLOW-1].addLayer(layer);
-                        }
-                    }).bindPopup(function (data) {
-                        return "Average discharge: " + legend_text[data.feature.properties.ORD_FLOW-1];
-                    }).addTo(map);
-                    
+                for (var i=0; i<json_list.length; i++)
+                {
+                    json_path = json_list[i];
+                    fetch(json_path)
+                    .then(function(response){
+                        return response.json();
+                    })
+                    .then(function(data){
+                        //console.log(data);
+                        
+                        L.geoJSON(data, {
+                            style: function (feature) {
+                                cus_color = color_list[feature.properties.ORD_FLOW - 1];
+                                return {color: cus_color};
+                            },
+                            onEachFeature: function(feature, layer){
+                                //console.log(feature);
+                                layers[feature.properties.ORD_FLOW-1].addLayer(layer);
+                            }
+                        }).bindPopup(function (data) {
+                            return "Average discharge: " + legend_text[data.feature.properties.ORD_FLOW-1];
+                        }).addTo(map);
+                        
 
-                    /*
-                    var activeLayer = L.geoJson(data, {
-                        filter: function(feature, layer) {
-                            return (feature.properties.ORD_FLOW == 4);
-                        }
-                    }).addTo(map);
-                    */
+                        /*
+                        var activeLayer = L.geoJson(data, {
+                            filter: function(feature, layer) {
+                                return (feature.properties.ORD_FLOW == 4);
+                            }
+                        }).addTo(map);
+                        */
 
+                        
+
+                    });
                     legend.addTo(map);
 
-                    for(var i=0; i<legend_text.length; i++)
+                    for(var j=0; j<legend_text.length; j++)
                     {
-                        overlayMaps[legend_text[i]] = layers[i];
-                        layers[i].addTo(map);
+                        overlayMaps[legend_text[j]] = layers[j];
+                        layers[j].addTo(map);
                     }
                     $('.leaflet-control-layers').remove();
                     L.control.layers(baseLayers, overlayMaps).addTo(map);
-
-                });
+                }
+            }
 
         }
-        
+                
     };
 </script>
 
