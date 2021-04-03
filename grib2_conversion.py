@@ -31,7 +31,7 @@ lat_lon_text.close()
 
 
 o_file = open(output_filename, "w")
-o_file.write("date, hour, value, grid_i, grid_j, latitude, longitude\n")
+o_file.write("date,hour,value,grid_i,grid_j,latitude,longitude\n")
 o_file.close()
 
 
@@ -55,7 +55,7 @@ for index in range(forcasted_hour_range[0], forcasted_hour_range[1]+1):
                 grid_j = j+1
                 lat = lat_info[j][i] 
                 long = long_info[j][i] 
-                o_file.write(f"{today}, {hour}, {value}, {grid_i}, {grid_j}, {lat}, {long}\n")
+                o_file.write(f"{today},{hour},{value},{grid_i},{grid_j},{lat},{long}\n")
     gr.close()
     o_file.close()
     os.remove(file_name)

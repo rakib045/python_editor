@@ -39,7 +39,7 @@ fig, ax = plt.subplots()
 ax.plot(t, s)
 
 ax.set(xlabel='time (s)', ylabel='voltage (mV)',
-       title='About as simple as it gets, folks')
+        title='About as simple as it gets')
 ax.grid()
 
 fig.savefig("test.png")
@@ -63,38 +63,49 @@ fig.savefig("test1.png")
 
 %%%% #Chart# %%%%
 # Add your generated charts here
-addToChart('test.png',2)
-addToChart('test1.png',1)
+addToChart('Time vs Voltage', 'test.png',2)
+addToChart('Subplots', 'test1.png',1)   
 
 
 
 
+filename = "HydroRIVERS_v10_na_shp\HydroRIVERS_v10_na.shp"
+bbox = {
+       'min_longitude': -107.74566, 
+       'max_longitude': -105.65277, 
+       'min_latitude': 51.544626, 
+       'max_latitude': 52.72631
+}
+output_filename = "jeoJSON_saskatoon.json"
+
+generateGeoJSON(filename, bbox, output_filename)
 
 
 
-addRiverMapToChart(chart_name='Chart 1', order=2) 
+> ------- <
 
+filename = "RData\\river_with_lake_flag4_reorder.shp"
+bbox = {
+       'min_longitude': -120.585937, 
+       'max_longitude': -101.557617, 
+       'min_latitude': 48.95136, 
+       'max_latitude': 59.95501
+}
+output_filename = "jeoJSON_al_sk.json"
 
-color_list_seq = ['#000000', '#08306b', '#08519c', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff']
+generateGeoJSON(filename, bbox, output_filename)
+
+-------------
+addRiverMapToChart(chart_name='Chart 1', order=1)
+-------------
+
+color_list_seq = [ '#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#000000']
 addColorListRiverMap(chart_name='Chart 1', color_list=color_list_seq)
 
-jsons = ['jeoJSON_na_30s_saskatoon.json']
-
+jsons = ['jeoJSON_al_sk.json']
 addJSONRiverMap(chart_name='Chart 1', jsonfilenames=jsons)
+
+-------------
 drawChart(chart_name='Chart 1')
 
 
-
-
-
-color_list_seq = ["#e31a1c", "#ff7f00", "#6a3d9a", "#1f78b4", "#33a02c", "#fb9a99", "#fdbf6f", "#cab2d6", "#a6cee3", "#b2df8a"]
-addColorListRiverMap(chart_name='Chart 1', color_list=color_list_seq)
-
-jsons = ['jeoJSON_na_30s_regina.json']
-
-addJSONRiverMap(chart_name='Chart 1', jsonfilenames=jsons)
-
-
-
-
-drawChart(chart_name='Chart 1')
