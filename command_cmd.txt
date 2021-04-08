@@ -61,6 +61,8 @@ ax2.set_xlabel('time (s)')
 ax2.set_ylabel('Undamped')
 fig.savefig("test1.png")
 
+print(x1)
+
 %%%% #Chart# %%%%
 # Add your generated charts here
 addToChart('Time vs Voltage', 'test.png',2)
@@ -109,3 +111,25 @@ addJSONRiverMap(chart_name='Chart 1', jsonfilenames=jsons)
 drawChart(chart_name='Chart 1')
 
 
+
+bbox_whole_west = {
+       'min_longitude': -140.18555, 
+       'max_longitude': -102.48047, 
+       'min_latitude': 51.344339, 
+       'max_latitude': 69.687618
+}
+
+
+bbox_sk = {
+       'min_longitude': -109.95117, 
+       'max_longitude': -101.79931, 
+       'min_latitude': 49.18170, 
+       'max_latitude':  55.24155
+}
+
+bbox_saskatoon = {
+       'min_longitude': -107.74566,
+       'max_longitude': -105.65277, 
+       'min_latitude': 51.544626, 
+       'max_latitude':  52.72631
+}

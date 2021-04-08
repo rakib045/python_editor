@@ -16,6 +16,9 @@
     crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.6.2/d3.min.js" integrity="sha512-L2eTGYYQqzK5YozYyUVrJKj2ZRnHE3QzV1+1yY6VXHExStF3potRZyEcD/B6sTOe04xYxB21QNLmVTQFcgwovg==" crossorigin="anonymous"></script>
 
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="Scripts/bundle.js"></script>
+
     <style>
         .info {
             padding: 6px 8px;
@@ -69,6 +72,7 @@
     var maxVal = 0;
     var custom_grades = [];
     var quantizeScale = d3.scaleQuantize();
+    var geoJsonFeature;
 
     var params = getParams(window.location.href);
     if(params.name)
@@ -101,8 +105,6 @@
 
 	//var mymap = L.map('mapid').setView([52.123582, -106.66214], 9);
 
-    
-
     var map_div = document.querySelector('#mapid');
     width_height_str = 'width: ' + (this.innerWidth-20) + "; height: " + (this.innerHeight-20);
     map_div.setAttribute('style', width_height_str);
@@ -119,39 +121,35 @@
         "Cities": cities
     };
 
-    //var legend_text = [">= 100,000", "10,000-100,000", "1,000-10,000", "100-1,000", "10-100", "1-10", "0.1-1", "0.01-0.1", "0.001-0.01", "< 0.001"];
     var legend_text = [];
     var layers = [];
     
-
-
     var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
     var grayscale   = L.tileLayer(mbUrl, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
         streets  = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-    
-    var map = L.map('mapid', {
-        center: [52.123582, -106.66214],
-        zoom: 9,
-        layers: [grayscale, cities]
-    });
+   var map;
 
     var baseLayers = {
         "Grayscale": grayscale,
         "Streets": streets
     };
-
     
-    //var demo_color_list_seq = ["#ffffff", "#08306b", "#08519c", "#2171b5", "#4292c6", "#6baed6", "#9ecae1", "#c6dbef", "#deebf7", "#f7fbff" ];
-
-    L.control.layers(baseLayers, overlayMaps).addTo(map);
-
     var legend = L.control({position: 'bottomleft'});
 
+    
 
-    drawMap();
+    initializeMap();
+
+
+    var variable_name = "IRFroutedRunoff";
+    var year = 1995;
+    var day = 0;
+    var day_addition = 1;
+
+    drawMap(variable_name, year, day);
     
     var websocket = new WebSocket("ws://127.0.0.1:6789/");
     websocket.onmessage = function (event) {
@@ -205,10 +203,11 @@
         //drawMap(data.json_file, data.color_list);
     };    
 
-    function drawMap(){
+    function drawMap(variable_name, year, day){
         color_list = sessionStorage.getItem("colorlist").split(',');
         //json_list_str = sessionStorage.getItem("geojson");
-        json_list_str = "jeoJSON_al_sk.json";
+        //json_list_str = "jeoJSON_al_sk.json";
+        json_list_str = "jeoJSON_sk_1995_1996.json";
         minVal = 1000000;
         maxVal = -1000000;
         
@@ -237,8 +236,21 @@
                         return response.json();
                     })
                     .then(function(data){
-                        minVal_t = d3.min(data.features, d=> d.properties.flow_acc);
-                        maxVal_t = d3.max(data.features, d=> d.properties.flow_acc);
+                        //minVal_t = d3.min(data.features, d=> d.properties.flow_acc);
+                        //maxVal_t = d3.max(data.features, d=> d.properties.flow_acc);
+
+                        all_values = [];
+                        data.features.forEach(function(d){
+                            attr_names = Object.keys(d.properties[variable_name]);
+                            for(var it=0; it<attr_names.length; it++)
+                            {
+                                temp_array = d.properties[variable_name][attr_names[it]];
+                                all_values = all_values.concat(temp_array);
+                            }
+                        });
+
+                        minVal_t = d3.min(all_values);
+                        maxVal_t = d3.max(all_values);
 
                         if(minVal_t < minVal)
                             minVal = minVal_t;
@@ -257,9 +269,10 @@
                                 //quantizeScale.domain([minVal, maxVal]).range(temp_array);
 
                             //setScaleGradesLinear(minVal, maxVal, color_list.length);
-                            setScaleGradesLogarithmic(minVal, maxVal, 1, 61457, color_list.length);
+                            //setScaleGradesLogarithmic(minVal, maxVal, 1, 61457, color_list.length);
+                            setScaleGradesLogarithmic(minVal, maxVal, 1, maxVal*2/3, color_list.length);
 
-                            console.log(custom_grades);
+                            //console.log(custom_grades);
 
                             for(var j=0; j< color_list.length; j++){
                                 layers.push(L.layerGroup());
@@ -270,6 +283,7 @@
                 }
 
                 counter_1 = 1;
+                //var index = 0;
                 for (var i=0; i<json_list.length; i++)
                 {
                     json_path = json_list[i];
@@ -281,15 +295,20 @@
                         //console.log(data);
                         
                         L.geoJSON(data, {
+                            filter: function(feature){
+                                if (feature.properties.islake == 0) return true;
+                            },
                             style: function (feature) {
-                                cus_color = color_list[getIndexOfGrades(feature.properties.flow_acc)];
+                                cus_color = color_list[getIndexOfGrades(feature.properties[variable_name][year][day])];
                                 return {color: cus_color};
                             },
                             onEachFeature: function(feature, layer){
-                                layers[getIndexOfGrades(feature.properties.flow_acc)].addLayer(layer);
+                                //console.log(index);
+                                layers[getIndexOfGrades(feature.properties[variable_name][year][day])].addLayer(layer);
+                                //index++;
                             }
                         }).bindPopup(function (data) {
-                            return "Flow Accumulation: " + data.feature.properties.flow_acc;
+                            return variable_name + ": " + data.feature.properties[variable_name][year][day];
                         }).addTo(map);
 
 
@@ -321,7 +340,7 @@
 
                             legend.onAdd = function(m){
                                 var div = L.DomUtil.create('div', 'info legend');
-                                div.innerHTML += "<p>Flow Accumulation</p>"
+                                div.innerHTML += "<p>" + variable_name + "</p>"
                                 for(var i=0; i<color_list.length; i++)
                                 {
                                     div.innerHTML += '<div style="margin-bottom: 2px;"><i style="background:' + color_list[i] + '; opacity:1"></i>' + legend_text[i] + '</div>';
@@ -333,10 +352,15 @@
                             $('.leaflet-control-layers').remove();
                             L.control.layers(baseLayers, overlayMaps).addTo(map);
 
+                            var theDate = new Date(year, 0, 1);
+                            var myNewDate = new Date(theDate);
+                            theDate.setDate(theDate.getDate() + day);
+
+                            $('#infoAnimation').html((day+1) + "/365 day of " + year + " (" + theDate.toDateString() + ")");
+
                         }
                         counter_1++;
                         
-
                     });
                     
                 }
@@ -345,6 +369,20 @@
         }
                 
     };
+
+    function updateChart(variable_name, year, day){
+        /*
+        console.log(geoJsonFeature);
+
+        geoJsonFeature.eachLayer(function (layer) { 
+            cus_color = color_list[getIndexOfGrades(layer.feature.properties[variable_name][year][day])]; 
+            layer.setStyle({color : cus_color});
+        });
+        */
+
+        initializeMap();
+        drawMap(variable_name, year, day);
+    }
 
     function setScaleGradesLinear(min, max, no_steps){
         var steps_len = (maxVal-minVal)/no_steps;
@@ -370,7 +408,7 @@
         */
         for (var i = 0; i < no_steps; i++) {
             var d = val_max - parseInt((Math.log(log_min+ i*steps_len) - Math.log(log_min)) / (Math.log(log_max) - Math.log(log_min)) * (val_max - val_min));
-            custom_grades.push(d);
+            custom_grades.push(d.toFixed(2));
         }
         custom_grades = custom_grades.reverse();
         custom_grades.pop();
@@ -384,6 +422,86 @@
         }
         return i;
     }
+
+    var printer;
+
+
+    function initializeMap(){
+        if (this.map != undefined) this.map.remove();        
+        this.map = L.map('mapid', {
+            center: [52.123582, -106.66214],
+            zoom: 9,
+            layers: [grayscale, cities]
+        });
+        L.control.layers(baseLayers, overlayMaps).addTo(this.map);
+
+        var animation_control = L.control({position: 'bottomright'});
+        animation_control.onAdd = function(m){
+            var div = L.DomUtil.create('div', 'info animation');
+            var str = ""
+            str += "<h4>Animation Panel</h4>";
+            str += "<p>Date : <span id='infoAnimation'></span></p>";
+            str += "<p>Animation Speed : <select id='dayAdditionAnimation'>";
+            str += "<option value='1'> 1 </option>";
+            str += "<option value='7'> 7 </option>";
+            str += "<option value='30'> 30 </option>";
+            str += "</select>  day</p>";
+            str += "<button id='playAnimation' onclick='animationNextStep()'><i class='fa fa-play' aria-hidden='true'></i>  Play</button>";
+            str += "<button id='pauseAnimation' onclick='pauseAnimation()'><i class='fa fa-pause' aria-hidden='true'></i>  Pause</button>";
+            str += "<button id='stopAnimation' onclick='stopAnimation()'><i class='fa fa-stop' aria-hidden='true'></i>  Stop and Reset</button>";
+
+            div.innerHTML = str;
+            return div;
+        };
+        animation_control.addTo(map);
+
+
+        this.printer = L.easyPrint({
+            title: 'Print',
+      		tileLayer: grayscale,
+      		sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
+      		filename: 'myMap',
+      		exportOnly: true,
+      		hideControlContainer: false
+		}).addTo(map);
+
+    };
+
+    var anim;
+
+    function animationNextStep(){
+        this.day_addition = parseInt($('#dayAdditionAnimation').val());
+        this.anim = setTimeout(function(){
+            this.day = this.day + this.day_addition;
+            if(this.day >= 365)
+            {
+                this.year++;
+                this.day = this.day - 365;
+            }
+            drawMap(variable_name, year, day);
+            animationNextStep();
+        }, 1000);
+    }
+
+    function stopAnimation(){
+        this.day = 0;
+        this.year = 1995;
+        clearTimeout(this.anim);
+        drawMap(variable_name, year, day);
+    }
+
+    function pauseAnimation(){
+        clearTimeout(this.anim);
+    }
+
+    /*
+    function manualPrint () {
+		this.printer.printMap('CurrentSize', 'MyManualPrint')
+	}
+    */
+
+
+
 </script>
 
 

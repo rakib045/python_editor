@@ -1,6 +1,8 @@
 import os, time, shapefile
 from web_socket_server import SERVER, web_port
 from json import dumps
+import netCDF4 as nc
+import numpy as np
 
 result_array = []
 
@@ -138,6 +140,66 @@ def generateGeoJSON(shp_file_name, bbox, output_filename):
         elif sxmax > xmax: continue
         elif symin < ymin: continue
         elif symax > ymax: continue
+
+        atr = dict(zip(field_names, sr.record))
+        geom = sr.shape.__geo_interface__
+        buffer.append(dict(type="Feature", \
+        geometry=geom, properties=atr)) 
+        
+        index += 1
+    
+        # write the GeoJSON file
+    
+    geojson = open(output_filename, "w")
+    geojson.write(dumps({"type": "FeatureCollection", "features": buffer}, indent=2) + "\n")
+    geojson.close()
+    print("Total Shape Count: " + str(index))
+    end = time.time()
+    print(f"Processing time of the conversion is {end - start} second")
+    print("GeoJSON generation completed !")
+
+
+def generateGeoJSON_FromSHPAndNetCDF_WithinTimeRange(shp_file_name, bbox, nc_filename, var_name, from_year, to_year, output_filename):    
+
+    start = time.time()
+
+    reader = shapefile.Reader(shp_file_name)
+
+    fields = reader.fields[1:]
+    field_names = [field[0] for field in fields]
+    buffer = []
+    
+    index=0
+
+    #xmin = bbox_lon_min  # Lon
+    #xmax = bbox_lon_max
+    #ymin = bbox_lat_min  #Lat
+    #ymax = bbox_lat_max
+
+    xmin = bbox['min_longitude']  # Lon
+    xmax = bbox['max_longitude']
+    ymin = bbox['min_latitude']  #Lat
+    ymax = bbox['max_latitude']
+
+    for sr in reader.shapeRecords():
+        
+        sxmin, symin, sxmax, symax = sr.shape.bbox
+        
+        if sxmin <  xmin: continue
+        elif sxmax > xmax: continue
+        elif symin < ymin: continue
+        elif symax > ymax: continue
+
+        field_names.append(var_name)
+        seg_id = sr.record['seg_id']
+        temp_json = {}
+        for year in range(from_year, to_year+1):
+            nc_file = nc_filename.replace("****", str(year))
+            ds = nc.Dataset(nc_file)
+            index = np.where(ds['reachID'][:] == seg_id)[0][0]
+            temp_json[year] = np.array(ds['IRFroutedRunoff'][:,index]).tolist()
+
+        sr.record.append(temp_json)
 
         atr = dict(zip(field_names, sr.record))
         geom = sr.shape.__geo_interface__

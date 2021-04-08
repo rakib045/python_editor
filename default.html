@@ -12,33 +12,35 @@
         <div class="container">
             <h1>Advanced VIS</h1>
             <div>
-                <button type="button" class="btn btn-outline-success" id="run_all">
-                    <i class="bi bi-play-fill"></i> Run Everything</button>
-                <button type="button" class="btn btn-outline-success" id="run_code"><i class="bi bi-arrow-down-right"></i> Run Code</button>
-                <button type="button" class="btn btn-outline-success" id="run_chart"><i class="bi bi-graph-up"></i> Run Chart</button>
-                <!--
-                <button type="button" class="btn btn-outline-info" id="run_all"><i class="bi bi-caret-right-fill"></i>Add to Chart</button> 
-                <button type="button" class="btn btn-outline-danger" id="run_all"><i class="bi bi-caret-right-fill"></i> Clear Console</button>
-                <button type="button" class="btn btn-outline-danger" id="run_all"><i class="bi bi-caret-right-fill"></i> Clear Charts</button>
-                -->
+                <button type="button" class="btn btn-outline-success" id="run_all" disabled>
+                    <i class="bi bi-collection-play"></i> Run Everything</button>
             </div>
-
-
             <div class="row">
               <div class="col-sm">
-                
-                <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Write your code here:</label>
-                    <textarea id="input_code" class="form-control" rows="30" style="font-size: 14px;">
-%%%% #Markup# %%%%
-# Your mark-up code goes here
+                <h4>Write your code here:</h4>
+                <div class="accordion" id="accordionExample" style="padding-bottom: 10px;">
+                    <div class="accordion-item" id="A1">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button bg-success border-success text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          Python Code
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse show border-success" aria-labelledby="headingOne" data-bs-parent="#accordionExample1">
+                        <div class="accordion-body">
+                            <button type="button" class="btn btn-outline-success" onclick="run_code_section('1')"><i class="bi bi-play-fill"></i> Run</button>
+                            <button type="button" class="btn btn-outline-warning" onclick="clear_txt('1')"><i class="bi bi-eraser"></i> Clear All</button>
+                            <button type="button" class="btn btn-outline-danger" onclick="remove_section('A1')"><i class="bi bi-trash"></i> Remove Section</button>
+                            <textarea id="input_code_1" class="form-control" rows="15" style="font-size: 14px; margin: 5px 0px;"></textarea>
+                            <div id="output_1"></div>                                                     
+                        </div>
+                      </div>
+                    </div>
+                </div>
 
-%%%% #Code# %%%%
-
-%%%% #Chart# %%%%
-# Add your generated charts here                                                                                         
-  
-                    </textarea>
+                <div class="input-group">
+                    <div class="input-group-text btn-success" id="btnGroupAddon">New Section</div>
+                    <input type="text" class="form-control border-success text-success" aria-describedby="btnGroupAddon" id="add_section_textbox"/>
+                    <button type="button" class="btn btn-outline-success" id="add_section"><i class="bi bi-plus"></i> Add</button>
                 </div>
 
               </div>
@@ -63,10 +65,10 @@
                         </div>                        
                     </div>
 
-                    <label for="exampleFormControlTextarea1" class="form-label">Console output: </label>
-                    
-                    
+                    <!--
+                    <label for="exampleFormControlTextarea1" class="form-label">Console output: </label>                                        
                     <textarea id="output_console" disabled class="form-control" rows="10" style="font-size:12px"></textarea> 
+                    -->
                                        
                 </div>
               </div>
@@ -78,14 +80,19 @@
             var input_code = document.querySelector('#input_code');
             var connection_info = document.querySelector('#connection_info');
             var status_info = document.querySelector('#status_info');
-            var output_console = document.querySelector('#output_console');
+            //var output_console = document.querySelector('#output_console');
 
             var chartTab = document.querySelector('#chartTab');
             var chartTabContent = document.querySelector('#chartTabContent');
+            
+            var add_section = document.querySelector('#add_section');
+            var add_section_textbox = document.querySelector('#add_section_textbox');
+            var accordionExample = document.querySelector('#accordionExample');
+
 
             var run_all = document.querySelector('#run_all');
-            var run_code = document.querySelector('#run_code');
-            var run_chart = document.querySelector('#run_chart');
+            //var run_code = document.querySelector('#run_code');
+            //var run_chart = document.querySelector('#run_chart');
 
 
            /*
@@ -99,9 +106,9 @@
 
             run_all.onclick = function (event) {
                 var d = new Date();
-                output_console.value += "-----------------------------------------";
-                output_console.value += "-----------------------------------------\n";
-                output_console.value += d + '\n';
+                //output_console.value += "-----------------------------------------";
+                //output_console.value += "-----------------------------------------\n";
+                //output_console.value += d + '\n';
 
                 status_info.setAttribute("class", "badge bg-warning text-dark");
                 status_info.innerHTML = "Running ...";
@@ -123,123 +130,93 @@
                 }
 
                 websocket.send(JSON.stringify(sending_data));
-            }
-
-            run_code.onclick = function (event) {
-                var d = new Date();
-                output_console.value += "-----------------------------------------";
-                output_console.value += "-----------------------------------------\n";
-                output_console.value += d + '\n';
-
-                status_info.setAttribute("class", "badge bg-warning text-dark");
-                status_info.innerHTML = "Running ...";
-
-                var total_code_array = input_code.value.split('%%%%');
-
-                var sending_data = {};
-
-                for(var i=0; i< total_code_array.length; i++)
-                {
-                    if(total_code_array[i].includes('#Code#'))
-                        sending_data['code'] = total_code_array[i+1];                    
-                }
-
-                websocket.send(JSON.stringify(sending_data));
-            }
-
-            run_chart.onclick = function (event) {
-                var d = new Date();
-                output_console.value += "-----------------------------------------";
-                output_console.value += "-----------------------------------------\n";
-                output_console.value += d + '\n';
-
-                status_info.setAttribute("class", "badge bg-warning text-dark");
-                status_info.innerHTML = "Running ...";
-
-                var total_code_array = input_code.value.split('%%%%');
-
-                var sending_data = {};
-
-                for(var i=0; i< total_code_array.length; i++)
-                {
-                    if(total_code_array[i].includes('#Chart#'))
-                        sending_data['chart'] = total_code_array[i+1];                    
-                }
-
-                websocket.send(JSON.stringify(sending_data));
-            }
+            }            
 
             websocket.onmessage = function (event) {
                 //console.log(event);
                 d = JSON.parse(event.data);
+                var output_div = document.querySelector('#output_' + d.return_div);
+                //output_div.innerHTML = "";
                 
 
                 if(d.error){
                     status_info.setAttribute("class", "badge bg-danger");
                     status_info.innerHTML = "Error in code";
-                    output_console.value += d.error;
+                    //output_console.value += d.error;
+                    output_div.innerHTML = d.error;
                 }
                 if(d.output){
                     status_info.setAttribute("class", "badge bg-success");
                     status_info.innerHTML = "Code executed";
-                    output_console.value += d.output;
-                }
-                if(d.chart != ''){ 
-                    d.chart = JSON.parse(d.chart.replaceAll("\'", "\""));                   
-                    status_info.setAttribute("class", "badge bg-success");
-                    status_info.innerHTML = "Code executed";
-                    output_console.value += "Chart has been updated\n";
 
-                    str_html = "";
-                    str1_html = "";
+                    outputs = d.output.trim().replaceAll('\n','').split(';##;');
+                    if (output_div != undefined)
+                        output_div.innerHTML = outputs[0];
+                    //output_console.value += outputs[0];
 
-                    for(var i=0; i<d.chart.length; i++)
-                    {
-                        if(d.chart[i].to.includes('master'))
+                    if (outputs.length > 1){
+
+                        charts = JSON.parse(outputs[1].replaceAll("\'", "\""));                   
+                        status_info.setAttribute("class", "badge bg-success");
+                        status_info.innerHTML = "Code executed";
+                        //output_console.value += "Chart has been updated\n";
+
+                        str_html = "";
+                        str1_html = "";
+
+                        for(var i=0; i<charts.length; i++)
                         {
-                            fname = d.chart[i].name.replaceAll(' ','')
-                            order = d.chart[i].order
+                            if(charts[i].to.includes('master'))
+                            {
+                                fname = charts[i].name.replaceAll(' ','')
+                                order = charts[i].order
 
-                            str_html += "<li class='nav-item' role='presentation'>";
-                            if(i==0)
-                                str_html += "<button class='nav-link active'";
-                            else
-                                str_html += "<button class='nav-link'";
+                                str_html += "<li class='nav-item' role='presentation'>";
+                                if(i==0)
+                                    str_html += "<button class='nav-link active'";
+                                else
+                                    str_html += "<button class='nav-link'";
 
-                            str_html += " id='" + fname + "_tab";
-                            str_html += "' data-bs-toggle='tab' data-bs-target='#" + fname + "' type='button' role='tab'";
-                            str_html += "aria-controls='"+ fname +"' aria-selected='true'>"+ d.chart[i].name +"</button>";
-                            str_html += "</li>";
-                        
-                            str1_html += "<div class='tab-pane fade show";
-                            if(i==0)
-                                str1_html += " active";
-                            str1_html += "' id='"+ fname +"' role='tabpanel' aria-labelledby='" + fname + "_tab" +"'>";
-                            if (d.chart[i].type == "image")
-                                str1_html += "<img src='" + d.chart[i].path + "' />";
-                            else if (d.chart[i].type == "iframe"){
-                                str1_html += "<a href='" + d.chart[i].path + "' target='_blank'>Open in new tab</a>";
-                                str1_html += "<iframe src='" + d.chart[i].path + "' width='600px' height='400px'></iframe>";                            
+                                str_html += " id='" + fname + "_tab";
+                                str_html += "' data-bs-toggle='tab' data-bs-target='#" + fname + "' type='button' role='tab'";
+                                str_html += "aria-controls='"+ fname +"' aria-selected='true'>"+ charts[i].name +"</button>";
+                                str_html += "</li>";
+                            
+                                str1_html += "<div class='tab-pane fade show";
+                                if(i==0)
+                                    str1_html += " active";
+                                str1_html += "' id='"+ fname +"' role='tabpanel' aria-labelledby='" + fname + "_tab" +"'>";
+                                if (charts[i].type == "image")
+                                    str1_html += "<img src='" + charts[i].path + "' />";
+                                else if (charts[i].type == "iframe"){
+                                    str1_html += "<a href='" + charts[i].path + "' target='_blank'>Open in new tab</a>";
+                                    str1_html += "<iframe src='" + charts[i].path + "' width='600px' height='400px'></iframe>";                            
+                                }
+                                    
+                                str1_html += "</div>";
                             }
-                                
-                            str1_html += "</div>";
+                                                    
                         }
-                                                
-                    }
+                        if(str_html != '' && str1_html != '')
+                        {
+                            chartTab.innerHTML = str_html;
+                            chartTabContent.innerHTML = str1_html;
 
-                    if(str_html != '' && str1_html != '')
-                    {
-                        chartTab.innerHTML = str_html;
-                        chartTabContent.innerHTML = str1_html;
+                            if (output_div != undefined)
+                                output_div.innerHTML = "Chart has been updated!!!";
+                        }
+
                     }
                     
-                    
+                                        
                 }
-                if(!d.error && !d.code && !d.chart)
+                if(!d.error && !d.code && !d.output)
                 {
                     status_info.setAttribute("class", "badge bg-success");
                     status_info.innerHTML = "Code executed";
-                    output_console.value += "Code executed succesfully\n";
+                    //output_console.value += "Code executed succesfully\n";
+                    if (output_div != undefined)
+                        output_div.innerHTML = "Code executed succesfully";
                 }
                 /*
                 else{
@@ -250,7 +227,7 @@
                 */
             };
             websocket.onopen = function (event) {
-                output_console.value = "Version: ";
+                //output_console.value = "Version: ";
                 connection_info.setAttribute("class", "badge bg-success");
                 connection_info.innerHTML = "Connected";
             };
@@ -258,6 +235,58 @@
                 connection_info.setAttribute("class", "badge bg-danger");
                 connection_info.innerHTML = "Connection Error";
             };
+
+            add_section.onclick = function (event) {
+                var random_str = Math.random().toString(36).substring(7);
+                section_name = add_section_textbox.value.trim().replace(' ','') + random_str;
+                var str = "<div class='accordion-item' id='" + section_name + "'>";
+                str +=  "<h2 class='accordion-header' id='heading" + section_name + "'>";
+                str +=  "<button class='accordion-button bg-success border-success text-white collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapse" + section_name + "' aria-expanded='false' aria-controls='collapse"+section_name+"' style='border-top-color: white !important;'>";
+                str +=  add_section_textbox.value;
+                str +=  "</button></h2>";
+                str +=  "<div id='collapse" + section_name + "' class='accordion-collapse collapse border-success' aria-labelledby='heading" + section_name + "' data-bs-parent='#accordionExample'>";
+                str +=  "<div class='accordion-body'>";
+                str +=  "<button type='button' class='btn btn-outline-success' onclick='run_code_section(\"" + section_name + "\")' style='margin-right: 5px;'><i class='bi bi-play-fill'></i> Run</button>";
+                str +=  "<button type='button' class='btn btn-outline-warning' onclick='clear_txt(\"" + section_name + "\")' style='margin-right: 5px;'><i class='bi bi-eraser'></i> Clear All</button>";
+                str +=  "<button type='button' class='btn btn-outline-danger' onclick='remove_section(\"" + section_name + "\")' style='margin-right: 5px;'><i class='bi bi-trash'></i> Remove Section</button>";                                      
+                str +=  "<textarea id='input_code_" + section_name + "' class='form-control' rows='15' style='font-size: 14px;margin: 5px 0px;'></textarea>";
+                str += "<div id='output_" + section_name + "'></div>";
+                str +=  "</div></div></div>";
+
+                accordionExample.innerHTML += str;
+            }
+
+            function clear_txt(str_name){
+                var textarea_box = document.querySelector('#input_code_' + str_name);
+                textarea_box.value = "";
+            };
+
+            function remove_section(str_name){
+                var section = document.querySelector('#' + str_name);
+                section.remove();
+            };
+
+            function run_code_section(str_name){
+                //var d = new Date();
+                //output_console.value += "-----------------------------------------";
+                //output_console.value += "-----------------------------------------\n";
+                //output_console.value += d + '\n';
+
+                status_info.setAttribute("class", "badge bg-warning text-dark");
+                status_info.innerHTML = "Running ...";
+
+                var textarea_box = document.querySelector('#input_code_' + str_name);
+
+                var sending_data = {};
+                sending_data['code'] = textarea_box.value;
+                sending_data['return_div'] = str_name;
+
+                var output_div = document.querySelector('#output_' + str_name);
+                output_div.innerHTML = "Code is running..."
+
+                websocket.send(JSON.stringify(sending_data));
+            }
+
         </script>
     </body>
 </html>

@@ -40,6 +40,25 @@ async def python_code_processing(websocket, path):
             sent_chart = ''
 
             data_code = data.get('code')
+            data_return_div = data.get('return_div')
+            f= open("python_chart_temp.py","w+")
+            f.write("from util_library import *\n")
+            f.write(data_code)
+            f.write("\nresult_array = sorted(result_array, key=lambda x: x['order'], reverse=False)\n")
+            f.write("print(';##;')\n")
+            f.write("print(result_array)")
+            f.close()
+
+            #sent_chart = generate_chart(data_chart)
+            process = subprocess.Popen(['python', 'python_chart_temp.py'],
+                    stdout=subprocess.PIPE, 
+                    stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate()
+            sent_error = stderr.decode("utf-8")
+            sent_output = stdout.decode("utf-8")
+
+            '''
+            data_code = data.get('code')
             if data_code:                
                 f= open("python_temp.py","w+")
                 f.write("from util_library import *")
@@ -69,8 +88,9 @@ async def python_code_processing(websocket, path):
                 stdout, stderr = process.communicate()
                 sent_error = stderr.decode("utf-8")
                 sent_chart = stdout.decode("utf-8")
+            '''
 
-            await notify_everyone(json.dumps({ 'output': sent_output, 'error': sent_error, 'chart':sent_chart, 'markup':''}) )
+            await notify_everyone(json.dumps({ 'output': sent_output, 'error': sent_error, 'return_div':data_return_div, 'markup':''}) )
     except Exception as e:
         await websocket.send(json.dumps({ 'output': '', 'error': 'Internal Error Occured', 'chart':'', 'markup':''}) )
     finally:
