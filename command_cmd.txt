@@ -98,13 +98,14 @@ output_filename = "jeoJSON_al_sk.json"
 generateGeoJSON(filename, bbox, output_filename)
 
 -------------
+
 addRiverMapToChart(chart_name='Chart 1', order=1)
 -------------
 
 color_list_seq = [ '#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#000000']
 addColorListRiverMap(chart_name='Chart 1', color_list=color_list_seq)
 
-jsons = ['jeoJSON_al_sk.json']
+jsons = ['jeoJSON_saskatoon.json']
 addJSONRiverMap(chart_name='Chart 1', jsonfilenames=jsons)
 
 -------------
@@ -121,10 +122,10 @@ bbox_whole_west = {
 
 
 bbox_sk = {
-       'min_longitude': -109.95117, 
-       'max_longitude': -101.79931, 
-       'min_latitude': 49.18170, 
-       'max_latitude':  55.24155
+       'min_longitude': -110.12695, 
+       'max_longitude': -101.44775, 
+       'min_latitude': 48.951366, 
+       'max_latitude':  59.91097
 }
 
 bbox_saskatoon = {
@@ -133,3 +134,35 @@ bbox_saskatoon = {
        'min_latitude': 51.544626, 
        'max_latitude':  52.72631
 }
+
+bbox_sk_al = {
+       'min_longitude': -119.70703, 
+       'max_longitude': -101.77735, 
+       'min_latitude': 48.98022, 
+       'max_latitude':  59.91098
+}
+
+
+
+
+shp_filename = "RData\\river_with_lake_flag4_reorder.shp"
+nc_filename = "D:\OneDrive_USask\OneDrive - University of Saskatchewan\PravinShervan\hybrid_test.mizuRoute.h.****-01-01-00000.nc"
+var_name = 'IRFroutedRunoff'
+
+bbox_saskatoon = {
+       'min_longitude': -107.74566,
+       'max_longitude': -105.65277, 
+       'min_latitude': 51.544626, 
+       'max_latitude':  52.72631
+}
+output_filename = "jeoJSON_saskatoon_1995_1996.json"
+
+generateGeoJSON_FromSHPAndNetCDF_WithinTimeRange(shp_filename, bbox_saskatoon, nc_filename, var_name, 1995, 1996, output_filename)
+
+
+addRiverMapToChart(chart_name='Chart 1', order=1)
+
+jsons = ['jeoJSON_saskatoon_1995_1996.json']
+addJSONRiverMap(chart_name='Chart 1', jsonfilenames=jsons)
+
+drawChart(chart_name='Chart 1')
