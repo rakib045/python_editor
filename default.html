@@ -30,8 +30,8 @@
                     <div class="accordion-item" id="A1">
                       <h2 class="accordion-header" id="headingOne">
                         <div class="accordion-button bg-white border-success text-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="padding: 10px 15px; border-width: 2px;">
-                          <div style="font-size: 24px" class="col-6">Code</div>
-                          <div class="col-5">
+                          <div style="font-size: 24px" class="col-5">Code</div>
+                          <div class="col-6">
                             <button type="button" class="accrd-button btn btn-outline-success" onclick="run_code_section('1')"><i class="bi bi-play-fill"></i> Run</button>
                             <button type="button" class="accrd-button btn btn-outline-warning" onclick="clear_txt('1')"><i class="bi bi-eraser"></i> Clear</button>
                             <button type="button" class="accrd-button btn btn-outline-danger" onclick="remove_section('A1')"><i class="bi bi-trash"></i> Remove</button>
@@ -255,9 +255,9 @@
                 var str = "<div class='accordion-item' id='" + section_name + "'>";
                 str +=  "<h2 class='accordion-header' id='heading" + section_name + "'>";
                 str +=  "<div class='accordion-button bg-white border-success text-success' type='button' data-bs-toggle='collapse' data-bs-target='#collapse" + section_name + "' aria-expanded='false' aria-controls='collapse"+section_name+"' style='padding: 10px 15px; border-width: 2px'>";
-                str +=  "<div style='font-size: 24px' class='col-6'>";
+                str +=  "<div style='font-size: 24px' class='col-5'>";
                 str +=  add_section_textbox.value + "</div>";
-                str +=  "<div class='col-5'>";
+                str +=  "<div class='col-6'>";
                 str +=  "<button type='button' class='accrd-button btn btn-outline-success' onclick='run_code_section(\"" + section_name + "\")'><i class='bi bi-play-fill'></i> Run</button>";
                 str +=  "<button type='button' class='accrd-button btn btn-outline-warning' onclick='clear_txt(\"" + section_name + "\")'><i class='bi bi-eraser'></i> Clear</button>";
                 str +=  "<button type='button' class='accrd-button btn btn-outline-danger' onclick='remove_section(\"" + section_name + "\")'><i class='bi bi-trash'></i> Remove</button>";                                                      

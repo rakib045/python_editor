@@ -103,7 +103,10 @@ addRiverMapToChart(chart_name='Chart 1', order=1)
 -------------
 
 color_list_seq = [ '#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#000000']
-addColorListRiverMap(chart_name='Chart 1', color_list=color_list_seq)
+
+color_list_seq = ['#ffffd9', '#edf8b1', '#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8', '#253494', '#081d58', '#000000']
+color_list_qual = [ "#b2df8a", "#a6cee3", "#cab2d6", "#fdbf6f", "#fb9a99", "#33a02c", "#1f78b4", "#6a3d9a", "#ff7f00", "#e31a1c"]
+addColorListRiverMap(chart_name='Chart 1', color_list=color_list_qual)
 
 jsons = ['jeoJSON_saskatoon.json']
 addJSONRiverMap(chart_name='Chart 1', jsonfilenames=jsons)
@@ -166,3 +169,28 @@ jsons = ['jeoJSON_saskatoon_1995_1996.json']
 addJSONRiverMap(chart_name='Chart 1', jsonfilenames=jsons)
 
 drawChart(chart_name='Chart 1')
+
+-------------------------------------------------------------------------
+
+
+addRiverMapToChart(chart_name='River Map2', order=1)
+
+
+color_list_seq = ['#ffffd9', '#edf8b1', '#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8', '#253494', '#081d58', '#000000']
+addColorListRiverMap(chart_name='River Map2', color_list=color_list_seq)
+
+jsons = ['jeoJSON_saskatchewan_alberta_acc_gt_15.json']
+addJSONRiverMap(chart_name='River Map2', jsonfilenames=jsons)
+
+drawChart(chart_name='River Map2')
+
+
+------------------------------------------------------------------------------
+
+
+addRiverMapToChart(chart_name='River Map1', order=1)
+
+jsons = ['jeoJSON_west_all.json']
+addJSONRiverMap(chart_name='River Map1', jsonfilenames=jsons)
+
+drawChart(chart_name='River Map1')
