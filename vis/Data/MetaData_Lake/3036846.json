@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 228,
+    "Lake_name": "Colville",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 448.2,
+    "Shore_len": 176.21,
+    "Shore_dev": 2.35,
+    "Vol_total": 6512.58,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 14.5,
+    "Dis_avg": 8.989,
+    "Res_time": 8385.5,
+    "Elevation": 229,
+    "Slope_100": 1.89,
+    "Wshd_area": 2635.4,
+    "Pour_long": -125.72769,
+    "Pour_lat": 67.238481
+  }
+}

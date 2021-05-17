@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 21,
+    "Lake_name": "Takiyuak",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 1031.69,
+    "Shore_len": 1003.96,
+    "Shore_dev": 8.82,
+    "Vol_total": 49576.74,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 48.1,
+    "Dis_avg": 41.152,
+    "Res_time": 13943.5,
+    "Elevation": 366,
+    "Slope_100": -1.0,
+    "Wshd_area": 7177.5,
+    "Pour_long": -113.658891,
+    "Pour_lat": 66.21204
+  }
+}

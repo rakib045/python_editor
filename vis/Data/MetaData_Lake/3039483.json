@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 34,
+    "Lake_name": "Claire",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 1332.93,
+    "Shore_len": 642.99,
+    "Shore_dev": 4.97,
+    "Vol_total": 1700.0,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 1.3,
+    "Dis_avg": 46.537,
+    "Res_time": 422.8,
+    "Elevation": 207,
+    "Slope_100": -1.0,
+    "Wshd_area": 21416.2,
+    "Pour_long": -111.703703,
+    "Pour_lat": 58.628837
+  }
+}

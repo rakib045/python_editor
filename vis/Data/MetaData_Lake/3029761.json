@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 344,
+    "Lake_name": "Sid",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 284.8,
+    "Shore_len": 258.77,
+    "Shore_dev": 4.33,
+    "Vol_total": 3427.1,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 12.0,
+    "Dis_avg": 16.659,
+    "Res_time": 2381.0,
+    "Elevation": 296,
+    "Slope_100": 1.78,
+    "Wshd_area": 3553.1,
+    "Pour_long": -103.74945,
+    "Pour_lat": 62.300276
+  }
+}

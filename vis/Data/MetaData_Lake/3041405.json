@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 258,
+    "Lake_name": "Hottah",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 950.73,
+    "Shore_len": 1846.46,
+    "Shore_dev": 16.89,
+    "Vol_total": 6383.43,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 6.7,
+    "Dis_avg": 83.394,
+    "Res_time": 885.9,
+    "Elevation": 175,
+    "Slope_100": -1.0,
+    "Wshd_area": 23813.0,
+    "Pour_long": -118.19375,
+    "Pour_lat": 65.227083
+  }
+}

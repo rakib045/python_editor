@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 359,
+    "Lake_name": "Nonacho",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 865.24,
+    "Shore_len": 2186.07,
+    "Shore_dev": 20.96,
+    "Vol_total": 13215.61,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 15.3,
+    "Dis_avg": 117.948,
+    "Res_time": 1296.8,
+    "Elevation": 312,
+    "Slope_100": -1.0,
+    "Wshd_area": 25598.7,
+    "Pour_long": -109.959376,
+    "Pour_lat": 61.666459
+  }
+}

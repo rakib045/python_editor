@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 290,
+    "Lake_name": "Aylmer",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 800.94,
+    "Shore_len": 1089.95,
+    "Shore_dev": 10.86,
+    "Vol_total": 15765.95,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 19.7,
+    "Dis_avg": 194.418,
+    "Res_time": 938.6,
+    "Elevation": 355,
+    "Slope_100": -1.0,
+    "Wshd_area": 40140.4,
+    "Pour_long": -107.936388,
+    "Pour_lat": 64.074333
+  }
+}

@@ -1,0 +1,199 @@
+python RiverBasin.py --conversion=ShapeToGeoJSON --bbox="-107.74566, -105.65277, 51.544626, 52.72631" --input_filename=HydroRIVERS_v10_na_shp/HydroRIVERS_v10_na.shp --output_filename=jeoJSON_na_30s_saskatoon.json
+python RiverBasin.py --conversion=ShapeToGeoJSON --bbox="-104.85076, -104.351577, 50.288023, 50.602852" --input_filename=HydroRIVERS_v10_na_shp/HydroRIVERS_v10_na.shp --output_filename=jeoJSON_na_30s_regina.json
+python RiverBasin.py --conversion=ShapeToGeoJSON --bbox="-109.775391, -101.601563,  49.0522703, 55.4414794" --input_filename=HydroRIVERS_v10_na_shp/HydroRIVERS_v10_na.shp --output_filename=jeoJSON_na_30_saskatchewan_lower_half.json
+
+
+python RiverBasin.py --start=web-socket --server=127.0.0.1 --port=5678
+python RiverBasin.py --start=web-server --port=8000 --input_filename=index.html
+python RiverBasin.py --start=web-server --port=8000 --input_filename=default.html
+
+
+python RiverBasin.py --param=1 --color_list="#e31a1c, #ff7f00, #6a3d9a, #1f78b4, #33a02c, #fb9a99, #fdbf6f, #cab2d6, #a6cee3, #b2df8a" --json_file=jeoJSON_na_30s_saskatoon.json --server=127.0.0.1 --port=5678
+python RiverBasin.py --param=1 --color_list="#e31a1c, #ff7f00, #6a3d9a, #1f78b4, #33a02c, #fb9a99, #fdbf6f, #cab2d6, #a6cee3, #b2df8a" --json_file=jeoJSON_na_30s_regina.json --server=127.0.0.1 --port=5678
+python RiverBasin.py --param=1 --refresh=True --server=127.0.0.1 --port=5678
+
+python RiverBasin.py --param=1 --color_list="#e31a1c, #ff7f00, #6a3d9a, #1f78b4, #33a02c, #fb9a99, #fdbf6f, #cab2d6, #a6cee3, #b2df8a" --json_file=jeoJSON_na_30_saskatchewan_lower_half.json --server=127.0.0.1 --port=5678
+
+python RiverBasin.py --param=1 --color_list="#000000, #08306b, #08519c, #2171b5, #4292c6, #6baed6, #9ecae1, #c6dbef, #deebf7, #f7fbff" --json_file=jeoJSON_na_30_saskatchewan_lower_half.json --server=127.0.0.1 --port=5678
+
+
+Qualitative color:  #e31a1c, #ff7f00, #6a3d9a, #1f78b4, #33a02c, #fb9a99, #fdbf6f, #cab2d6, #a6cee3, #b2df8a
+Sequential color : #000000, #08306b, #08519c, #2171b5, #4292c6, #6baed6, #9ecae1, #c6dbef, #deebf7, #f7fbff 
+
+
+
+
+%%%% #Markup# %%%%
+# Your mark-up code goes here
+
+%%%% #Code# %%%%
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Data for plotting
+t = np.arange(0.0, 2.0, 0.01)
+s = 1 + np.sin(2 * np.pi * t)
+
+fig, ax = plt.subplots()
+ax.plot(t, s)
+
+ax.set(xlabel='time (s)', ylabel='voltage (mV)',
+        title='About as simple as it gets')
+ax.grid()
+
+fig.savefig("test.png")
+
+x1 = np.linspace(0.0, 5.0)
+x2 = np.linspace(0.0, 2.0)
+
+y1 = np.cos(2 * np.pi * x1) * np.exp(-x1)
+y2 = np.cos(2 * np.pi * x2)
+
+fig, (ax1, ax2) = plt.subplots(2, 1)
+fig.suptitle('A tale of 2 subplots')
+
+ax1.plot(x1, y1, 'o-')
+ax1.set_ylabel('Damped oscillation')
+
+ax2.plot(x2, y2, '.-')
+ax2.set_xlabel('time (s)')
+ax2.set_ylabel('Undamped')
+fig.savefig("test1.png")
+
+addToChart('Time vs Voltage', 'test.png',2)
+addToChart('Subplots', 'test1.png',1) 
+
+print(x1)
+
+%%%% #Chart# %%%%
+# Add your generated charts here
+addToChart('Time vs Voltage', 'test.png',2)
+addToChart('Subplots', 'test1.png',1)   
+
+
+
+
+filename = "HydroRIVERS_v10_na_shp\HydroRIVERS_v10_na.shp"
+bbox = {
+       'min_longitude': -107.74566, 
+       'max_longitude': -105.65277, 
+       'min_latitude': 51.544626, 
+       'max_latitude': 52.72631
+}
+output_filename = "jeoJSON_saskatoon.json"
+
+generateGeoJSON(filename, bbox, output_filename)
+
+
+
+> ------- <
+
+filename = "RData\\river_with_lake_flag4_reorder.shp"
+bbox = {
+       'min_longitude': -120.585937, 
+       'max_longitude': -101.557617, 
+       'min_latitude': 48.95136, 
+       'max_latitude': 59.95501
+}
+output_filename = "jeoJSON_al_sk.json"
+
+generateGeoJSON(filename, bbox, output_filename)
+
+-------------
+
+addRiverMapToChart(chart_name='Chart 1', order=1)
+-------------
+
+color_list_seq = [ '#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#000000']
+
+color_list_seq = ['#ffffd9', '#edf8b1', '#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8', '#253494', '#081d58', '#000000']
+color_list_qual = [ "#b2df8a", "#a6cee3", "#cab2d6", "#fdbf6f", "#fb9a99", "#33a02c", "#1f78b4", "#6a3d9a", "#ff7f00", "#e31a1c"]
+addColorListRiverMap(chart_name='Chart 1', color_list=color_list_qual)
+
+jsons = ['jeoJSON_saskatoon.json']
+addJSONRiverMap(chart_name='Chart 1', jsonfilenames=jsons)
+
+-------------
+drawChart(chart_name='Chart 1')
+
+
+
+bbox_whole_west = {
+       'min_longitude': -140.18555, 
+       'max_longitude': -102.48047, 
+       'min_latitude': 51.344339, 
+       'max_latitude': 69.687618
+}
+
+
+bbox_sk = {
+       'min_longitude': -110.12695, 
+       'max_longitude': -101.44775, 
+       'min_latitude': 48.951366, 
+       'max_latitude':  59.91097
+}
+
+bbox_saskatoon = {
+       'min_longitude': -107.74566,
+       'max_longitude': -105.65277, 
+       'min_latitude': 51.544626, 
+       'max_latitude':  52.72631
+}
+
+bbox_sk_al = {
+       'min_longitude': -119.70703, 
+       'max_longitude': -101.77735, 
+       'min_latitude': 48.98022, 
+       'max_latitude':  59.91098
+}
+
+
+
+
+shp_filename = "RData\\river_with_lake_flag4_reorder.shp"
+nc_filename = "D:\OneDrive_USask\OneDrive - University of Saskatchewan\PravinShervan\hybrid_test.mizuRoute.h.****-01-01-00000.nc"
+var_name = 'IRFroutedRunoff'
+
+bbox_saskatoon = {
+       'min_longitude': -107.74566,
+       'max_longitude': -105.65277, 
+       'min_latitude': 51.544626, 
+       'max_latitude':  52.72631
+}
+output_filename = "jeoJSON_saskatoon_1995_1996.json"
+
+generateGeoJSON_FromSHPAndNetCDF_WithinTimeRange(shp_filename, bbox_saskatoon, nc_filename, var_name, 1995, 1996, output_filename)
+
+
+addRiverMapToChart(chart_name='Chart 1', order=1)
+
+jsons = ['jeoJSON_saskatoon_1995_1996.json']
+addJSONRiverMap(chart_name='Chart 1', jsonfilenames=jsons)
+
+drawChart(chart_name='Chart 1')
+
+-------------------------------------------------------------------------
+
+
+addRiverMapToChart(chart_name='River Map2', order=1)
+
+
+color_list_seq = ['#ffffd9', '#edf8b1', '#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8', '#253494', '#081d58', '#000000']
+addColorListRiverMap(chart_name='River Map2', color_list=color_list_seq)
+
+jsons = ['jeoJSON_saskatchewan_alberta_acc_gt_15.json']
+addJSONRiverMap(chart_name='River Map2', jsonfilenames=jsons)
+
+drawChart(chart_name='River Map2')
+
+
+------------------------------------------------------------------------------
+
+
+addRiverMapToChart(chart_name='River Map1', order=1)
+
+jsons = ['jeoJSON_west_all.json']
+addJSONRiverMap(chart_name='River Map1', jsonfilenames=jsons)
+
+drawChart(chart_name='River Map1')

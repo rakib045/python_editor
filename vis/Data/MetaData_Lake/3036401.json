@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 551,
+    "Lake_name": "Cold",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 346.85,
+    "Shore_len": 116.58,
+    "Shore_dev": 1.77,
+    "Vol_total": 15131.9,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 43.6,
+    "Dis_avg": 13.192,
+    "Res_time": 13276.0,
+    "Elevation": 531,
+    "Slope_100": 5.24,
+    "Wshd_area": 6543.5,
+    "Pour_long": -109.845195,
+    "Pour_lat": 54.567004
+  }
+}

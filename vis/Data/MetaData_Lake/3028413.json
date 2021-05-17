@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 241,
+    "Lake_name": "Rockinghorse",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 226.29,
+    "Shore_len": 273.29,
+    "Shore_dev": 5.12,
+    "Vol_total": 5263.91,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 23.3,
+    "Dis_avg": 5.267,
+    "Res_time": 11567.3,
+    "Elevation": 433,
+    "Slope_100": 3.34,
+    "Wshd_area": 870.1,
+    "Pour_long": -112.460943,
+    "Pour_lat": 65.963044
+  }
+}

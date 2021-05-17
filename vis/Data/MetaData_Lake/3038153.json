@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 537,
+    "Lake_name": "Deschambault",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 543.74,
+    "Shore_len": 926.17,
+    "Shore_dev": 11.2,
+    "Vol_total": 3350.0,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 6.2,
+    "Dis_avg": 22.555,
+    "Res_time": 1719.0,
+    "Elevation": 322,
+    "Slope_100": -1.0,
+    "Wshd_area": 8486.2,
+    "Pour_long": -103.135655,
+    "Pour_lat": 54.839659
+  }
+}

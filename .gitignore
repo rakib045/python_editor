@@ -1,1 +1,3 @@
-RData/*
+.vscode/*
+__pycache__/*
+data_preprocessing/RData/*

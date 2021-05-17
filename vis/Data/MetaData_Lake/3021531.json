@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 524,
+    "Lake_name": "Plonge",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 238.32,
+    "Shore_len": 105.62,
+    "Shore_dev": 1.93,
+    "Vol_total": 3744.31,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 15.7,
+    "Dis_avg": 0.666,
+    "Res_time": 65070.4,
+    "Elevation": 446,
+    "Slope_100": 2.35,
+    "Wshd_area": 791.6,
+    "Pour_long": -107.504492,
+    "Pour_lat": 55.188031
+  }
+}

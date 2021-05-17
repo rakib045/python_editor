@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 42,
+    "Lake_name": "Lesser Slave",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 1186.51,
+    "Shore_len": 314.63,
+    "Shore_dev": 2.58,
+    "Vol_total": 13526.56,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 11.4,
+    "Dis_avg": 43.347,
+    "Res_time": 3611.7,
+    "Elevation": 572,
+    "Slope_100": -1.0,
+    "Wshd_area": 13479.0,
+    "Pour_long": -114.773391,
+    "Pour_lat": 55.306762
+  }
+}

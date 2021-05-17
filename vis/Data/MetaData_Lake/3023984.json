@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 428,
+    "Lake_name": "Riou",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 163.16,
+    "Shore_len": 254.64,
+    "Shore_dev": 5.62,
+    "Vol_total": 1150.03,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 7.0,
+    "Dis_avg": 5.669,
+    "Res_time": 2348.0,
+    "Elevation": 237,
+    "Slope_100": 1.27,
+    "Wshd_area": 1834.6,
+    "Pour_long": -106.650784,
+    "Pour_lat": 59.096666
+  }
+}

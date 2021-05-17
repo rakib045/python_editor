@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 397,
+    "Lake_name": "Buffalo",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 553.24,
+    "Shore_len": 232.25,
+    "Shore_dev": 2.79,
+    "Vol_total": 520.05,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 0.9,
+    "Dis_avg": 44.541,
+    "Res_time": 135.1,
+    "Elevation": 260,
+    "Slope_100": -1.0,
+    "Wshd_area": 15811.8,
+    "Pour_long": -115.25851,
+    "Pour_lat": 60.35401
+  }
+}

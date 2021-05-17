@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 383,
+    "Lake_name": "Wholdaia",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 579.88,
+    "Shore_len": 1489.63,
+    "Shore_dev": 17.45,
+    "Vol_total": 6213.22,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 10.7,
+    "Dis_avg": 32.722,
+    "Res_time": 2197.7,
+    "Elevation": 347,
+    "Slope_100": -1.0,
+    "Wshd_area": 5427.4,
+    "Pour_long": -103.868885,
+    "Pour_lat": 60.829424
+  }
+}

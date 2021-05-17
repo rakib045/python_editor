@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 230,
+    "Lake_name": "Bois",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 458.53,
+    "Shore_len": 228.78,
+    "Shore_dev": 3.01,
+    "Vol_total": 6526.67,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 14.2,
+    "Dis_avg": 6.002,
+    "Res_time": 12585.8,
+    "Elevation": 284,
+    "Slope_100": 1.85,
+    "Wshd_area": 1416.1,
+    "Pour_long": -125.258076,
+    "Pour_lat": 67.041833
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "data": {
+    "BotElev": 378.0,
+    "Length": 7797.934723082537,
+    "OBJECTID": null,
+    "PFAF": "336692",
+    "PFAF_CODE": 336692000000.0,
+    "PF_TYPE": 5,
+    "Shape_Leng": 0.07806367235,
+    "Slope": 0.000256478166466,
+    "TopElev": 380.0,
+    "Tosegment": 3024858,
+    "end_x": -106.98020833294811,
+    "end_y": 63.19673611088285,
+    "flow_acc": 269.108,
+    "seg_id": 3001731,
+    "start_x": -106.97187499993129,
+    "start_y": 63.15402777815956,
+    "islake": 0,
+    "lakeId": 0,
+    "RATEACV": 0.0,
+    "RATEBCV": 0.0,
+    "lake_Vol": 0.0
+  }
+}

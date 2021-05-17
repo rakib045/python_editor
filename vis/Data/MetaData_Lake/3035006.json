@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 22,
+    "Lake_name": "Contwoyto",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 1053.82,
+    "Shore_len": 1449.04,
+    "Shore_dev": 12.59,
+    "Vol_total": 23383.42,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 22.2,
+    "Dis_avg": 36.013,
+    "Res_time": 7515.1,
+    "Elevation": 435,
+    "Slope_100": -1.0,
+    "Wshd_area": 9841.5,
+    "Pour_long": -111.239858,
+    "Pour_lat": 66.044988
+  }
+}

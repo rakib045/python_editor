@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 545,
+    "Lake_name": "Smoothstone",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 277.7,
+    "Shore_len": 111.9,
+    "Shore_dev": 1.89,
+    "Vol_total": 6072.44,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 21.9,
+    "Dis_avg": 8.552,
+    "Res_time": 8218.3,
+    "Elevation": 475,
+    "Slope_100": 3.02,
+    "Wshd_area": 2783.0,
+    "Pour_long": -106.792708,
+    "Pour_lat": 54.750923
+  }
+}

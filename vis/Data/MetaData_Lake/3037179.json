@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 517,
+    "Lake_name": "Babine",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 465.2,
+    "Shore_len": 561.85,
+    "Shore_dev": 7.35,
+    "Vol_total": 34529.73,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 74.2,
+    "Dis_avg": 63.76,
+    "Res_time": 6268.0,
+    "Elevation": 709,
+    "Slope_100": 7.77,
+    "Wshd_area": 6297.1,
+    "Pour_long": -126.628483,
+    "Pour_lat": 55.317605
+  }
+}

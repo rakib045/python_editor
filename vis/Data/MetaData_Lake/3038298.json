@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 433,
+    "Lake_name": "Davy",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 111.07,
+    "Shore_len": 189.08,
+    "Shore_dev": 5.06,
+    "Vol_total": 558.15,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 5.0,
+    "Dis_avg": 47.363,
+    "Res_time": 136.4,
+    "Elevation": 341,
+    "Slope_100": 1.04,
+    "Wshd_area": 8666.9,
+    "Pour_long": -108.190857,
+    "Pour_lat": 58.938038
+  }
+}

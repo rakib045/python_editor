@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 497,
+    "Lake_name": "",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 120.69,
+    "Shore_len": 242.77,
+    "Shore_dev": 6.23,
+    "Vol_total": 2761.69,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 22.9,
+    "Dis_avg": 155.547,
+    "Res_time": 205.5,
+    "Elevation": 387,
+    "Slope_100": 3.81,
+    "Wshd_area": 94231.3,
+    "Pour_long": -106.7699,
+    "Pour_lat": 55.83722
+  }
+}

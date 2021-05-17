@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 574,
+    "Lake_name": "Crean",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 125.02,
+    "Shore_len": 124.27,
+    "Shore_dev": 3.14,
+    "Vol_total": 2437.47,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 19.5,
+    "Dis_avg": 1.207,
+    "Res_time": 23373.2,
+    "Elevation": 524,
+    "Slope_100": 3.29,
+    "Wshd_area": 396.0,
+    "Pour_long": -106.06875,
+    "Pour_lat": 54.085417
+  }
+}

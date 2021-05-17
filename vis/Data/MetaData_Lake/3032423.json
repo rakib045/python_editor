@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 337,
+    "Lake_name": "Mary",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 163.64,
+    "Shore_len": 201.74,
+    "Shore_dev": 4.45,
+    "Vol_total": 3373.56,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 20.6,
+    "Dis_avg": 22.712,
+    "Res_time": 1719.2,
+    "Elevation": 294,
+    "Slope_100": 3.24,
+    "Wshd_area": 4730.3,
+    "Pour_long": -103.411305,
+    "Pour_lat": 62.450704
+  }
+}

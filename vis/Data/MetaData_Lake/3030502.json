@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 586,
+    "Lake_name": "Candle",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 131.68,
+    "Shore_len": 73.9,
+    "Shore_dev": 1.82,
+    "Vol_total": 1181.77,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 9.0,
+    "Dis_avg": 3.867,
+    "Res_time": 3537.1,
+    "Elevation": 491,
+    "Slope_100": 1.65,
+    "Wshd_area": 1862.9,
+    "Pour_long": -105.161458,
+    "Pour_lat": 53.767026
+  }
+}
