@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 2,
+    "Lake_name": "Great Bear",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 30450.64,
+    "Shore_len": 5331.72,
+    "Shore_dev": 8.62,
+    "Vol_total": 2200000.0,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 72.2,
+    "Dis_avg": 535.187,
+    "Res_time": 47577.7,
+    "Elevation": 145,
+    "Slope_100": -1.0,
+    "Wshd_area": 147665.4,
+    "Pour_long": -123.505546,
+    "Pour_lat": 65.138384
+  }
+}

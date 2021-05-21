@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 500,
+    "Lake_name": "Pinehouse",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 379.1,
+    "Shore_len": 704.73,
+    "Shore_dev": 10.21,
+    "Vol_total": 8243.2,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 21.7,
+    "Dis_avg": 194.97,
+    "Res_time": 489.3,
+    "Elevation": 379,
+    "Slope_100": 2.8,
+    "Wshd_area": 106294.9,
+    "Pour_long": -106.186465,
+    "Pour_lat": 55.777014
+  }
+}

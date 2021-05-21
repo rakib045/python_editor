@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 498,
+    "Lake_name": "Peter Pond",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 827.51,
+    "Shore_len": 345.22,
+    "Shore_dev": 3.39,
+    "Vol_total": 9516.38,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 11.5,
+    "Dis_avg": 18.032,
+    "Res_time": 6108.2,
+    "Elevation": 415,
+    "Slope_100": -1.0,
+    "Wshd_area": 13602.7,
+    "Pour_long": -108.464679,
+    "Pour_lat": 55.831148
+  }
+}

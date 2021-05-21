@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 527,
+    "Lake_name": "Egg",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 130.68,
+    "Shore_len": 189.82,
+    "Shore_dev": 4.68,
+    "Vol_total": 1437.15,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 11.0,
+    "Dis_avg": 25.538,
+    "Res_time": 651.3,
+    "Elevation": 370,
+    "Slope_100": 1.98,
+    "Wshd_area": 7327.9,
+    "Pour_long": -105.357467,
+    "Pour_lat": 55.093386
+  }
+}

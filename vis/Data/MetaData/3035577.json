@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 323,
+    "Lake_name": "Tyrrell",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 229.37,
+    "Shore_len": 653.33,
+    "Shore_dev": 12.17,
+    "Vol_total": 2254.88,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 9.8,
+    "Dis_avg": 16.406,
+    "Res_time": 1590.8,
+    "Elevation": 318,
+    "Slope_100": 1.57,
+    "Wshd_area": 3913.9,
+    "Pour_long": -105.335453,
+    "Pour_lat": 63.06394
+  }
+}

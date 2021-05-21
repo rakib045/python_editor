@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 213,
+    "Lake_name": "Eskimo Southern",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 843.49,
+    "Shore_len": 930.4,
+    "Shore_dev": 9.04,
+    "Vol_total": 17603.94,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 20.9,
+    "Dis_avg": 15.701,
+    "Res_time": 12976.8,
+    "Elevation": 6,
+    "Slope_100": -1.0,
+    "Wshd_area": 5383.3,
+    "Pour_long": -132.466129,
+    "Pour_lat": 69.204614
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 321,
+    "Lake_name": "Fish",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 116.63,
+    "Shore_len": 113.54,
+    "Shore_dev": 2.97,
+    "Vol_total": 894.01,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 7.7,
+    "Dis_avg": 15.271,
+    "Res_time": 677.6,
+    "Elevation": 290,
+    "Slope_100": 1.48,
+    "Wshd_area": 1971.0,
+    "Pour_long": -122.802093,
+    "Pour_lat": 63.10626
+  }
+}

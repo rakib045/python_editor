@@ -196,9 +196,8 @@
     };
     color_list = [];
     var data_list = [];    
-    //var default_color_list = [ "#b2df8a", "#a6cee3", "#cab2d6", "#fdbf6f", "#fb9a99", "#33a02c", "#1f78b4", "#6a3d9a", "#ff7f00", "#e31a1c"];
-    //var default_color_list = [ '#ffffd9','#edf8b1','#c7e9b4','#7fcdbb','#41b6c4','#1d91c0','#225ea8','#253494','#081d58','#000000'];
-    var default_color_list = [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'];
+    var default_color_list = [ "#b2df8a", "#a6cee3", "#cab2d6", "#fdbf6f", "#fb9a99", "#33a02c", "#1f78b4", "#6a3d9a", "#ff7f00", "#e31a1c"];
+    //var default_color_list = [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'];
     
     var geojsons = "";
     
@@ -365,12 +364,9 @@
     function drawMap(variable_name, year, day){
         color_list = sessionStorage.getItem("colorlist").split(',');
         json_list_str = sessionStorage.getItem("geojson");
-        //json_list_str = "jeoJSON_saskatchewan.json";
-        //json_list_str = "jeoJSON_saskatchewan_alberta.json";
-        //json_list_str = "jeoJSON_saskatoon.json";
-        //json_list_str = "jeoJSON_saskatchewan_alberta_acc_gt_15.json"
-        //json_list_str = "jeoJSON_west.json";
-        json_list_str = "jeoJSON_west_all.json";
+
+        //json_list_str = "jeoJSON_west_all.json";
+        json_list_str = "jeoJSON_al_sk_river_flow_acc_gt_1500.json";
         
         minVal = 1000000;
         maxVal = -1000000;
@@ -602,13 +598,6 @@
     function setScaleGradesLogarithmic(val_min, val_max, log_min, log_max, no_steps){
         custom_grades = [];
         var steps_len = (parseInt(log_max - log_min) / no_steps);
-
-        /*
-        for (var i = log_min; i < log_max; i = i + steps_len) {
-            var d = val_max - parseInt((Math.log(i) - Math.log(log_min)) / (Math.log(log_max) - Math.log(log_min)) * (val_max - val_min));
-            custom_grades.push(d);
-        }
-        */
         for (var i = 0; i < no_steps; i++) {
             var d = val_max - parseInt((Math.log(log_min+ i*steps_len) - Math.log(log_min)) / (Math.log(log_max) - Math.log(log_min)) * (val_max - val_min));
             custom_grades.push(d.toFixed(2));
@@ -699,84 +688,6 @@
 
         $('#infoAnimation').html((day+1) + "/365 day of " + year + " (" + theDate.toDateString() + ")");
     };
-
-    /*
-    function drawShapes(data_list){
-        counter_1 = 1;
-
-        for (var i=0; i<data_list.length; i++)
-        {
-            this.geoJsonFeature = L.geoJSON(data_list[i], {
-                filter: function(feature){
-                    if (feature.properties.islake == 0) return true;
-                },
-                style: function (feature) {
-                    cus_color = color_list[getIndexOfGrades(feature.properties[variable_name][year][day])];
-                    return {color: cus_color};
-                },
-                onEachFeature: function(feature, layer){
-                    //console.log(index);
-                    layers[getIndexOfGrades(feature.properties[variable_name][year][day])].addLayer(layer);
-                    //index++;
-                }
-            }).bindPopup(function (d) {
-
-                return "<div><button onclick='showMetaDataInfo("+ d.feature.properties.seg_id + ")'>Show IRFroutedRunoff</button></div>";
-                //return variable_name + ": " + d.feature.properties[variable_name][year][day];
-            }).addTo(map);
-
-
-            if(counter_1 == data_list.length){ 
-
-                //console.log(minVal);
-                //console.log(maxVal);
-                legend_text = [];
-
-                
-                for(var j=0; j<=custom_grades.length; j++)
-                {
-                    str_label = "";
-                    if(j==0)
-                        str_label += "<= " + custom_grades[j];
-                    else if(j==custom_grades.length)
-                        str_label += ">= " + custom_grades[j-1];                                   
-                    else
-                        str_label += (custom_grades[j-1]+1) + " - " + custom_grades[j];
-                    
-                    legend_text.push(str_label);
-                }
-
-                for(var j=0; j<legend_text.length; j++)
-                {
-                    overlayMaps[legend_text[j]] = layers[j];
-                    layers[j].addTo(map);
-                }
-
-                legend.onAdd = function(m){
-                    var div = L.DomUtil.create('div', 'info legend');
-                    div.innerHTML += "<p>" + variable_name + "</p>"
-                    for(var i=0; i<color_list.length; i++)
-                    {
-                        div.innerHTML += '<div style="margin-bottom: 2px;"><i style="background:' + color_list[i] + '; opacity:1"></i>' + legend_text[i] + '</div>';
-                    }
-                    return div;
-                }
-                legend.addTo(map);
-                
-                $('.leaflet-control-layers').remove();
-                L.control.layers(baseLayers, overlayMaps).addTo(map);
-
-                var theDate = new Date(year, 0, 1);
-                var myNewDate = new Date(theDate);
-                theDate.setDate(theDate.getDate() + day);
-
-                $('#infoAnimation').html((day+1) + "/365 day of " + year + " (" + theDate.toDateString() + ")");
-
-            }
-            counter_1++;
-        }
-    };
-    */
 
     function initializeMap(){
         if (this.map != undefined) this.map.remove();        
@@ -1013,13 +924,6 @@
                 
     }
 
-    /*
-    function manualPrint () {
-		this.printer.printMap('CurrentSize', 'MyManualPrint')
-	}
-    */
-
-    //drawHistoryHeatMapChart(seg_id, div_name, data);
 
 </script>
 

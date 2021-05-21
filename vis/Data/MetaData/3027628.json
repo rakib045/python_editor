@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 521,
+    "Lake_name": "Canoe",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 189.02,
+    "Shore_len": 83.6,
+    "Shore_dev": 1.72,
+    "Vol_total": 3617.74,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 19.1,
+    "Dis_avg": 1.297,
+    "Res_time": 32283.8,
+    "Elevation": 423,
+    "Slope_100": 2.94,
+    "Wshd_area": 3281.9,
+    "Pour_long": -108.144807,
+    "Pour_lat": 55.218106
+  }
+}

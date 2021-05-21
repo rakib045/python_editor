@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 698,
+    "Lake_name": "Arrow",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 2,
+    "Grand_id": 282,
+    "Lake_area": 510.05,
+    "Shore_len": 586.78,
+    "Shore_dev": 7.33,
+    "Vol_total": 11300.0,
+    "Vol_res": 11300.0,
+    "Vol_src": 2,
+    "Depth_avg": 22.2,
+    "Dis_avg": 1128.258,
+    "Res_time": 115.9,
+    "Elevation": 429,
+    "Slope_100": -1.0,
+    "Wshd_area": 36413.2,
+    "Pour_long": -117.774543,
+    "Pour_lat": 49.342295
+  }
+}

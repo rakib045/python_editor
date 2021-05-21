@@ -32,7 +32,11 @@ def addRiverMapToChart(chart_name, order=100, jsonfilename='', color_list=''):
     if chart_name != '':
         path += "name=" + chart_name.replace(' ','') + "&"
 
-    if jsonfilename != '':
+    filenames_str = ''
+    for filename in jsonfilename:
+        filenames_str += filename + ","
+    
+    if filenames_str != '':
         path += "geojson=" + filenames_str[:-1] + "&"
     
     if color_list != '':
@@ -51,8 +55,7 @@ def addJSONRiverMap(chart_name, jsonfilenames):
 
     filenames_str = ''
     for filename in jsonfilenames:
-        if os.path.exists(filename):
-            filenames_str += filename + ","
+        filenames_str += filename + ","
     if filenames_str != '':
         data_array["geojson"] = filenames_str[:-1]
     result_array.append(data_array)
@@ -81,34 +84,6 @@ def drawChart(chart_name):
     result_array.append(data_array)
     return
 
-'''
-def addRiverMapToChart(chart_name, files, color_list='', order=100):
-    global result_array
-    filenames = files.replace(' ','').split(',')
-    filenames_str = ''
-    for filename in filenames:
-        if os.path.exists(filename):
-            filenames_str += filename + ","
-    data_array = {}
-    data_array["id"] = chart_name.strip()
-    data_array['name'] = chart_name
-    data_array['type'] = 'iframe'
-    data_array["order"] = order
-    path = 'http://' + SERVER + ":" + str(web_port) + "/river_map.html?"
-    if chart_name != '':
-        path += "name=" + chart_name.strip() + "&"
-
-    if filenames_str != '':
-        path += "geojson=" + filenames_str[:-1] + "&"
-    
-    if color_list != '':
-        color_list_array = color_list.replace(' ','').replace('#','%23')
-        path += "colorlist=" + color_list_array + "&"
-    data_array['path'] = path.replace(',', '%2C')
-    result_array.append(data_array)
-    #print(result_array)
-    return
-'''
 
 def generateGeoJSON(shp_file_name, bbox, output_filename):    
 

@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 643,
+    "Lake_name": "Diefenbaker",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 2,
+    "Grand_id": 253,
+    "Lake_area": 391.72,
+    "Shore_len": 750.71,
+    "Shore_dev": 10.7,
+    "Vol_total": 9870.0,
+    "Vol_res": 9870.0,
+    "Vol_src": 2,
+    "Depth_avg": 25.2,
+    "Dis_avg": 262.165,
+    "Res_time": 435.7,
+    "Elevation": 551,
+    "Slope_100": 2.99,
+    "Wshd_area": 118913.8,
+    "Pour_long": -106.864575,
+    "Pour_lat": 51.268741
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 409,
+    "Lake_name": "Selwyn",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 564.14,
+    "Shore_len": 1485.22,
+    "Shore_dev": 17.64,
+    "Vol_total": 6649.81,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 11.8,
+    "Dis_avg": 35.078,
+    "Res_time": 2194.1,
+    "Elevation": 376,
+    "Slope_100": -1.0,
+    "Wshd_area": 5023.6,
+    "Pour_long": -104.165625,
+    "Pour_lat": 59.897076
+  }
+}

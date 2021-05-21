@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 36,
+    "Lake_name": "Cree",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 1155.15,
+    "Shore_len": 2054.47,
+    "Shore_dev": 17.05,
+    "Vol_total": 17211.73,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 14.9,
+    "Dis_avg": 23.397,
+    "Res_time": 8514.3,
+    "Elevation": 482,
+    "Slope_100": -1.0,
+    "Wshd_area": 3963.4,
+    "Pour_long": -106.302082,
+    "Pour_lat": 57.706249
+  }
+}

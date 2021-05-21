@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 394,
+    "Lake_name": "Teslin",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 355.58,
+    "Shore_len": 440.72,
+    "Shore_dev": 6.59,
+    "Vol_total": 24791.23,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 69.7,
+    "Dis_avg": 365.259,
+    "Res_time": 785.6,
+    "Elevation": 683,
+    "Slope_100": 7.83,
+    "Wshd_area": 22000.4,
+    "Pour_long": -133.26319,
+    "Pour_lat": 60.450699
+  }
+}

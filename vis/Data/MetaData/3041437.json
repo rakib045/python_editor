@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 350,
+    "Lake_name": "Barlow",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 127.92,
+    "Shore_len": 399.69,
+    "Shore_dev": 9.97,
+    "Vol_total": 737.35,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 5.8,
+    "Dis_avg": 143.358,
+    "Res_time": 59.5,
+    "Elevation": 286,
+    "Slope_100": 1.13,
+    "Wshd_area": 25678.3,
+    "Pour_long": -102.894792,
+    "Pour_lat": 62.091779
+  }
+}

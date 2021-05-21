@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 288,
+    "Lake_name": "Ingray",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 138.88,
+    "Shore_len": 282.46,
+    "Shore_dev": 6.76,
+    "Vol_total": 8734.65,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 62.9,
+    "Dis_avg": 15.644,
+    "Res_time": 6462.2,
+    "Elevation": 241,
+    "Slope_100": 8.91,
+    "Wshd_area": 4914.5,
+    "Pour_long": -116.238542,
+    "Pour_lat": 64.103423
+  }
+}

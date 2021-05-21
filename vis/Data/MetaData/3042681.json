@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 696,
+    "Lake_name": "Kootenay",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 3,
+    "Grand_id": 279,
+    "Lake_area": 421.55,
+    "Shore_len": 392.34,
+    "Shore_dev": 5.39,
+    "Vol_total": 75445.12,
+    "Vol_res": 1010.0,
+    "Vol_src": 3,
+    "Depth_avg": 179.0,
+    "Dis_avg": 751.282,
+    "Res_time": 1162.3,
+    "Elevation": 530,
+    "Slope_100": 16.92,
+    "Wshd_area": 46401.5,
+    "Pour_long": -117.465095,
+    "Pour_lat": 49.46878
+  }
+}

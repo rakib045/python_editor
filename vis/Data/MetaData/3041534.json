@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 648,
+    "Lake_name": "Revelstoke",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "Other",
+    "Lake_type": 2,
+    "Grand_id": 257,
+    "Lake_area": 111.21,
+    "Shore_len": 309.35,
+    "Shore_dev": 8.28,
+    "Vol_total": 5180.0,
+    "Vol_res": 5180.0,
+    "Vol_src": 2,
+    "Depth_avg": 46.6,
+    "Dis_avg": 789.746,
+    "Res_time": 75.9,
+    "Elevation": 572,
+    "Slope_100": 14.27,
+    "Wshd_area": 26204.6,
+    "Pour_long": -118.193246,
+    "Pour_lat": 51.052067
+  }
+}

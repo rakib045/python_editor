@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 363,
+    "Lake_name": "Kluane",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 397.6,
+    "Shore_len": 312.22,
+    "Shore_dev": 4.42,
+    "Vol_total": 40596.22,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 102.1,
+    "Dis_avg": 63.849,
+    "Res_time": 7359.0,
+    "Elevation": 768,
+    "Slope_100": 10.64,
+    "Wshd_area": 5569.7,
+    "Pour_long": -139.013864,
+    "Pour_lat": 61.390816
+  }
+}

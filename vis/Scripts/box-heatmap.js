@@ -1,10 +1,10 @@
 
 
-function drawHistoryHeatMapChart(seg_id, var_name){
+function drawHistoryHeatMapChart(seg_id, layer_name){
     //alert(seg_id);
     
 
-    d3.json("Data/" + var_name + "/Monthly/" + seg_id + ".json").then(function(d) {
+    d3.json("Data/" + data_library.variable_name_list[layer_name] + "/Monthly/" + seg_id + ".json").then(function(d) {
         var data = d.data;
 
         var temp_data = [];
@@ -27,12 +27,12 @@ function drawHistoryHeatMapChart(seg_id, var_name){
 
         }
 
-        drawHM_BoxChart(temp_data, year_list, seg_id, var_name);
+        drawHM_BoxChart(temp_data, year_list, seg_id, layer_name);
     });
    
 }
 
-function drawHM_BoxChart(data, year_list, seg_id, var_name){
+function drawHM_BoxChart(data, year_list, seg_id, layer_name){
 
     var margin = { top: 20, right: 10, bottom: 30, left: 30 },
     width = 800 - margin.left - margin.right,
@@ -40,7 +40,7 @@ function drawHM_BoxChart(data, year_list, seg_id, var_name){
     gridSize = Math.floor(width / 24),
     legendElementWidth = gridSize,
     buckets = 10,
-    colors = color_list;
+    colors = map_library.color_list_array[layer_name];
     years = year_list,
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -75,10 +75,7 @@ function drawHM_BoxChart(data, year_list, seg_id, var_name){
         .attr("transform", "translate(" + gridSize / 2 + ", -6)");
         //.attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
 
-    var heatmapChart = function(data) {
-        //var colorScale = d3.scaleQuantile()
-        //    .domain([0, buckets - 1, d3.max(data, function (d) { return d.value; })])
-        //    .range(colors);
+    var heatmapChart = function(data, layer_name) {
 
         var cards = svg.selectAll(".month")
             .data(data, function (d) { return d.year + ':' + d.month; });
@@ -102,7 +99,7 @@ function drawHM_BoxChart(data, year_list, seg_id, var_name){
             .attr("height", gridSize)
             .style("fill", function (d) { 
                 //return colorScale(d.value); 
-                return color_list[0];
+                return colors[0];
             })
             .attr("cursor", "pointer")
             .on("mouseover", function(event,d) {
@@ -122,17 +119,17 @@ function drawHM_BoxChart(data, year_list, seg_id, var_name){
                   .style("opacity", 0);
             })
             .on("click", function () { 
-                drawLineChart(this.attributes.dt.value + seg_id, var_name);             
+                drawLineChart(this.attributes.dt.value + seg_id, layer_name);             
     
             })
             .transition().duration(2000)
             .style("fill", function (d) {
-                return color_list[getIndexOfGrades(d.value)];
+                return colors[data_library.getIndexOfGrades(map_library.grade_list_array[layer_name], d.value)];
             });
 
         cards.transition().duration(1000)
             .style("fill", function (d) { 
-                return color_list[getIndexOfGrades(d.value)];
+                return colors[data_library.getIndexOfGrades(map_library.grade_list_array[layer_name], d.value)];
             });
 
         cards.select("title").text(function (d) { return d.value; });
@@ -141,6 +138,6 @@ function drawHM_BoxChart(data, year_list, seg_id, var_name){
 
     }
 
-    heatmapChart(data);
+    heatmapChart(data, layer_name);
 
 }

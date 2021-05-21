@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 254,
+    "Lake_name": "Mahony",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 183.26,
+    "Shore_len": 91.54,
+    "Shore_dev": 1.91,
+    "Vol_total": 3265.62,
+    "Vol_res": 0.0,
+    "Vol_src": 3,
+    "Depth_avg": 17.8,
+    "Dis_avg": 4.879,
+    "Res_time": 7746.8,
+    "Elevation": 259,
+    "Slope_100": 2.78,
+    "Wshd_area": 608.2,
+    "Pour_long": -125.518097,
+    "Pour_lat": 65.504407
+  }
+}

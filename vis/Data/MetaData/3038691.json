@@ -1,0 +1,25 @@
+{
+  "data": {
+    "Hylak_id": 287,
+    "Lake_name": "Mackay",
+    "Country": "Canada",
+    "Continent": "North America",
+    "Poly_src": "CanVec",
+    "Lake_type": 1,
+    "Grand_id": 0,
+    "Lake_area": 966.57,
+    "Shore_len": 1556.69,
+    "Shore_dev": 14.12,
+    "Vol_total": 19975.48,
+    "Vol_res": 0.0,
+    "Vol_src": 1,
+    "Depth_avg": 20.7,
+    "Dis_avg": 155.844,
+    "Res_time": 1483.5,
+    "Elevation": 390,
+    "Slope_100": -1.0,
+    "Wshd_area": 31398.0,
+    "Pour_long": -109.869895,
+    "Pour_lat": 64.119755
+  }
+}
