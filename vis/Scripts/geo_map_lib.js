@@ -248,7 +248,7 @@ var animation_library = {
 
             str += "<button id='jumpToButton' onclick='animation_library.jumpToTheDay()'><i class='fa fa-play' aria-hidden='true'></i>  Go</button>";
             str += "</p>";
-            str += "<p>Animation Step : 1 <select id='stepAnimation'>";
+            str += "<p>Animation Step : <select id='stepAnimation'>";
             str += "<option value='day'> Day </option>";
             str += "<option value='month'> Month </option>";
             str += "<option value='year'> Year </option>";
@@ -358,7 +358,7 @@ var legend_library = {
                 div.innerHTML += "<p>"+ title +"</p>"
                 for(var i=0; i<color_list.length; i++)
                 {
-                    div.innerHTML += '<div style="margin-bottom: 2px;"><i style="background:' + color_list[i] + '; opacity:1"></i>' + legend_text[i] + '</div>';
+                    div.innerHTML += '<div style="margin-bottom: 4px;"><i style="background:' + color_list[i] + '; opacity:1"></i>' + legend_text[i] + '</div>';
                 }
                 return div;
             }

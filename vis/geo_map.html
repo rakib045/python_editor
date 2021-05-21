@@ -172,7 +172,7 @@
                             <div id="loadingProgress" class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
 
-                        <p style="font-family: areal; font-size: 15px; padding: 15px 0px;"><span id="shapeLoadedFileCount"></span>/<span id="shapeTotalFileCount"></span> shape files loaded</p>
+                        <p style="font-family: areal; font-size: 15px; padding: 15px 0px; display: none;"><span id="shapeLoadedFileCount"></span>/<span id="shapeTotalFileCount"></span> shape files loaded</p>
                     </span>
 
                     
@@ -207,7 +207,8 @@
     map_library.initializeMap();
     
     var layer_name = 'River';
-    map_library.color_list_array[layer_name] = [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'];
+    //map_library.color_list_array[layer_name] = [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'];
+    map_library.color_list_array[layer_name] = ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fc5735', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'];
 
     //var grades = data_library.getScaleGradesLinear(0, 120, color_list_array[layer_name].length);
     //legend_library.initializeLegendControl('legend_'+layer_name, 'Water Discharge (m3/s)', 'bottomleft', color_list_array[layer_name], legend_library.generateLegendTexts(grades));
@@ -220,7 +221,8 @@
 
 
     layer_name = 'Lake';
-    map_library.color_list_array[layer_name] = [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'];
+    //map_library.color_list_array[layer_name] = [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'];
+    map_library.color_list_array[layer_name] = [ '#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529'];
 
     //var grades = data_library.getScaleGradesLinear(0, 120, color_list_array[layer_name].length);
     //legend_library.initializeLegendControl('legend_'+layer_name, 'Water Discharge (m3/s)', 'bottomleft', color_list_array[layer_name], legend_library.generateLegendTexts(grades));
