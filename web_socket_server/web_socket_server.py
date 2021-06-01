@@ -5,9 +5,8 @@ import subprocess
 import re
 import os
 
-import util_library
 
-SERVER = '127.0.0.1'
+SERVER = 'localhost'
 socket_port = 6789
 web_port = 8000
 

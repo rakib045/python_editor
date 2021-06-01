@@ -20,69 +20,65 @@ def addToChart(chart_name, filename, order=100):
     #print(result_array)
     return
 
-def addRiverMapToChart(chart_name, order=100, jsonfilename='', color_list=''):
+def initGeoMap(chart_name):
     global result_array
     data_array = {}
     data_array["id"] = chart_name.replace(' ','')
     data_array["to"] = "master," + chart_name.replace(' ','')
     data_array['name'] = chart_name
-    data_array['type'] = 'iframe'
-    data_array["order"] = order
-    path = 'http://' + SERVER + ":" + str(web_port) + "/river_map.html?"
+    data_array['type'] = 'new_tab'
+    data_array["order"] = 1
+    path = 'http://' + SERVER + ":" + str(web_port) + "/geo_map.html?"
+
     if chart_name != '':
         path += "name=" + chart_name.replace(' ','') + "&"
 
-    filenames_str = ''
-    for filename in jsonfilename:
-        filenames_str += filename + ","
-    
-    if filenames_str != '':
-        path += "geojson=" + filenames_str[:-1] + "&"
-    
-    if color_list != '':
-        color_list_array = color_list.replace(' ','').replace('#','%23')
-        path += "colorlist=" + color_list_array + "&"
     data_array['path'] = path.replace(',', '%2C')
     result_array.append(data_array)
     #print(result_array)
     return
 
-def addJSONRiverMap(chart_name, jsonfilenames):
-    global result_array
-    data_array = {}
-    data_array["to"] = chart_name.replace(' ','')
-    data_array["order"] = 1000
-
-    filenames_str = ''
-    for filename in jsonfilenames:
-        filenames_str += filename + ","
-    if filenames_str != '':
-        data_array["geojson"] = filenames_str[:-1]
-    result_array.append(data_array)
-    return
-
-def addColorListRiverMap(chart_name, color_list):
-    global result_array
-    data_array = {}
-    data_array["to"] = chart_name.replace(' ','')
-    data_array["order"] = 1000
-
-    color_str = ''
-    for color in color_list:
-        color_str += color + ","
-    if color_str != '':
-        data_array["colorlist"] = color_str[:-1]
-    result_array.append(data_array)
-    return
-
-def drawChart(chart_name):
+def drawGeoChart(chart_name, layer_name, json_filename, variable_name):
     global result_array
     data_array = {}
     data_array["to"] = chart_name.replace(' ','')
     data_array["draw"] = 1
     data_array["order"] = 1000
+    data_array["layer_name"] = layer_name
+    data_array["json_filename"] = json_filename
+    data_array["variable_name"] = variable_name
     result_array.append(data_array)
     return
+
+def redrawGeoChart(chart_name):
+    global result_array
+    data_array = {}
+    data_array["to"] = chart_name.replace(' ','')
+    data_array["redraw"] = 1
+    data_array["order"] = 1000
+    result_array.append(data_array)
+    return
+
+def addColorListToGeoChart(chart_name, layer_name, color_list):
+    global result_array
+    data_array = {}
+    data_array["to"] = chart_name.replace(' ','')
+    data_array["order"] = 1000
+    data_array["layer_name"] = layer_name
+    data_array["color_list"] = color_list
+    result_array.append(data_array)
+    return
+
+def addLegendToGeoChart(chart_name, layer_name, legend_info):
+    global result_array
+    data_array = {}
+    data_array["to"] = chart_name.replace(' ','')
+    data_array["order"] = 1000
+    data_array["layer_name"] = layer_name
+    data_array["legend_info"] = legend_info
+    result_array.append(data_array)
+    return
+
 
 
 def generateGeoJSON(shp_file_name, bbox, output_filename):    

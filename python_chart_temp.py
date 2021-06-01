@@ -1,5 +1,5 @@
 from util_library import *
-drawGeoChart('Chart1', 'River','jeoJSON_al_sk_river_flow_acc_gt_1500.json', 'IRFroutedRunoff')
+print('Hi')
 result_array = sorted(result_array, key=lambda x: x['order'], reverse=False)
 print(';##;')
 print(result_array)

@@ -12,6 +12,7 @@ var map_library = {
     'layers_list_array': [],
     'color_list_array': {},
     'grade_list_array': {},
+    'grade_scale': {},
     'layer_name_list': [],
     'default_color_list': [ "#b2df8a", "#a6cee3", "#cab2d6", "#fdbf6f", "#fb9a99", "#33a02c", "#1f78b4", "#6a3d9a", "#ff7f00", "#e31a1c"],
     //'default_color_list': [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'],
@@ -524,7 +525,10 @@ var data_library = {
 
                 if (map_library.grade_list_array[layer_name] == undefined)
                 {
-                    map_library.grade_list_array[layer_name] = data_library.getScaleGradesLinear(data_library.minVal, data_library.maxVal, map_library.color_list_array[layer_name].length);
+                    if(map_library.grade_scale[layer_name] == 'logarithmic')
+                        map_library.grade_list_array[layer_name] = data_library.getScaleGradesLogarithmic(data_library.minVal, data_library.maxVal, data_library.minVal+1, data_library.maxVal*2/3, map_library.color_list_array[layer_name].length);
+                    else
+                        map_library.grade_list_array[layer_name] = data_library.getScaleGradesLinear(data_library.minVal, data_library.maxVal, map_library.color_list_array[layer_name].length);
                 }
 
                 if(legend_library.legend_title_list[layer_name] == undefined){

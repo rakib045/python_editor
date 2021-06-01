@@ -184,24 +184,15 @@
 
 <script>
 
-    var getParams = function (url) {
-        var params = {};
-        var parser = document.createElement('a');
-        parser.href = url;
-        var query = parser.search.substring(1);
-        var vars = query.split('&');
-        for (var i = 0; i < vars.length; i++) {
-            var pair = vars[i].split('=');
-            params[pair[0]] = decodeURIComponent(pair[1]);
-        }
-        return params;
-    };
-
-    var params = getParams(window.location.href);
-    if(params.name)
-        sessionStorage.setItem("chart_name", params.name);
+    //var default_color_list = [ "#b2df8a", "#a6cee3", "#cab2d6", "#fdbf6f", "#fb9a99", "#33a02c", "#1f78b4", "#6a3d9a", "#ff7f00", "#e31a1c"];
+    //var default_color_list = [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'];
+    //var color_list = [];
+    //var data_list = [];
+    //var layers_list = [];
     
 
+
+    //var quantizeScale = d3.scaleQuantize();
 
     var loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'), {
         keyboard: false,
@@ -215,7 +206,6 @@
         
     map_library.initializeMap();
     
-    /*
     var layer_name = 'River';
     //map_library.color_list_array[layer_name] = [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'];
     map_library.color_list_array[layer_name] = ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fc5735', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'];
@@ -242,7 +232,6 @@
     legend_library.legend_pos_list[layer_name] = "bottomleft";
 
     map_library.drawMap(layer_name, 'jeoJSON_al_sk_lake.json', 'IRFlakeVol');
-    */
     
     var websocket = new WebSocket("ws://127.0.0.1:6789/");
     websocket.onmessage = function (event) {
@@ -261,30 +250,38 @@
                     chart_name = sessionStorage.getItem("chart_name");
                     if(charts[index].to.includes(chart_name)){
 
-                        if(charts[index].hasOwnProperty('color_list')){
-                            map_library.color_list_array[charts[index].layer_name] = charts[index].color_list;
+                        if(charts[index].hasOwnProperty('colorlist')){
+                            sessionStorage.removeItem("colorlist");
+                            color_list = [];
+                            colors = charts[index].colorlist.split(',');
+                            for(var i=0; i< colors.length; i++)
+                            {
+                                color_list.push(colors[i]);
+                            }
+
+                            sessionStorage.setItem("colorlist", color_list);
                         }
-                        if(charts[index].hasOwnProperty('legend_info')){
-
-                            if(charts[index].legend_info.hasOwnProperty('grade_list') )
-                                map_library.grade_list_array[charts[index].layer_name] = charts[index].legend_info.grade_list;
-
-                            if(charts[index].legend_info.hasOwnProperty('scale') )
-                                map_library.grade_scale[charts[index].layer_name] =  charts[index].legend_info.scale;                              
+                        if(charts[index].hasOwnProperty('geojson')){
+                            geojsons = sessionStorage.getItem("geojson").split(',');
+                            jsons = charts[index].geojson.split(',');
+                            for(var i=0; i< jsons.length; i++)
+                            {
+                                if(!geojsons.includes(jsons[i]))
+                                    geojsons.push(jsons[i]);
+                            }
+                            var geojson_str = "";
+                            for(var j=0; j< geojsons.length; j++)
+                            {
+                                if(j != 0)
+                                    geojson_str += ",";
+                                geojson_str += geojsons[j];
+                            }
                             
-                            if(charts[index].legend_info.hasOwnProperty('legend_title') )
-                                legend_library.legend_title_list[charts[index].layer_name] = charts[index].legend_info.legend_title;
-                            
-                            if(charts[index].legend_info.hasOwnProperty('legend_position') )
-                                legend_library.legend_pos_list[charts[index].layer_name] = charts[index].legend_info.legend_position;
-
-                            //map_library.color_list_array[charts[index].layer_name] = charts[index].color_list;
+                            sessionStorage.removeItem("geojson");
+                            sessionStorage.setItem("geojson", geojson_str);
                         }
                         if(charts[index].hasOwnProperty('draw') && charts[index].draw == 1){
-                            map_library.drawMap(charts[index].layer_name, charts[index].json_filename, charts[index].variable_name);
-                        }
-                        if(charts[index].hasOwnProperty('redraw') && charts[index].redraw == 1){
-                            window.location.reload();
+                            drawMap(variable_name, year, day);
                         }
 
                     }

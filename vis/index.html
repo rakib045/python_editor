@@ -58,8 +58,8 @@
 
               <div class="col-sm">
                 <div class="mb-3">
-                    <div style="display: none;">
-                        <span id="connection_info" class="badge bg-warning text-dark">Connecting ...</span>
+                    <div>
+                        <span id="connection_info" class="badge bg-warning text-dark">Connecting to Socket Server ...</span>
                         <span id="status_info" class=""></span>
                     </div>
                     <div class="card border-success" style="font-size:0.8em">
@@ -87,7 +87,8 @@
           </div>
 
         <script>
-            var websocket = new WebSocket("ws://127.0.0.1:6789/");
+            var web_socket_url = "ws://127.0.0.1:6789/";
+            var websocket = new WebSocket(web_socket_url);
             var input_code = document.querySelector('#input_code');
             var connection_info = document.querySelector('#connection_info');
             var status_info = document.querySelector('#status_info');
@@ -159,8 +160,8 @@
                     output_div.innerHTML = d.error;
                 }
                 if(d.output){
-                    status_info.setAttribute("class", "badge bg-success");
-                    status_info.innerHTML = "Code executed";
+                    //status_info.setAttribute("class", "badge bg-success");
+                    //status_info.innerHTML = "Code executed";
 
                     outputs = d.output.trim().replaceAll('\n','').split(';##;');
                     if (output_div != undefined)
@@ -205,6 +206,9 @@
                                     str1_html += "<a href='" + charts[i].path + "' target='_blank'>Open in new tab</a>";
                                     str1_html += "<iframe src='" + charts[i].path + "' width='600px' height='400px'></iframe>";                            
                                 }
+                                else if (charts[i].type == "new_tab"){ 
+                                    window.open(charts[i].path, '_blank');                    
+                                }
                                     
                                 str1_html += "</div>";
                             }
@@ -242,11 +246,11 @@
             websocket.onopen = function (event) {
                 //output_console.value = "Version: ";
                 connection_info.setAttribute("class", "badge bg-success");
-                connection_info.innerHTML = "Connected";
+                connection_info.innerHTML = "Connected with Library Server";
             };
             websocket.onerror = function (event) {
                 connection_info.setAttribute("class", "badge bg-danger");
-                connection_info.innerHTML = "Connection Error";
+                connection_info.innerHTML = "Connection Error with Library Server";
             };
 
             add_section.onclick = function (event) {
