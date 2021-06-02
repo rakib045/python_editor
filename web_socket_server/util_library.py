@@ -5,6 +5,7 @@ import netCDF4 as nc
 import numpy as np
 
 result_array = []
+path_url = "http://localhost:8000/"
 
 def addToChart(chart_name, filename, order=100):
     global result_array
@@ -28,7 +29,7 @@ def initGeoMap(chart_name):
     data_array['name'] = chart_name
     data_array['type'] = 'new_tab'
     data_array["order"] = 1
-    path = 'http://' + SERVER + ":" + str(web_port) + "/geo_map.html?"
+    path = path_url + "geo_map.html?"
 
     if chart_name != '':
         path += "name=" + chart_name.replace(' ','') + "&"
