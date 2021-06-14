@@ -9,6 +9,13 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
             //"args": ["--start=web-server", "--port=8000", "--input_filename=index.html"],
             //"args": ["--start=web-socket", "--server=127.0.0.1", "--port=5678"],
             //"args": ["--param=1", "--refresh=True", "--server=127.0.0.1", "--port=5678", "--json_file=jeoJSON_na_30s.json", "--color_list=red, blue", "--message=Hi, I got the message"],

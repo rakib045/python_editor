@@ -9,7 +9,7 @@ function drawLineChart(info, layer_name){
     
     var data = [];
 
-      d3.json("Data/" + data_library.variable_name_list[layer_name] + "/Monthly/" + seg_id + ".json").then(function(d) {
+      d3.json("Data/" + data_library.variable_name_list[layer_name] + "/Monthly/id_" + seg_id + ".json").then(function(d) {
         var data = d.data;
 
         var temp_data = [];

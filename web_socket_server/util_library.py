@@ -39,7 +39,7 @@ def initGeoMap(chart_name):
     #print(result_array)
     return
 
-def drawGeoChart(chart_name, layer_name, json_filename, variable_name):
+def drawGeoChart(chart_name, layer_name, json_filename, variable_name, connecting_id='id', aggregation_type='average'):
     global result_array
     data_array = {}
     data_array["to"] = chart_name.replace(' ','')
@@ -48,6 +48,9 @@ def drawGeoChart(chart_name, layer_name, json_filename, variable_name):
     data_array["layer_name"] = layer_name
     data_array["json_filename"] = json_filename
     data_array["variable_name"] = variable_name
+    data_array["connecting_id"] = connecting_id
+    data_array["aggregation_type"] = aggregation_type
+
     result_array.append(data_array)
     return
 
@@ -80,6 +83,17 @@ def addLegendToGeoChart(chart_name, layer_name, legend_info):
     result_array.append(data_array)
     return
 
+def addAnimationToGeoChart(chart_name, year_from, year_to, animation_info):
+    global result_array
+    data_array = {}
+    data_array["to"] = chart_name.replace(' ','')
+    data_array["order"] = 1000
+    data_array["animation"] = 1
+    data_array["animation_info"] = animation_info
+    data_array["year_from"] = year_from
+    data_array["year_to"] = year_to
+    result_array.append(data_array)
+    return
 
 
 def generateGeoJSON(shp_file_name, bbox, output_filename):    

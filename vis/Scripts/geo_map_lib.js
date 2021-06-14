@@ -14,6 +14,10 @@ var map_library = {
     'grade_list_array': {},
     'grade_scale': {},
     'layer_name_list': [],
+
+    'connecting_id_list': {},
+    'aggregate_val_list': {},
+
     'default_color_list': [ "#b2df8a", "#a6cee3", "#cab2d6", "#fdbf6f", "#fb9a99", "#33a02c", "#1f78b4", "#6a3d9a", "#ff7f00", "#e31a1c"],
     //'default_color_list': [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'],
 
@@ -42,7 +46,7 @@ var map_library = {
         L.control.layers(map_library.baseLayers).addTo(map_library.map);
         
         map_library.initializeSideBar();
-        animation_library.initializeAnimationControl('anim_1', 'Animation Panel', 'bottomright');
+        //animation_library.initializeAnimationControl('anim_1', 'Animation Panel', 'bottomright');
         map_library.initializePrinterControl();
         
     },
@@ -64,12 +68,26 @@ var map_library = {
 		}).addTo(map_library.map);
     },
 
-    'drawMap': function(layer_name, json_files, variable_name){
+    'drawMap': function(layer_name, json_files, variable_name, connecting_id, aggregate_val){
         //json_files = "jeoJSON_al_sk_river_flow_acc_gt_1500.json";
         if( !map_library.layer_name_list.includes(layer_name))
             map_library.layer_name_list.push(layer_name);
 
         loadingModal.show();
+
+        if(connecting_id == undefined)
+            map_library.connecting_id_list[layer_name] = 'id';
+        else
+            map_library.connecting_id_list[layer_name] = connecting_id;
+        
+        if(aggregate_val == undefined)
+            map_library.aggregate_val_list[layer_name] = 'average';
+        else if(aggregate_val == 'mean' || aggregate_val == 'average')
+            map_library.aggregate_val_list[layer_name] = 'average';
+        else if(aggregate_val == 'total' || aggregate_val == 'sum')
+            map_library.aggregate_val_list[layer_name] = 'total';
+        else
+            map_library.aggregate_val_list[layer_name] = aggregate_val;
 
         if(json_files != "")
         {
@@ -107,7 +125,7 @@ var map_library = {
                         console.log(data_library.list_geo_json_data[layer_name]);
                         
                         data_library.list_geo_json_data[layer_name].features.forEach(function(data){
-                            var temp = d3.json("Data\\"+variable_name+"\\Daily\\" + data.properties.seg_id + ".json");
+                            var temp = d3.json("Data\\"+variable_name+"\\Daily\\id_" + data.properties.id + ".json");
                             if (data_library.list_json_files[layer_name] == undefined)
                                 data_library.list_json_files[layer_name] = [];
                             data_library.list_json_files[layer_name].push(temp);
@@ -137,11 +155,11 @@ var map_library = {
                     return true;
                 },
                 style: function (feature) {
-                    var seg_id = feature.properties.seg_id;
-                    if (data_library.variable_data[layer_name][seg_id] == undefined)
+                    var c_id = feature.properties.id;
+                    if (data_library.variable_data[layer_name][c_id] == undefined)
                         return {color: 'grey'};
                     cus_color = map_library.color_list_array[layer_name][data_library.getIndexOfGrades(map_library.grade_list_array[layer_name], 
-                        data_library.variable_data[layer_name][seg_id][animation_library.year][animation_library.day])];
+                        data_library.variable_data[layer_name][c_id][animation_library.year][animation_library.day][map_library.aggregate_val_list[layer_name]])];
                     return {color: cus_color, fillOpacity: 0.75};
                 },
                 onEachFeature: function onEachFeature(feature, layer) {
@@ -149,7 +167,7 @@ var map_library = {
                     map_library.layers_list_array[layer_name].addLayer(layer);
 
                     layer.on('click', function (e) {
-                        showMetaDataInfo( map_library.sidebar ,feature.properties.seg_id, layer_name);
+                        showMetaDataInfo( map_library.sidebar ,feature.properties.id, layer_name, [animation_library.start_year, animation_library.end_year], map_library.aggregate_val_list[layer_name]);
                     });
                 }
             })
@@ -175,15 +193,15 @@ var map_library = {
 
         data_library.list_geo_json_feature[layer_name].eachLayer(function (layer) { 
             //cus_color = color_list[getIndexOfGrades(layer.feature.properties[variable_name][year][day])]; 
-            var seg_id = layer.feature.properties.seg_id;
-            if (data_library.variable_data[layer_name][seg_id] != undefined){
+            var c_id = layer.feature.properties.id;
+            if (data_library.variable_data[layer_name][c_id] != undefined){
 
-                if(data_library.variable_data[layer_name][seg_id][year] == undefined){
+                if(data_library.variable_data[layer_name][c_id][year] == undefined){
                     layer.setStyle({color : 'grey'});
                 }
                 else{
                     cus_color = map_library.color_list_array[layer_name][data_library.getIndexOfGrades(map_library.grade_list_array[layer_name], 
-                        data_library.variable_data[layer_name][seg_id][year][day])];
+                        data_library.variable_data[layer_name][c_id][year][day][map_library.aggregate_val_list[layer_name]])];
                     layer.setStyle({color : cus_color});
                 }                
             }
@@ -204,7 +222,9 @@ var map_library = {
 var animation_library = {
     /* variables */
     'animation_control_list': {},
-    'year': 1995,
+    'year': 2010,
+    'start_year': 2010,
+    'end_year': 2020,
     'day': 0,
     'day_addition': 1,
     'anim': null,
@@ -212,6 +232,7 @@ var animation_library = {
 
     /* functions */
     'initializeAnimationControl': function(control_class_name, title, pos){
+        animation_library.year = animation_library.start_year;
         animation_library.removeAnimationControl(control_class_name);
             
         animation_library.animation_control_list[control_class_name] = L.control({position: pos});
@@ -243,7 +264,7 @@ var animation_library = {
             str += "</select>";
 
             str += "<select id='jumpToYear' style='margin-right:2px'>";
-            for(var i=1995; i<=2005; i++)
+            for(var i=animation_library.start_year; i<=animation_library.end_year; i++)
                 str += "<option value=" + i + ">" + i + "</option>"
             str += "</select>";
 
@@ -325,7 +346,7 @@ var animation_library = {
 
     'stopAnimation':function(){
         animation_library.day = 0;
-        animation_library.year = 1995;
+        animation_library.year = animation_library.start_year;
         clearTimeout(animation_library.anim);
         //drawMap(variable_name, year, day);
         map_library.layer_name_list.forEach(function(l_name, index){
@@ -468,7 +489,7 @@ var data_library = {
             files.forEach(function(file, index){
                 //console.log(file.segment_id);      
                 if(file.status == 'fulfilled')                          
-                    temp[file.value.segment_id] = file.value.data;
+                    temp[file.value[map_library.connecting_id_list[layer_name]]] = file.value.data;
                 else
                     console.log(file.status);                                
             });
@@ -494,9 +515,18 @@ var data_library = {
             for(var i=0; i<seg_ids.length; i++)
             {
                 var temp_data = data_library.variable_data[layer_name][seg_ids[i]];
-                var years = Object.keys(temp_data);
-                for(var j=0; j<years.length; j++){
-                    var days_data = temp_data[years[j]];
+
+                //var years = Object.keys(temp_data);
+                var years = [];
+                for(var index=animation_library.start_year; index <= animation_library.end_year; index++)
+                    years.push(index);
+
+                for(var j=0; j<years.length; j++){                    
+                    var days_data = [];
+
+                    for(var index=0; index< Object.keys(temp_data[years[j]]).length; index++)
+                        days_data.push(temp_data[years[j]][index]['average']);
+
                     var days = Object.keys(days_data);
                     for( var k=0; k<days.length; k++){
                         
@@ -515,7 +545,7 @@ var data_library = {
                 
                 console.log(data_library.minVal);
                 console.log(data_library.maxVal);
-                console.log(data_library.variable_data[layer_name].length);
+                //console.log(data_library.variable_data[layer_name].length);
 
                 loadingModal.hide();
                 if (map_library.color_list_array[layer_name] == undefined)

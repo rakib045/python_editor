@@ -1,22 +1,27 @@
 
 
-function drawHistoryHeatMapChart(seg_id, layer_name){
+function drawHistoryHeatMapChart(seg_id, layer_name, year_range, aggregate_val='average'){
     //alert(seg_id);
     
 
-    d3.json("Data/" + data_library.variable_name_list[layer_name] + "/Monthly/" + seg_id + ".json").then(function(d) {
+    d3.json("Data/" + data_library.variable_name_list[layer_name] + "/Monthly/id_" + seg_id + ".json").then(function(d) {
         var data = d.data;
 
         var temp_data = [];
 
-        var year_list = Object.keys(data);
+        //var year_list = Object.keys(data);
+
+        var year_list = [];
+        for(var index=year_range[0]; index <= year_range[1]; index++)
+            year_list.push(index);
+
         for(var i=0; i<year_list.length; i++)
         {
             var month_data = data[year_list[i]];
             var month_list = Object.keys(month_data);
 
             for(var j=0; j<month_list.length; j++){
-                var value = month_data[month_list[j]].average;
+                var value = month_data[month_list[j]][aggregate_val];
                 var temp_obj = {};
                 temp_obj['year'] = i+1;
                 temp_obj['month'] = j+1;
@@ -109,7 +114,7 @@ function drawHM_BoxChart(data, year_list, seg_id, layer_name){
                 div_tooltip1.transition()
                   .duration(200)
                   .style("opacity", .8);
-                  div_tooltip1.html("<div> Year: " + year_str + ", Month: "+ month_str +"<br/>Average Value: " + d.value + " m3/s</div>")
+                  div_tooltip1.html("<div> Year: " + year_str + ", Month: "+ month_str +"<br/>Value: " + d.value + " m3/s</div>")
                   .style("left", (event.pageX-margin.left-margin.right) + "px")
                   .style("top", (event.pageY) + "px");
             })

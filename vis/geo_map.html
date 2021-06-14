@@ -213,8 +213,39 @@
     width_height_str = 'width: ' + (this.innerWidth-20) + "; height: " + (this.innerHeight-20);
     map_div.setAttribute('style', width_height_str);    
         
-    map_library.initializeMap();
     
+    
+    map_library.initializeMap();
+
+    /*
+    var layer_name = 'River IRFRoutedRunOff';
+    //map_library.color_list_array[layer_name] = [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'];
+    map_library.color_list_array[layer_name] = [ '#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529'];
+
+    //var grades = data_library.getScaleGradesLinear(0, 120, color_list_array[layer_name].length);
+    //legend_library.initializeLegendControl('legend_'+layer_name, 'Water Discharge (m3/s)', 'bottomleft', color_list_array[layer_name], legend_library.generateLegendTexts(grades));
+    
+    map_library.grade_list_array[layer_name] = data_library.getScaleGradesLogarithmic(0, 550, 1, 550*2/3, map_library.default_color_list.length);
+    legend_library.legend_title_list[layer_name] = "Water Discharge (m3/s)";
+    legend_library.legend_pos_list[layer_name] = "bottomleft";    
+
+    animation_library.start_year = 2009;
+    animation_library.end_year = 2013;
+    animation_library.initializeAnimationControl('anim_1', 'Animation Panel', 'bottomright');
+
+    //map_library.drawMap(layer_name, 'jeoJSONs/bow_river_network.json', 'IRFroutedRunoff', 'COMID', 'average');
+
+    var layer_name = 'River KWTRoutedRunOff';
+    map_library.color_list_array[layer_name] = ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fc5735', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'];
+
+    //map_library.grade_list_array[layer_name] = data_library.getScaleGradesLogarithmic(0, 550, 1, 550*2/3, map_library.default_color_list.length);
+    //map_library.grade_list_array[layer_name] = [10.1, 20, 50, 60, 80, 100, 150, 200, 250];
+    legend_library.legend_title_list[layer_name] = "KWT (m3/s)";
+    legend_library.legend_pos_list[layer_name] = "bottomleft";   
+    map_library.drawMap(layer_name, 'jeoJSONs/bow_river_network.json', 'KWTRoutedRunOff', 'COMID', 'max');
+    
+    */
+
     /*
     var layer_name = 'River';
     //map_library.color_list_array[layer_name] = [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'];
@@ -243,7 +274,10 @@
 
     map_library.drawMap(layer_name, 'jeoJSON_al_sk_lake.json', 'IRFlakeVol');
     */
-    
+
+
+
+    //var websocket = new WebSocket("ws://206.12.95.141/AdvancedVisWebSocket");
     var websocket = new WebSocket("ws://127.0.0.1:6789/");
     websocket.onmessage = function (event) {
         d = JSON.parse(event.data);
@@ -280,8 +314,18 @@
 
                             //map_library.color_list_array[charts[index].layer_name] = charts[index].color_list;
                         }
+                        if(charts[index].hasOwnProperty('animation')){
+                            animation_library.start_year = charts[index].year_from;
+                            animation_library.end_year = charts[index].year_to;
+                            if(charts[index].hasOwnProperty('animation_info')){
+                                animation_library.initializeAnimationControl('anim_1', charts[index].animation_info.title, charts[index].animation_info.position);
+                            }
+                            else
+                                animation_library.initializeAnimationControl('anim_1', 'Animation Panel', 'bottomright');
+                        }
                         if(charts[index].hasOwnProperty('draw') && charts[index].draw == 1){
-                            map_library.drawMap(charts[index].layer_name, charts[index].json_filename, charts[index].variable_name);
+                            map_library.drawMap(charts[index].layer_name, charts[index].json_filename, charts[index].variable_name, 
+                            charts[index].connecting_id, charts[index].aggregation_type);
                         }
                         if(charts[index].hasOwnProperty('redraw') && charts[index].redraw == 1){
                             window.location.reload();
