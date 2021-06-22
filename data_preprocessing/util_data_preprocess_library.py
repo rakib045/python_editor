@@ -102,7 +102,7 @@ def getSecondDiffArray(initial_date_str, start_date_str, end_date_str, steps):
 
     return value_array
 
-def generateDailyData(filename, variable_name, column_info, row_info, year_range):
+def generateDailyDataFromHourlyData(filename, variable_name, column_info, row_info, year_range):
     temp_json_hourly = {}
     print('Reading All NC Files - Started')
 
@@ -127,12 +127,39 @@ def generateDailyData(filename, variable_name, column_info, row_info, year_range
     print('Reading All NC Files - Ended')
     return temp_json_hourly, column_indexes, row_indexes
 
+
+def generateDailyDataFromDailyData(filename, variable_name, column_info, row_info, year_range):
+    temp_json_hourly = {}
+    print('Reading All NC Files - Started')
+
+    ds = nc.Dataset(filename)
+
+    column_ids_input = np.around(column_info['column_ids']).astype(int)
+    column_ids_nc = np.around(ds[column_info['column_name']][:]).astype(int)
+    column_indexes = np.where(np.in1d(column_ids_nc, column_ids_input))[0]
+    
+    row_ids_input = np.around(row_info['row_ids']).astype(int)
+    row_ids_nc = np.around(ds[row_info['row_name']][:]).astype(int)
+    row_indexes = np.where(np.in1d(row_ids_nc, row_ids_input))[0]
+
+    val_per_day = np.array(ds[variable_name][row_indexes, column_indexes]).tolist()
+
+    day_index = 0
+    day_count = 365
+    for year in range(year_range[0], year_range[1]+1):
+
+        temp_json_hourly[year] = np.around(val_per_day[day_index:(day_index+day_count)], 3)
+        day_index += day_count
+
+    print('Reading All NC Files - Ended')
+    return temp_json_hourly, column_indexes, row_indexes
+
 def generateJSONFromNetCDFYearSeparatedFileHourly(filename, year_range, variable_name, column_info, row_info, id_param_name):    
        
     column_ids_input = np.around(column_info['column_ids']).astype(int)
 
     temp_json_hourly = {}
-    temp_json_hourly_full_data, column_indexes, row_indexes = generateDailyData(filename, variable_name, column_info, row_info, year_range)
+    temp_json_hourly_full_data, column_indexes, row_indexes = generateDailyDataFromHourlyData(filename, variable_name, column_info, row_info, year_range)
 
     print("Generating Hourly Data - Start")
 
@@ -158,7 +185,7 @@ def generateJSONFromNetCDFYearSeparatedFileDaily(filename, year_range, variable_
 
     column_ids_input = np.around(column_info['column_ids']).astype(int)
 
-    temp_json_hourly, column_indexes, row_indexes = generateDailyData(filename, variable_name, column_info, row_info, year_range)
+    temp_json_hourly, column_indexes, row_indexes = generateDailyDataFromHourlyData(filename, variable_name, column_info, row_info, year_range)
 
     print("Generating Daily Data - Start")
 
@@ -203,7 +230,7 @@ def generateJSONFromNetCDFYearSeparatedFileMonthly(filename, year_range, variabl
 
     column_ids_input = np.around(column_info['column_ids']).astype(int)
 
-    temp_json_hourly, column_indexes, row_indexes = generateDailyData(filename, variable_name, column_info, row_info, year_range)
+    temp_json_hourly, column_indexes, row_indexes = generateDailyDataFromHourlyData(filename, variable_name, column_info, row_info, year_range)
 
     print("Generating Monthly Data - Start")
 
@@ -226,6 +253,116 @@ def generateJSONFromNetCDFYearSeparatedFileMonthly(filename, year_range, variabl
                     daily_array.append(day_avg)
                     day_current_index += 24
 
+
+                
+                temp_array['total'] = round(sum(daily_array), 3)
+                temp_array['max'] = round(max(daily_array), 3)
+                temp_array['min'] = round(min(daily_array), 3)
+                temp_array['average'] = round(average(daily_array), 3)
+                temp_array['value'] = daily_array
+
+                monthly_temp_array[index] = temp_array
+
+            
+            temp_json_daily[year] = monthly_temp_array
+
+        file_path_name = "data_preprocessing\\Data\\" + variable_name + "\\Monthly\\id_" +str(column_ids_input[col_index]) + ".json"
+        var_file = open(file_path_name, "w") 
+        var_file.write(json.dumps({id_param_name: str(column_ids_input[col_index]), 'peroid_type':'Monthly', 'data': temp_json_daily}, indent=2))
+        var_file.close()
+
+    print("Generating Monthly Data - End")
+    print("-----------------------------------")
+    
+    return 0
+
+
+def generateJSONFromNetCDFDaily(filename, year_range, variable_name, column_info, row_info, id_param_name):
+    
+    days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    temp_json_daily = {}
+
+    column_ids_input = np.around(column_info['column_ids']).astype(int)
+
+    temp_json_hourly, column_indexes, row_indexes = generateDailyDataFromDailyData(filename, variable_name, column_info, row_info, year_range)
+
+    print("Generating Daily Data - Start")
+
+    time_multiplier = 24
+    for col_index in column_indexes.tolist():    
+        for year in range(year_range[0], year_range[1]+1):            
+            start_index = 0
+            daily_temp_array = {}
+            t_array = temp_json_hourly[year][:,col_index].tolist()
+            
+            for index in range(0, 365):
+                temp_array = {}   
+                 
+                #hour_array = np.around(t_array[start_index:(start_index+time_multiplier)], 3).tolist()
+                #start_index += time_multiplier              
+
+                #temp_array['total'] = round(sum(hour_array), 3)
+                #temp_array['max'] = round(max(hour_array), 3)
+                #temp_array['min'] = round(min(hour_array), 3)
+                #temp_array['average'] = round(sum(hour_array)/len(hour_array), 3)
+                #temp_array['value'] = hour_array
+
+                temp_array['total'] = round(t_array[index], 3)
+                temp_array['max'] = round(t_array[index], 3)
+                temp_array['min'] = round(t_array[index], 3)
+                temp_array['average'] = round(t_array[index], 3)
+                temp_array['value'] = [t_array[index]]
+
+                daily_temp_array[index] = temp_array
+
+            
+            temp_json_daily[year] = daily_temp_array
+
+        file_path_name = "data_preprocessing\\Data\\" + variable_name + "\\Daily\\id_" +str(column_ids_input[col_index]) + ".json"
+        var_file = open(file_path_name, "w") 
+        var_file.write(json.dumps({id_param_name: str(column_ids_input[col_index]), 'peroid_type':'Daily', 'data': temp_json_daily}, indent=2))
+        var_file.close()
+
+    print("Generating Daily Data - End")
+    print("-----------------------------------")
+    
+    return 0
+
+
+def generateJSONFromNetCDFMonthly(filename, year_range, variable_name, column_info, row_info, id_param_name):
+    
+    days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    temp_json_daily = {}
+
+    column_ids_input = np.around(column_info['column_ids']).astype(int)
+
+    temp_json_hourly, column_indexes, row_indexes = generateDailyDataFromDailyData(filename, variable_name, column_info, row_info, year_range)
+
+    print("Generating Monthly Data - Start")
+
+    time_multiplier = 24
+    for col_index in column_indexes.tolist():    
+        for year in range(year_range[0], year_range[1]+1):            
+            start_index = 0
+            monthly_temp_array = {}
+            t_array = temp_json_hourly[year][:,col_index].tolist() 
+            for index in range(0, 12):
+                temp_array = {}   
+                
+                #hour_array = np.around(t_array[start_index:(start_index + time_multiplier * days_in_month[index])], 3).tolist()
+                #start_index += time_multiplier * days_in_month[index]
+
+                #daily_array = []
+                #day_current_index = 0
+                #for day_index in range(days_in_month[index]):
+                #    day_avg = np.around(average(hour_array[day_current_index:(day_current_index+24)]), 3)
+                #    daily_array.append(day_avg)
+                #    day_current_index += 24
+
+                daily_array = []
+                for day_index in range(days_in_month[index]):
+                    day_val = np.around(t_array[index], 3)
+                    daily_array.append(day_val)
 
                 
                 temp_array['total'] = round(sum(daily_array), 3)

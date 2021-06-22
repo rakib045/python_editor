@@ -1,12 +1,12 @@
 function showMetaDataInfo(sidebar, seg_id, layer_name, year_range, aggregate_val='average'){
     sidebar.open('home');
     
-    $('#segment_info').html('Segment ID: ' + seg_id );
+    $('#segment_info').html(data_library.connecting_id_list[layer_name] + ': ' + seg_id );
     var meta_data_str = "";
 
     $('#historyHeatMap').html('');
 
-    d3.json("Data/MetaData/id_" + seg_id + ".json").then(function(d) {
+    d3.json("Data/MetaData/" + data_library.connecting_id_list[layer_name] + "_" + seg_id + ".json").then(function(d) {
         var data = d.data;
 
         meta_data_str += "<div>Variable Name : " + data_library.variable_name_list[layer_name] + "</div>";
@@ -15,6 +15,9 @@ function showMetaDataInfo(sidebar, seg_id, layer_name, year_range, aggregate_val
         meta_data_str += appendHTMLTextForMetadata('Flow Accumulation', data.flow_acc, true);
         meta_data_str += appendHTMLTextForMetadata('Lake Name', data.Lake_name, false);
         meta_data_str += appendHTMLTextForMetadata('Lake Area', data.Lake_area, true);
+        meta_data_str += appendHTMLTextForMetadata('HRU Area', data.HRU_area, true);
+        meta_data_str += appendHTMLTextForMetadata('Center Latitude', data.center_lat, true);
+        meta_data_str += appendHTMLTextForMetadata('Center Longitude', data.center_lon, true);
 
         $('#meta_info_div').html(meta_data_str);
     });

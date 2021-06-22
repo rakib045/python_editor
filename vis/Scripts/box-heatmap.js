@@ -41,7 +41,7 @@ function drawHM_BoxChart(data, year_list, seg_id, layer_name){
 
     var margin = { top: 20, right: 10, bottom: 30, left: 30 },
     width = 800 - margin.left - margin.right,
-    height = 380 - margin.top - margin.bottom,
+    height = 210 - margin.top - margin.bottom,
     gridSize = Math.floor(width / 24),
     legendElementWidth = gridSize,
     buckets = 10,

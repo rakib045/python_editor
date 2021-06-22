@@ -39,8 +39,8 @@ var map_library = {
             map_library.map == null;
 
         map_library.map = L.map('mapid', {
-            center: [55.0784, -110.0610],
-            zoom: 6,
+            center: [51.312588, -116.021118],
+            zoom: 10,
             layers: [map_library.baseLayers["Grayscale"]]
         });
         L.control.layers(map_library.baseLayers).addTo(map_library.map);
@@ -118,6 +118,7 @@ var map_library = {
                             if(index == 0){                                
                                 data_library.list_geo_json_data[layer_name]=file;
                                 data_library.variable_name_list[layer_name] = variable_name;
+                                data_library.connecting_id_list[layer_name] = file.id_param_name;
                             }
                             else
                                 data_library.list_geo_json_data[layer_name].features = data_library.list_geo_json_data[layer_name].features.concat(file.features);
@@ -428,6 +429,7 @@ var data_library = {
     'total_shape_file': 0,
     'loaded_shape_files': 0,
     'variable_name_list': {},
+    'connecting_id_list': {},
     'minVal': 1000000,
     'maxVal': -1000000,
     

@@ -5,6 +5,7 @@ import netCDF4 as nc
 import numpy as np
 
 result_array = []
+#path_url = "http://206.12.95.141/AdvancedVis/"
 path_url = "http://localhost:8000/"
 
 def addToChart(chart_name, filename, order=100):
