@@ -1,4 +1,9 @@
-function showMetaDataInfo(sidebar, seg_id, layer_name, year_range, aggregate_val='average'){
+function showMetaDataInfo(seg_id, layer_name, chart_type, aggregation_type){
+
+    var sidebar = map_library.sidebar;
+    var year_range = [animation_library.start_year, animation_library.end_year];
+    var aggregate_val = aggregation_type;
+
     sidebar.open('home');
     
     $('#segment_info').html(data_library.connecting_id_list[layer_name] + ': ' + seg_id );
@@ -21,7 +26,11 @@ function showMetaDataInfo(sidebar, seg_id, layer_name, year_range, aggregate_val
 
         $('#meta_info_div').html(meta_data_str);
     });
-    drawHistoryHeatMapChart(seg_id, layer_name, year_range, aggregate_val);
+
+    if(chart_type == 'Heatmap')
+        drawHistoryHeatMapChart(seg_id, layer_name, year_range, aggregate_val);
+    else if (chart_type == 'LineChart')
+        drawHistoryLineChartChart(seg_id, layer_name, year_range, aggregate_val);
 }
 
 function appendHTMLTextForMetadata(label_name, value, isNumber){
