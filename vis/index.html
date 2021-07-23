@@ -2,10 +2,15 @@
 <html>
     <head>
         <title>Python Command</title>
+        <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+        
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-    
+        
         <style>
             .accrd-button{
                 margin-right: 5px;
@@ -17,7 +22,13 @@
         
         <div class="container">
             <h1>Advanced VIS</h1>
-            <div>
+            <div style="padding-bottom: 10px;">
+                <a href="/out/" class="btn btn-outline-success" id="documentation" target="_blank" >
+                    <i class="bi bi-info-square-fill"></i> Documentation</a>
+
+                    <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadModal" id="uploadModalButton">
+                        <i class="bi bi-upload"></i> Upload Code
+                    </button>
                 <!--
                 <button type="button" class="btn btn-outline-success" id="run_all" disabled>
                     <i class="bi bi-collection-play"></i> Run Everything</button>
@@ -86,10 +97,78 @@
             </div>
           </div>
 
+
+        <!-- Modal -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Modal title</h5>
+                </div>
+                <div class="modal-body">
+                
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Select File Type</label>
+                        <select class="form-select" aria-label="Default select example" id="uploadFileType">
+                            <option value="py" selected>Python File (.py)</option>
+                            <option value="txt">Text File (.txt)</option>
+                            <option value="ipynb">Jupyter Notebook File (.ipynb)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Browse for the File</label>
+                        <input class="form-control" type="file" id="uploadedFile">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Code Segment Name</label>
+                        <input class="form-control" type="input" id="codeSegmentName" value="UploadedCode">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="uploadModalCloseButton">Close</button>
+                <button type="button" class="btn btn-primary"  id="loadModalButton">Load</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
         <script>
 
             //var web_socket_url = "ws://206.12.95.141/AdvancedVisWebSocket";
             var web_socket_url = "ws://127.0.0.1:6789/";
+
+            $( document ).ready(function() {
+                console.log( "ready!" );
+                //$('#uploadModal').modal();
+            });
+
+            var upload_modal_button = document.querySelector('#uploadModalButton');
+            var upload_modal_close_button = document.querySelector('#uploadModalCloseButton');
+            var load_modal_button = document.querySelector('#loadModalButton');
+
+            var upload_file_type_dd = document.querySelector('#uploadFileType');
+            var code_segment_name_textbox = document.querySelector('#codeSegmentName');
+
+
+            upload_modal_button.onclick = function (event) {
+                $('#uploadModal').modal('show');
+            }
+            upload_modal_close_button.onclick = function (event) {
+                $('#uploadModal').modal('hide');
+            }
+            load_modal_button.onclick = function (event) {
+                if(upload_file_type_dd.value == 'py')
+                    loadFileAsText('uploadedFile');
+                else if(upload_file_type_dd.value == 'ipynb')
+                    loadFileAsJupyterNotebook('uploadedFile');
+                else
+                    loadFileAsText('uploadedFile');
+                $('#uploadModal').modal('hide');
+            }
+            
 
             var websocket = new WebSocket(web_socket_url);
             var input_code = document.querySelector('#input_code');
@@ -104,50 +183,6 @@
             var add_section_textbox = document.querySelector('#add_section_textbox');
             var accordionExample = document.querySelector('#accordionExample');
 
-
-            //var run_all = document.querySelector('#run_all');
-            
-            //var run_code = document.querySelector('#run_code');
-            //var run_chart = document.querySelector('#run_chart');
-
-
-           /*
-            input_code.value = "%%%% #Markup# %%%%\n";
-            input_code.value += "# Your mark-up code goes here\n\n";
-            input_code.value += "%%%% #Code# %%%%\n";
-            input_code.value += "# Your python code goes here\n\n";
-            input_code.value += "%%%% #Chart# %%%%\n";
-            input_code.value += "# Add your generated charts here\n";
-            
-
-            run_all.onclick = function (event) {
-                var d = new Date();
-                //output_console.value += "-----------------------------------------";
-                //output_console.value += "-----------------------------------------\n";
-                //output_console.value += d + '\n';
-
-                status_info.setAttribute("class", "badge bg-warning text-dark");
-                status_info.innerHTML = "Running ...";
-
-                var total_code_array = input_code.value.split('%%%%');
-
-                var sending_data = {};
-
-                for(var i=0; i< total_code_array.length; i++)
-                {
-                    if(total_code_array[i].includes('#Markup#'))
-                        sending_data['markup'] = total_code_array[i+1];
-                    else if(total_code_array[i].includes('#Code#'))
-                        sending_data['code'] = total_code_array[i+1];
-                    else if(total_code_array[i].includes('#Chart#')){
-                        sending_data['chart'] = total_code_array[i+1];
-                    }                        
-                    
-                }
-
-                websocket.send(JSON.stringify(sending_data));
-            } 
-            */           
 
             websocket.onmessage = function (event) {
                 //console.log(event);
@@ -257,13 +292,19 @@
             };
 
             add_section.onclick = function (event) {
+                
+                add_text_in_code_section(add_section_textbox.value, '');
+            }
+
+            function add_text_in_code_section(str_name, code_str){
+
                 var random_str = Math.random().toString(36).substring(7);
-                section_name = add_section_textbox.value.trim().replace(' ','') + random_str;
+                section_name = str_name.trim().replace(' ','') + random_str;
                 var str = "<div class='accordion-item' id='" + section_name + "'>";
                 str +=  "<h2 class='accordion-header' id='heading" + section_name + "'>";
                 str +=  "<div class='accordion-button bg-white border-success text-success' style='padding: 10px 15px; border-width: 2px'>";
                 str +=  "<div style='font-size: 24px' class='col-5'  type='button' data-bs-toggle='collapse' data-bs-target='#collapse" + section_name + "' aria-expanded='false' aria-controls='collapse"+section_name+"' >";
-                str +=  add_section_textbox.value + "</div>";
+                str +=  str_name + "</div>";
                 str +=  "<div class='col-6'>";
                 str +=  "<button type='button' class='accrd-button btn btn-outline-success' onclick='run_code_section(\"" + section_name + "\")'><i class='bi bi-play-fill'></i> Run</button>";
                 str +=  "<button type='button' class='accrd-button btn btn-outline-warning' onclick='clear_txt(\"" + section_name + "\")'><i class='bi bi-eraser'></i> Clear</button>";
@@ -271,12 +312,15 @@
                 str +=  "</div></div></h2>";
                 str +=  "<div style='border-width: 0px 2px 2px 2px;' id='collapse" + section_name + "' class='accordion-collapse collapse border-success' aria-labelledby='heading" + section_name + "' data-bs-parent='#accordionExample'>";
                 str +=  "<div class='accordion-body'>";
-                str +=  "<textarea id='input_code_" + section_name + "' class='form-control' rows='15' style='font-size: 14px;margin: 5px 0px;'></textarea>";
-                str += "<div id='output_" + section_name + "'></div>";
+                str +=  "<textarea id='input_code_" + section_name + "' class='form-control' rows='15' style='font-size: 14px;margin: 5px 0px;'>";
+                str +=  code_str;
+                str +=  "</textarea>";
+                str +=  "<div id='output_" + section_name + "'></div>";
                 str +=  "</div></div></div>";
 
                 accordionExample.innerHTML += str;
-            }
+
+            };
 
             function clear_txt(str_name){
                 var textarea_box = document.querySelector('#input_code_' + str_name);
@@ -307,6 +351,44 @@
                 output_div.innerHTML = "Code is running..."
 
                 websocket.send(JSON.stringify(sending_data));
+            }
+
+
+            function loadFileAsText(div_id_name){
+                var fileToLoad = document.getElementById(div_id_name).files[0];
+
+                var fileReader = new FileReader();
+                fileReader.onload = function(fileLoadedEvent){
+                    var textFromFileLoaded = fileLoadedEvent.target.result;
+                    
+                    add_text_in_code_section(code_segment_name_textbox.value, textFromFileLoaded);
+                };
+
+                fileReader.readAsText(fileToLoad, "UTF-8");
+            }
+
+            function loadFileAsJupyterNotebook(div_id_name){
+                var fileToLoad = document.getElementById(div_id_name).files[0];
+
+                var fileReader = new FileReader();
+                fileReader.onload = function(fileLoadedEvent){
+                    var textFromFileLoaded = fileLoadedEvent.target.result;
+
+                    var str_code = "";
+                    var jsonObj = JSON.parse(textFromFileLoaded);
+
+                    for(var i=0; i<jsonObj.cells.length; i++)
+                    {
+                        if(jsonObj.cells[i].cell_type == 'code')
+                        {
+                            str_code += JSON.parse(textFromFileLoaded).cells[i].source.join('') + '\n';
+                        }
+                    }
+                    
+                    add_text_in_code_section(code_segment_name_textbox.value, str_code);
+                };
+
+                fileReader.readAsText(fileToLoad, "UTF-8");
             }
 
         </script>
