@@ -221,7 +221,7 @@
     var params = getParams(window.location.href);
     if(params.name)
         sessionStorage.setItem("chart_name", params.name);
-    
+    var temp_id = params.temp_id;
 
 
     var loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'), {
@@ -238,8 +238,8 @@
     map_library.initializeMap();
 
     
-
     /*
+    
     animation_library.start_year = 2008;
     animation_library.end_year = 2013;
     animation_library.initializeAnimationControl('anim_1', 'Animation Panel', 'bottomright');
@@ -347,6 +347,12 @@
         
     };    
 
+    websocket.onopen = function (event) {
+        var obj = {'temp_id': temp_id, 'message_type': 'request'};
+        websocket.send(JSON.stringify(obj));
+    };
+
+    
 
 
 </script>

@@ -26,6 +26,9 @@
                 <a href="/out/" class="btn btn-outline-success" id="documentation" target="_blank" >
                     <i class="bi bi-info-square-fill"></i> Documentation</a>
 
+                    <a href="#" onclick="save_in_text()" class="btn btn-outline-success" id="save_code" >
+                        <i class="bi bi-info-square-fill"></i> Save Code</a>
+
                     <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadModal" id="uploadModalButton">
                         <i class="bi bi-upload"></i> Upload Code
                     </button>
@@ -391,6 +394,19 @@
                 fileReader.readAsText(fileToLoad, "UTF-8");
             }
 
+            function save_in_text(){
+                var text = document.getElementById("input_code_1").value;
+                //text = text.replace(/\n/g, "\r\n"); // To retain the Line breaks.
+                var blob = new Blob([text], { type: "text/plain"});
+                var anchor = document.createElement("a");
+                anchor.download = "my_code.txt";
+                anchor.href = window.URL.createObjectURL(blob);
+                anchor.target ="_blank";
+                anchor.style.display = "none"; // just to be safe!
+                document.body.appendChild(anchor);
+                anchor.click();
+                document.body.removeChild(anchor);
+            };
         </script>
     </body>
 </html>

@@ -1,5 +1,5 @@
 import os, time, shapefile
-from web_socket_server import SERVER, web_port
+#from web_socket_server import SERVER, web_port
 from json import dumps
 import netCDF4 as nc
 import numpy as np
@@ -9,12 +9,13 @@ result_array = []
 path_url = "http://localhost:8000/"
 
 def addToChart(chart_name, filename, order=100):
-    """A function just for me.
+    """By calling this method, the image/chart will be visible in the chart section.
 
-    :param my_arg: The first of my arguments.
-    :param my_other_arg: The second of my arguments.
+    :param chart_name: The unique name of the chart in string
+    :param file_name: The file name of the chart that has been saved in the server
+    :param order: The file name of the chart that has been saved in the server
 
-    :returns: A message (just for me, of course).
+    :returns: void.
     """
     global result_array
     if os.path.exists(filename):
@@ -30,19 +31,25 @@ def addToChart(chart_name, filename, order=100):
     return
 
 def initGeoMap(chart_name):
+    """By calling this method, the image/chart will be visible in the chart section.
+
+    :param chart_name: The unique name of the chart in string
+    :param file_name: The file name of the chart that has been saved in the server
+    :param order: The file name of the chart that has been saved in the server
+
+    :returns: void.
+    """
     global result_array
     data_array = {}
-    temp_id = 'ABC123'
     data_array["id"] = chart_name.replace(' ','')
     data_array["to"] = "master," + chart_name.replace(' ','')
     data_array['name'] = chart_name
     data_array['type'] = 'new_tab'
     data_array["order"] = 1
-    data_array['temp_id'] = temp_id
     path = path_url + "geo_map.html?"
 
     if chart_name != '':
-        path += "name=" + chart_name.replace(' ','') + "&" + "temp_id=" + temp_id
+        path += "name=" + chart_name.replace(' ','') + "&"
 
     data_array['path'] = path.replace(',', '%2C')
     result_array.append(data_array)
