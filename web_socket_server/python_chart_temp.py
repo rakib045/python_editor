@@ -1,28 +1,27 @@
 from util_library import *
-def bubbleSort(in_array):
-    array_size = len(in_array)
+initGeoMap('Chart1')
 
-    for i in range(array_size):
-        not_swap = True
-        for j in range(0, array_size-i-1):
-            #print("i: " + str(i) + ", j: " + str(j))
-            if in_array[j] > in_array[j+1]:
-                not_swap = False
-                in_array[j], in_array[j+1] = in_array[j+1], in_array[j]
 
-        if not_swap:
-            break
+animation_info = {
+       'title': 'My Animation',
+       'position': 'bottomright',
+}
+addAnimationToGeoChart('Chart1', 2008, 2013, animation_info)
 
-if __name__ == '__main__':
-    print("Code is starting ...")
-    input_array = [4, 3, 2, 8, 9, 5]
-    #print("Input Array: " + str(input_array))
+layer_name = 'Scalar SWE'
+variable_name = 'scalarSWE'
+color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
+addColorListToGeoChart('Chart1', layer_name, color_list)
 
-    #Call Bubble Sort Array
-    bubbleSort(input_array)
-
-    print("Output Array: " + str(input_array))
-    #print("Code finished !")
+legend_info = {
+'legend_title': 'Scalar SWE (kg m-2)', 
+'legend_position': 'bottomleft',
+'scale': 'logarithmic'
+}
+addLegendToGeoChart('Chart1', layer_name, legend_info)
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', 'average')
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', 'average')
+drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
 result_array = sorted(result_array, key=lambda x: x['order'], reverse=False)
 print(';##;')
 print(result_array)

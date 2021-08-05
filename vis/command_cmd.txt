@@ -318,6 +318,8 @@ legend_info = {
 'scale': 'logarithmic'
 }
 addLegendToGeoChart('Chart1', layer_name, legend_info)
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', 'average')
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', 'average')
 drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
 
 
@@ -335,6 +337,8 @@ legend_info = {
 }
 
 addLegendToGeoChart('Chart1', layer_name, legend_info)
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', 'average')
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', 'average')
 drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
 
 

@@ -105,6 +105,20 @@ def addAnimationToGeoChart(chart_name, year_from, year_to, animation_info):
     result_array.append(data_array)
     return
 
+def addOptionButtonToGeoChart(chart_name, layer_name, button_display_text, chart_type, aggregation_type):
+    global result_array
+    data_array = {}
+    data_array["to"] = chart_name.replace(' ','')
+    data_array["order"] = 1000
+    data_array["button_info"] = 1
+    data_array["layer_name"] = layer_name
+    data_array["display_text"] = button_display_text
+    data_array["chart_type"] = chart_type
+    data_array["aggregation_type"] = aggregation_type
+    result_array.append(data_array)
+    return
+
+
 
 def generateGeoJSON(shp_file_name, bbox, output_filename):    
 
