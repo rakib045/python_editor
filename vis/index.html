@@ -11,6 +11,10 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
         
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+
         <style>
             .accrd-button{
                 margin-right: 5px;
@@ -55,19 +59,20 @@
                       </h2>
                       <div style="border-width: 0px 2px 2px 2px;" id="collapseOne" class="accordion-collapse collapse show border-success" aria-labelledby="headingOne" data-bs-parent="#accordionExample1">
                         <div class="accordion-body">
-                            <textarea id="input_code_1" class="form-control" rows="15" style="font-size: 14px; margin: 5px 0px;"></textarea>
+                            <textarea id="input_code_1" class="form-control" rows="25" style="font-size: 14px; margin: 5px 0px;"></textarea>
                             <div id="output_1"></div>                                                     
                         </div>
                       </div>
                     </div>
                 </div>
 
+                <!--
                 <div class="input-group">
                     <div class="input-group-text btn-success" id="btnGroupAddon">New Section</div>
                     <input type="text" class="form-control border-success text-success" aria-describedby="btnGroupAddon" id="add_section_textbox"/>
                     <button type="button" class="btn btn-outline-success" id="add_section"><i class="bi bi-plus"></i> Add</button>
                 </div>
-
+                -->
               </div>
 
               <div class="col-sm">
@@ -106,34 +111,83 @@
             <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="uploadModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="uploadModalLabel">Upload Code</h5>
                 </div>
                 <div class="modal-body">
+                    <ul class="nav nav-tabs" id="chartTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="Server_tab" data-bs-toggle="tab" data-bs-target="#Server" type="button" role="tab" aria-controls="Server" aria-selected="true">Server</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="LocalMachine_tab" data-bs-toggle="tab" data-bs-target="#LocalMachine" type="button" role="tab" aria-controls="LocalMachine" aria-selected="true">Local Machine</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="chartTabContent">
+                        <div class="tab-pane fade show active" id="Server" role="tabpanel" aria-labelledby="Server_tab">
+                            <div style="padding: 5px; border-left: 1px solid rgb(222, 226, 230); border-bottom: 1px solid rgb(222, 226, 230); border-right: 1px solid rgb(222, 226, 230);">
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">Select File : </label>
+                                    <!--
+                                    <select class="form-select" size="6" aria-label="size select example">
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                        <option value="4">Four</option>
+                                        <option value="5">Five</option>
+                                        <option value="6">Six</option>
+                                      </select>
+                                    -->
+                                    <div id="file_server_browse_jstree"></div>
+                                </div>
+                                
+                            </div>                            
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="uploadModalCloseButtonTab1">Close</button>
+                                <button type="button" class="btn btn-primary"  id="loadFromServerModalButton">Load</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="LocalMachine" role="tabpanel" aria-labelledby="LocalMachine_tab">
+                            <div style="padding: 5px; border-left: 1px solid rgb(222, 226, 230); border-bottom: 1px solid rgb(222, 226, 230); border-right: 1px solid rgb(222, 226, 230);">
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">Select File Type</label>
+                                    <select class="form-select" aria-label="Default select example" id="uploadFileType">
+                                        <option value="py" selected>Python File (.py)</option>
+                                        <option value="txt">Text File (.txt)</option>
+                                        <option value="ipynb">Jupyter Notebook File (.ipynb)</option>
+                                    </select>
+                                </div>
+            
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">Browse for the File</label>
+                                    <input class="form-control" type="file" id="uploadedFile">
+                                </div>
+                                <!--
+            
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">Code Segment Name</label>
+                                    <input class="form-control" type="input" id="codeSegmentName" value="UploadedCode">
+                                </div>
+                                -->
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="uploadModalCloseButtonTab2">Close</button>
+                                    <button type="button" class="btn btn-primary"  id="loadModalButton">Load</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 
-                    <div class="mb-3">
-                        <label for="formFile" class="form-label">Select File Type</label>
-                        <select class="form-select" aria-label="Default select example" id="uploadFileType">
-                            <option value="py" selected>Python File (.py)</option>
-                            <option value="txt">Text File (.txt)</option>
-                            <option value="ipynb">Jupyter Notebook File (.ipynb)</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="formFile" class="form-label">Browse for the File</label>
-                        <input class="form-control" type="file" id="uploadedFile">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="formFile" class="form-label">Code Segment Name</label>
-                        <input class="form-control" type="input" id="codeSegmentName" value="UploadedCode">
-                    </div>
+                    
 
                 </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="uploadModalCloseButton">Close</button>
-                <button type="button" class="btn btn-primary"  id="loadModalButton">Load</button>
-                </div>
+                <!--
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="uploadModalCloseButton">Close</button>
+                    <button type="button" class="btn btn-primary"  id="loadModalButton">Load</button>
+                    </div>
+                -->
             </div>
             </div>
         </div>
@@ -143,13 +197,54 @@
             //var web_socket_url = "ws://206.12.95.141/AdvancedVisWebSocket";
             var web_socket_url = "ws://127.0.0.1:6789/";
 
+            var server_upload_code_filepath = '';
             $( document ).ready(function() {
-                console.log( "ready!" );
+                //console.log( "ready!" );
                 //$('#uploadModal').modal();
+                $('#file_server_browse_jstree').jstree({ 
+                        'core' : {
+                        'themes' : { 'stripes' : true },
+                        'data' : [
+                            { "id" : "RiverFlow", "parent" : "#", "text" : "Sample River Flow", "data" : "" },
+                            { "id" : "RiverFlow__bow_river_kwt_routed_runoff", "parent" : "RiverFlow", "text" : "bow_river_kwt_routed_runoff.txt", "icon" : "jstree-file", "data" : "/SampleCode/RiverFlow/bow_river_kwt_routed_runoff.txt" },
+                            
+                            { "id" : "CatchmentBasin", "parent" : "#", "text" : "Sample Catchment Basin", "data" : "" },
+                            { "id" : "CatchmentBasin__bow_river_catchment_ScalarSWE", "parent" : "CatchmentBasin", "text" : "bow_river_catchment_ScalarSWE.txt", "icon" : "jstree-file", "data" : "/SampleCode/CatchmentBasin/bow_river_catchment_ScalarSWE.txt" },
+
+                            { "id" : "RiverFlowCatchmentBasin", "parent" : "#", "text" : "Sample River Flow and Catchment Basin", "data" : "" },
+                            { "id" : "RiverFlowCatchmentBasin__bow_rvr_kwt_routed_runoff_and_swe", "parent" : "RiverFlowCatchmentBasin", "text" : "bow_rvr_kwt_routed_runoff_and_swe.txt", "icon" : "jstree-file", "data" : "/SampleCode/RiverFlowCatchmentBasin/bow_rvr_kwt_routed_runoff_and_swe.txt" }
+                        ]
+                    } 
+                });
+            });
+
+            $('#file_server_browse_jstree').on("changed.jstree", function (e, data) {
+                //console.log(data.selected);
+                //console.log(window.location.href + data.node.data);
+                server_upload_code_filepath = data.node.data;
+            });
+
+            $('#loadFromServerModalButton').click(function(){
+                if(server_upload_code_filepath == '')
+                    alert('Selected item is a folder, not a file. Please, select a file.');
+                else{
+                    //alert(window.location.href + server_upload_code_filepath);
+                    $.ajax({
+                        url: window.location.href + server_upload_code_filepath,
+                        success: function (data){
+                            //console.log(data);
+                            add_text_in_code_textbox(data);
+                            $('#uploadModal').modal('hide');
+                        }
+                    });
+                }
             });
 
             var upload_modal_button = document.querySelector('#uploadModalButton');
-            var upload_modal_close_button = document.querySelector('#uploadModalCloseButton');
+
+            var upload_modal_close_button_tab1 = document.querySelector('#uploadModalCloseButtonTab1');
+            var upload_modal_close_button_tab2 = document.querySelector('#uploadModalCloseButtonTab2');
+
             var load_modal_button = document.querySelector('#loadModalButton');
 
             var upload_file_type_dd = document.querySelector('#uploadFileType');
@@ -159,7 +254,10 @@
             upload_modal_button.onclick = function (event) {
                 $('#uploadModal').modal('show');
             }
-            upload_modal_close_button.onclick = function (event) {
+            upload_modal_close_button_tab1.onclick = function (event) {
+                $('#uploadModal').modal('hide');
+            }
+            upload_modal_close_button_tab2.onclick = function (event) {
                 $('#uploadModal').modal('hide');
             }
             load_modal_button.onclick = function (event) {
@@ -299,6 +397,10 @@
                 add_text_in_code_section(add_section_textbox.value, '');
             }
 
+            function add_text_in_code_textbox(code_str){
+                $('#input_code_1').val(code_str);
+            };
+
             function add_text_in_code_section(str_name, code_str){
 
                 var random_str = Math.random().toString(36).substring(7);
@@ -363,8 +465,9 @@
                 var fileReader = new FileReader();
                 fileReader.onload = function(fileLoadedEvent){
                     var textFromFileLoaded = fileLoadedEvent.target.result;
+                    add_text_in_code_textbox(textFromFileLoaded);
                     
-                    add_text_in_code_section(code_segment_name_textbox.value, textFromFileLoaded);
+                    //add_text_in_code_section(code_segment_name_textbox.value, textFromFileLoaded);
                 };
 
                 fileReader.readAsText(fileToLoad, "UTF-8");
@@ -387,8 +490,8 @@
                             str_code += JSON.parse(textFromFileLoaded).cells[i].source.join('') + '\n';
                         }
                     }
-                    
-                    add_text_in_code_section(code_segment_name_textbox.value, str_code);
+                    add_text_in_code_textbox(str_code);
+                    //add_text_in_code_section(code_segment_name_textbox.value, str_code);
                 };
 
                 fileReader.readAsText(fileToLoad, "UTF-8");

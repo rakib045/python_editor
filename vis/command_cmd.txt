@@ -299,8 +299,6 @@ drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_n
 
 
 initGeoMap('Chart1')
-
-
 animation_info = {
        'title': 'My Animation',
        'position': 'bottomright',
