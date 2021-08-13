@@ -1,4 +1,4 @@
-import os, time, shapefile
+import os, time, shapefile, random, string
 from web_socket_server import SERVER, web_port
 from json import dumps
 import netCDF4 as nc
@@ -32,7 +32,7 @@ def addToChart(chart_name, filename, order=100):
 def initGeoMap(chart_name):
     global result_array
     data_array = {}
-    temp_id = 'ABC123'
+    temp_id = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
     data_array["id"] = chart_name.replace(' ','')
     data_array["to"] = "master," + chart_name.replace(' ','')
     data_array['name'] = chart_name
@@ -117,6 +117,7 @@ def addOptionButtonToGeoChart(chart_name, layer_name, button_display_text, chart
     data_array["aggregation_type"] = aggregation_type
     result_array.append(data_array)
     return
+
 
 
 
