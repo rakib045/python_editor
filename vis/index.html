@@ -24,7 +24,7 @@
     </head>
     <body>
         
-        <div class="container">
+        <div class="container" style="max-width: 100%;">
             <h1>Advanced VIS</h1>
             <div style="padding-bottom: 10px;">
                 <a href="/out/" class="btn btn-outline-success" id="documentation" target="_blank" >
@@ -36,13 +36,26 @@
                     <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadModal" id="uploadModalButton">
                         <i class="bi bi-upload"></i> Upload Code
                     </button>
+
+                    <div style="float:right">
+                        <div style="font-size: 14px;">
+                            <i class="bi bi-person-circle" style="color: green;"></i>
+                            <span>Log in as Guest_</span><span id="user_id"></span>
+                        </div>
+                        <div>
+                            <span id="connection_info" class="badge bg-warning text-dark">Connecting to Socket Server ...</span>
+                            <span id="status_info" class=""></span>
+                        </div>
+                        
+                    </div>
+
                 <!--
                 <button type="button" class="btn btn-outline-success" id="run_all" disabled>
                     <i class="bi bi-collection-play"></i> Run Everything</button>
                     -->
             </div>
             <div class="row">
-              <div class="col-sm">
+              <div class="col-6">
                 <!--<h4>Write your code here:</h4> -->
                 <div class="accordion" id="accordionExample" style="padding-bottom: 10px;">
                     <div class="accordion-item" id="A1">
@@ -75,33 +88,42 @@
                 -->
               </div>
 
-              <div class="col-sm">
-                <div class="mb-3">
-                    <div>
-                        <span id="connection_info" class="badge bg-warning text-dark">Connecting to Socket Server ...</span>
-                        <span id="status_info" class=""></span>
+              <div class="col-3">
+                
+                <div class="card border-success" style="font-size:0.8em">
+                    <div class="card-header bg-transparent border-success text-success">
+                        <h4 class="card-title">Charts</h4>
                     </div>
-                    <div class="card border-success" style="font-size:0.8em">
-                        <div class="card-header bg-transparent border-success text-success">
-                            <h4 class="card-title">Charts</h4>
+                    <div class="card-body text-success" style="min-height: 350px;">
+                      <div class="card-text">
+                        <ul class="nav nav-tabs" id="chartTab" role="tablist">
+                        </ul>
+                        <div class="tab-content" id="chartTabContent">
                         </div>
-                        <div class="card-body text-success" style="min-height: 350px;">
-                          <div class="card-text">
-                            <ul class="nav nav-tabs" id="chartTab" role="tablist">
-                            </ul>
-                            <div class="tab-content" id="chartTabContent">
-                            </div>
-                          </div>
-                        </div>                        
-                    </div>
-
-                    <!--
-                    <label for="exampleFormControlTextarea1" class="form-label">Console output: </label>                                        
-                    <textarea id="output_console" disabled class="form-control" rows="10" style="font-size:12px"></textarea> 
-                    -->
-                                       
+                      </div>
+                    </div>                        
                 </div>
+
               </div>
+
+              <div class="col-3">
+                
+                <div class="card border-success" style="font-size:0.8em">
+                    <div class="card-header bg-transparent border-success text-success">
+                        <h4 class="card-title">Variables</h4>
+                    </div>
+                    <div class="card-body text-success">
+                      <div class="card-text">
+                            <div id="variables_jstree"></div>
+                      </div>
+                    </div>                        
+                </div>
+
+              </div>
+
+                            
+
+
             </div>
           </div>
 
@@ -194,6 +216,8 @@
 
         <script>
 
+            var user_id = '';
+
             //var web_socket_url = "ws://206.12.95.141/AdvancedVisWebSocket";
             var web_socket_url = "ws://127.0.0.1:6789/";
 
@@ -215,6 +239,39 @@
                             { "id" : "RiverFlowCatchmentBasin__bow_rvr_kwt_routed_runoff_and_swe", "parent" : "RiverFlowCatchmentBasin", "text" : "bow_rvr_kwt_routed_runoff_and_swe.txt", "icon" : "jstree-file", "data" : "/SampleCode/RiverFlowCatchmentBasin/bow_rvr_kwt_routed_runoff_and_swe.txt" }
                         ]
                     } 
+                });
+
+                $('#variables_jstree').jstree({  
+                        'core' : {
+                        'themes' : { 'stripes' : true },
+                        'data' : [
+                            { "id" : "RiverFlow", "parent" : "#", "text" : "River Flow", "data" : "" },
+
+                            { "id" : "RiverFlow__dlayRunoff", "parent" : "RiverFlow", "text" : "dlayRunoff", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "RiverFlow__IRFroutedRunoff", "parent" : "RiverFlow", "text" : "IRFroutedRunoff", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "RiverFlow__KWTroutedRunoff", "parent" : "RiverFlow", "text" : "KWTroutedRunoff", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "RiverFlow__sumUpstreamRunoff", "parent" : "RiverFlow", "text" : "sumUpstreamRunoff", "icon" : "jstree-file", "data" : "" },
+                            
+                            { "id" : "CatchmentBasin", "parent" : "#", "text" : "Catchment Basin", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarAquiferBaseflow", "parent" : "CatchmentBasin", "text" : "scalarAquiferBaseflow", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarAquiferStorage", "parent" : "CatchmentBasin", "text" : "scalarAquiferStorage", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarCanopyWat", "parent" : "CatchmentBasin", "text" : "scalarCanopyWat", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarInfiltration", "parent" : "CatchmentBasin", "text" : "scalarInfiltration", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarLatHeatTotal", "parent" : "CatchmentBasin", "text" : "scalarLatHeatTotal", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarNetRadiation", "parent" : "CatchmentBasin", "text" : "scalarNetRadiation", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarRainPlusMelt", "parent" : "CatchmentBasin", "text" : "scalarRainPlusMelt", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarSenHeatTotal", "parent" : "CatchmentBasin", "text" : "scalarSenHeatTotal", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarSoilBaseflow", "parent" : "CatchmentBasin", "text" : "scalarSoilBaseflow", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarSoilDrainage", "parent" : "CatchmentBasin", "text" : "scalarSoilDrainage", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarSurfaceRunoff", "parent" : "CatchmentBasin", "text" : "scalarSurfaceRunoff", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarSWE", "parent" : "CatchmentBasin", "text" : "scalarSWE", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarTotalET", "parent" : "CatchmentBasin", "text" : "scalarTotalET", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarTotalRunoff", "parent" : "CatchmentBasin", "text" : "scalarTotalRunoff", "icon" : "jstree-file", "data" : "" },
+                            { "id" : "CatchmentBasin__scalarTotalSoilWat", "parent" : "CatchmentBasin", "text" : "scalarTotalSoilWat", "icon" : "jstree-file", "data" : "" }
+
+                            ]
+                        }
+                        
                 });
             });
 
@@ -288,99 +345,110 @@
             websocket.onmessage = function (event) {
                 //console.log(event);
                 d = JSON.parse(event.data);
-                var output_div = document.querySelector('#output_' + d.return_div);
-                //output_div.innerHTML = "";
-                
 
-                if(d.error){
-                    status_info.setAttribute("class", "badge bg-danger");
-                    status_info.innerHTML = "Error in code";
-                    //output_console.value += d.error;
-                    output_div.innerHTML = d.error;
+                if(d['message_type'] == 'connection_establish'){
+                    user_id = d.output;
+                    $('#user_id').html(user_id);
                 }
-                if(d.output){
-                    //status_info.setAttribute("class", "badge bg-success");
-                    //status_info.innerHTML = "Code executed";
-
-                    outputs = d.output.trim().replaceAll('\n','').split(';##;');
-                    if (output_div != undefined)
-                        output_div.innerHTML = outputs[0];
-                    //output_console.value += outputs[0];
-
-                    if (outputs.length > 1){
-
-                        charts = JSON.parse(outputs[1].replaceAll("\'", "\""));                   
-                        status_info.setAttribute("class", "badge bg-success");
-                        status_info.innerHTML = "Code executed";
-                        //output_console.value += "Chart has been updated\n";
-
-                        str_html = "";
-                        str1_html = "";
-
-                        for(var i=0; i<charts.length; i++)
-                        {
-                            if(charts[i].to.includes('master'))
-                            {
-                                fname = charts[i].name.replaceAll(' ','')
-                                order = charts[i].order
-
-                                str_html += "<li class='nav-item' role='presentation'>";
-                                if(i==0)
-                                    str_html += "<button class='nav-link active'";
-                                else
-                                    str_html += "<button class='nav-link'";
-
-                                str_html += " id='" + fname + "_tab";
-                                str_html += "' data-bs-toggle='tab' data-bs-target='#" + fname + "' type='button' role='tab'";
-                                str_html += "aria-controls='"+ fname +"' aria-selected='true'>"+ charts[i].name +"</button>";
-                                str_html += "</li>";
-                            
-                                str1_html += "<div class='tab-pane fade show";
-                                if(i==0)
-                                    str1_html += " active";
-                                str1_html += "' id='"+ fname +"' role='tabpanel' aria-labelledby='" + fname + "_tab" +"'>";
-                                if (charts[i].type == "image")
-                                    str1_html += "<img src='" + charts[i].path + "' />";
-                                else if (charts[i].type == "iframe"){
-                                    str1_html += "<a href='" + charts[i].path + "' target='_blank'>Open in new tab</a>";
-                                    str1_html += "<iframe src='" + charts[i].path + "' width='600px' height='400px'></iframe>";                            
-                                }
-                                else if (charts[i].type == "new_tab"){ 
-                                    window.open(charts[i].path, '_blank');                    
-                                }
-                                    
-                                str1_html += "</div>";
-                            }
-                                                    
+                else if(d['message_type'] == 'returned_call'){
+                    if(d['user_id'] == user_id) {
+                        var output_div = document.querySelector('#output_' + d.return_div);
+                        //output_div.innerHTML = "";
+                        
+                        if(d.error){
+                            status_info.setAttribute("class", "badge bg-danger");
+                            status_info.innerHTML = "Error in code";
+                            //output_console.value += d.error;
+                            output_div.innerHTML = d.error;
                         }
-                        if(str_html != '' && str1_html != '')
-                        {
-                            chartTab.innerHTML = str_html;
-                            chartTabContent.innerHTML = str1_html;
+                        if(d.output){
+                            //status_info.setAttribute("class", "badge bg-success");
+                            //status_info.innerHTML = "Code executed";
 
+                            outputs = d.output.trim().replaceAll('\n','').split(';##;');
                             if (output_div != undefined)
-                                output_div.innerHTML = "Chart has been updated!!!";
+                                output_div.innerHTML = outputs[0];
+                            //output_console.value += outputs[0];
+
+                            if (outputs.length > 1){
+
+                                charts = JSON.parse(outputs[1].replaceAll("\'", "\""));                   
+                                status_info.setAttribute("class", "badge bg-success");
+                                status_info.innerHTML = "Code executed";
+                                //output_console.value += "Chart has been updated\n";
+
+                                str_html = "";
+                                str1_html = "";
+
+                                for(var i=0; i<charts.length; i++)
+                                {
+                                    if(charts[i].to.includes('master'))
+                                    {
+                                        fname = charts[i].name.replaceAll(' ','')
+                                        order = charts[i].order
+
+                                        str_html += "<li class='nav-item' role='presentation'>";
+                                        if(i==0)
+                                            str_html += "<button class='nav-link active'";
+                                        else
+                                            str_html += "<button class='nav-link'";
+
+                                        str_html += " id='" + fname + "_tab";
+                                        str_html += "' data-bs-toggle='tab' data-bs-target='#" + fname + "' type='button' role='tab'";
+                                        str_html += "aria-controls='"+ fname +"' aria-selected='true'>"+ charts[i].name +"</button>";
+                                        str_html += "</li>";
+                                    
+                                        str1_html += "<div class='tab-pane fade show";
+                                        if(i==0)
+                                            str1_html += " active";
+                                        str1_html += "' id='"+ fname +"' role='tabpanel' aria-labelledby='" + fname + "_tab" +"'>";
+                                        if (charts[i].type == "image")
+                                            str1_html += "<img src='" + charts[i].path + "' />";
+                                        else if (charts[i].type == "iframe"){
+                                            str1_html += "<a href='" + charts[i].path + "' target='_blank'>Open in new tab</a>";
+                                            str1_html += "<iframe src='" + charts[i].path + "' width='600px' height='400px'></iframe>";                            
+                                        }
+                                        else if (charts[i].type == "new_tab"){ 
+                                            window.open(charts[i].path + '&user_id=' + user_id, '_blank');                    
+                                        }
+                                            
+                                        str1_html += "</div>";
+                                    }
+                                                            
+                                }
+                                if(str_html != '' && str1_html != '')
+                                {
+                                    chartTab.innerHTML = str_html;
+                                    chartTabContent.innerHTML = str1_html;
+
+                                    if (output_div != undefined)
+                                        output_div.innerHTML = "Chart has been updated!!!";
+                                }
+
+                            }
+                            
+                                                
                         }
+                        if(!d.error && !d.code && !d.output)
+                        {
+                            status_info.setAttribute("class", "badge bg-success");
+                            status_info.innerHTML = "Code executed";
+                            //output_console.value += "Code executed succesfully\n";
+                            if (output_div != undefined)
+                                output_div.innerHTML = "Code executed succesfully";
+                        }
+                        /*
+                        else{
+                            status_info.setAttribute("class", "badge bg-success");
+                            status_info.innerHTML = "Code executed";
+                            output_console.value += "Code execution finishes without console output.\n"
+                        }
+                        */
 
                     }
                     
-                                        
                 }
-                if(!d.error && !d.code && !d.output)
-                {
-                    status_info.setAttribute("class", "badge bg-success");
-                    status_info.innerHTML = "Code executed";
-                    //output_console.value += "Code executed succesfully\n";
-                    if (output_div != undefined)
-                        output_div.innerHTML = "Code executed succesfully";
-                }
-                /*
-                else{
-                    status_info.setAttribute("class", "badge bg-success");
-                    status_info.innerHTML = "Code executed";
-                    output_console.value += "Code execution finishes without console output.\n"
-                }
-                */
+                
             };
             websocket.onopen = function (event) {
                 //output_console.value = "Version: ";
@@ -392,10 +460,12 @@
                 connection_info.innerHTML = "Connection Error with Library Server";
             };
 
+            /*
             add_section.onclick = function (event) {
                 
                 add_text_in_code_section(add_section_textbox.value, '');
             }
+            */
 
             function add_text_in_code_textbox(code_str){
                 $('#input_code_1').val(code_str);
@@ -451,6 +521,7 @@
                 var sending_data = {};
                 sending_data['code'] = textarea_box.value;
                 sending_data['return_div'] = str_name;
+                sending_data['user_id'] = user_id;
 
                 var output_div = document.querySelector('#output_' + str_name);
                 output_div.innerHTML = "Code is running..."

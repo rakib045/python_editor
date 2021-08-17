@@ -361,7 +361,7 @@
     };    
 
     websocket.onopen = function (event) {
-        var obj = {'temp_id': temp_id, 'message_type': 'request'};
+        var obj = {'temp_id': temp_id, 'user_id': params.user_id, 'message_type': 'request'};
         websocket.send(JSON.stringify(obj));
     };
 
