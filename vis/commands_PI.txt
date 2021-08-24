@@ -1,4 +1,3 @@
-from util_library import *
 import math
 import numpy as np
 import geopandas as gpd
@@ -140,7 +139,4 @@ plt.legend(temp.values(), temp.keys(), loc='best')
 
 # save
 plt.savefig('test.png', bbox_inches='tight')
-addToChart('Shape Chart', 'test.png', 1)
-result_array = sorted(result_array, key=lambda x: x['order'], reverse=False)
-print(';##;')
-print(result_array)
+addToChart('Chart 1', 'test.png', 1)

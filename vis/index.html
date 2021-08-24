@@ -403,7 +403,7 @@
                                             str1_html += " active";
                                         str1_html += "' id='"+ fname +"' role='tabpanel' aria-labelledby='" + fname + "_tab" +"'>";
                                         if (charts[i].type == "image")
-                                            str1_html += "<img src='" + charts[i].path + "' />";
+                                            str1_html += "<img style='width:100%' src='" + charts[i].path + "' />";
                                         else if (charts[i].type == "iframe"){
                                             str1_html += "<a href='" + charts[i].path + "' target='_blank'>Open in new tab</a>";
                                             str1_html += "<iframe src='" + charts[i].path + "' width='600px' height='400px'></iframe>";                            

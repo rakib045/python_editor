@@ -3,10 +3,12 @@ from web_socket_server import SERVER, web_port
 from json import dumps
 import netCDF4 as nc
 import numpy as np
+import shutil as sutil
 
 result_array = []
 #path_url = "http://206.12.95.141/AdvancedVis/"
 path_url = "http://localhost:8000/"
+physical_path = "../vis/"
 
 def addToChart(chart_name, filename, order=100):
     """A function just for me.
@@ -18,11 +20,15 @@ def addToChart(chart_name, filename, order=100):
     """
     global result_array
     if os.path.exists(filename):
+        chart_file_path_name = 'chart_output/' 
+        
+        sutil.copy(filename, physical_path + chart_file_path_name)
+        os.remove(filename)
         data_array = {}
         data_array["id"] = chart_name.replace(' ','')
         data_array["to"] = "master," + chart_name.replace(' ','')
         data_array["name"] = chart_name
-        data_array["path"] = filename
+        data_array["path"] = chart_file_path_name + filename 
         data_array["type"] = 'image'
         data_array["order"] = order
         result_array.append(data_array)
