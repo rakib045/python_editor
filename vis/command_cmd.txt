@@ -23,10 +23,10 @@ Sequential color : #000000, #08306b, #08519c, #2171b5, #4292c6, #6baed6, #9ecae1
 
 
 
-%%%% #Markup# %%%%
+#Markup
 # Your mark-up code goes here
 
-%%%% #Code# %%%%
+#Code
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -66,13 +66,13 @@ addToChart('Subplots', 'test1.png',1)
 
 print(x1)
 
-%%%% #Chart# %%%%
+#Chart
 # Add your generated charts here
 addToChart('Time vs Voltage', 'test.png',2)
 addToChart('Subplots', 'test1.png',1)   
 
 
-
+######################
 
 filename = "HydroRIVERS_v10_na_shp\HydroRIVERS_v10_na.shp"
 bbox = {
@@ -234,11 +234,12 @@ legend_info = {
 addLegendToGeoChart('Chart1', layer_name, legend_info)
 drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'sum')
 
-
-
 redrawGeoChart('Chart1')
 
 
+
+
+initGeoMap('Chart1')
 
 animation_info = {
        'title': 'My Animation',
@@ -342,15 +343,13 @@ drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_n
 
 
 
-
-
 layer_name = 'Scalar Canopy Wat'
 variable_name = 'scalarCanopyWat'
 color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
 addColorListToGeoChart('Chart1', layer_name, color_list)
 
 legend_info = {
-'legend_title': 'Scalar SWE (kg m-2)', 
+'legend_title': 'Scalar Canopy Wat (kg m-2)', 
 'legend_position': 'bottomleft',
 'scale': 'logarithmic'
 }

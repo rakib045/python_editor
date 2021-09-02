@@ -1,146 +1,60 @@
 from util_library import *
-import math
-import numpy as np
-import geopandas as gpd
-from pathlib import Path
-import matplotlib.pyplot as plt
-import matplotlib.ticker as plticker
-from shapely.geometry import Polygon
+initGeoMap('Chart1')
+animation_info = {
+       'title': 'My Animation',
+       'position': 'bottomright',
+}
+addAnimationToGeoChart('Chart1', 2008, 2013, animation_info)
+
+layer_name = 'Scalar SWE'
+variable_name = 'scalarSWE'
+color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
+addColorListToGeoChart('Chart1', layer_name, color_list)
+
+legend_info = {
+'legend_title': 'Scalar SWE (kg m-2)', 
+'legend_position': 'bottomleft',
+'scale': 'logarithmic'
+}
+addLegendToGeoChart('Chart1', layer_name, legend_info)
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', 'average')
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', 'average')
+drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
 
 
-controlFolder = Path('')
-controlFile = 'control_active.txt'
+
+layer_name = 'Average KWTroutedRunoff'
+variable_name = 'KWTroutedRunoff'
+
+color_list = ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc5735', '#ed4624', '#e31a1c', '#bd0026', '#800026']
+addColorListToGeoChart('Chart1', layer_name, color_list)
+
+legend_info = {
+'legend_title': 'Average KWTroutedRunoff (m3/s)', 
+'legend_position': 'bottomleft',
+'grade_list': [5, 10, 20, 40, 60, 90, 120, 150, 200]
+}
+
+addLegendToGeoChart('Chart1', layer_name, legend_info)
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', 'average')
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', 'average')
+drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
 
 
-# Function to extract a given setting from the control file
-def read_from_control( file, setting ):
-    
-    # Open 'control_active.txt' and ...
-    for line in open(file):
-        
-        # ... find the line with the requested setting
-        if setting in line and not line.startswith('#'):
-            break
-    
-    # Extract the setting's value
-    substring = line.split('|',1)[1]      # Remove the setting's name (split into 2 based on '|', keep only 2nd part)
-    substring = substring.split('#',1)[0] # Remove comments, does nothing if no '#' is found
-    substring = substring.strip()         # Remove leading and trailing whitespace, tabs, newlines
-    
-    # Return this value    
-    return substring
-
-# Function to specify a default path
-def make_default_path(suffix):
-    
-    # Get the root path
-    rootPath = Path( read_from_control(controlFolder/controlFile,'root_path') )
-    
-    # Get the domain folder
-    domainName = read_from_control(controlFolder/controlFile,'domain_name')
-    domainFolder = 'domain_' + domainName
-    
-    # Specify the forcing path
-    defaultPath = rootPath / domainFolder / suffix
-    
-    return defaultPath
 
 
-shp = gpd.read_file('catchment\\bow_distributed_elevation_zone.shp')
-# function to round coordinates of a bounding box to ERA5s 0.25 degree resolution
-def round_coords_to_ERA5(coords):
-    
-    '''Assumes coodinates are an array: [lon_min,lat_min,lon_max,lat_max].
-    Returns separate lat and lon vectors.'''
-    
-    # Extract values
-    lon = [coords[1],coords[3]]
-    lat = [coords[2],coords[0]]
-    
-    # Round to ERA5 0.25 degree resolution
-    rounded_lon = [math.floor(lon[0]*4)/4, math.ceil(lon[1]*4)/4]
-    rounded_lat = [math.floor(lat[0]*4)/4, math.ceil(lat[1]*4)/4]
-    
-    # Find if we are still in the representative area of a different ERA5 grid cell
-    if lat[0] > rounded_lat[0]+0.125:
-        rounded_lat[0] += 0.25
-    if lon[0] > rounded_lon[0]+0.125:
-        rounded_lon[0] += 0.25
-    if lat[1] < rounded_lat[1]-0.125:
-        rounded_lat[1] -= 0.25
-    if lon[1] < rounded_lon[1]-0.125:
-        rounded_lon[1] -= 0.25
-    
-    # Make a download string
-    dl_string = '{}/{}/{}/{}'.format(rounded_lat[1],rounded_lon[0],rounded_lat[0],rounded_lon[1])
-    
-    return dl_string, rounded_lat, rounded_lon
+layer_name = 'Scalar Canopy Wat'
+variable_name = 'scalarCanopyWat'
+color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
+addColorListToGeoChart('Chart1', layer_name, color_list)
 
-# Find the spatial extent the data needs to cover
-bounding_box = read_from_control(controlFolder/controlFile,'forcing_raw_space')
-
-
-# Convert string to array
-bounding_box = bounding_box.split('/')
-bounding_box = [float(value) for value in bounding_box]
-
-
-# Find the rounded bounding box
-coordinates, lat, lon = round_coords_to_ERA5(bounding_box)
-
-
-# Print in ERA5 format
-print('ERA5 coordinates defined as [{}].'.format(coordinates))
-
-# Bounding box as specified in control file
-bb_control_lat = [bounding_box[0],bounding_box[0],bounding_box[2],bounding_box[2],bounding_box[0]]
-bb_control_lon = [bounding_box[1],bounding_box[3],bounding_box[3],bounding_box[1],bounding_box[1]]
-
-# ERA5 grid points from coordinates
-spacing = 0.25
-points_lat = np.arange(lat[0],lat[1]+spacing,spacing).tolist()
-points_lon = np.arange(lon[0],lon[1]+spacing,spacing).tolist()
-
-# Define a plotting grid
-grid_lon_era5_points, grid_lat_era5_points = np.meshgrid(points_lon,points_lat)
-
-# Grid cells we assume each ERA5 point is representative of
-cells_lat = np.arange(lat[0]-spacing/2,lat[1]+spacing+spacing/2,spacing).tolist()
-cells_lon = np.arange(lon[0]-spacing/2,lon[1]+spacing+spacing/2,spacing).tolist()
-
-# Define a plotting grid
-grid_lon_era5_cells, grid_lat_era5_cells = np.meshgrid(cells_lon,cells_lat)
-
-
-# Make a figure
-fig = plt.figure(figsize=(10,10))
-ax = fig.gca()
-
-# data
-shp.plot(ax=ax,facecolor='None',edgecolor='k'); # catchment
-plt.plot(bb_control_lon,bb_control_lat, \
-         color='b', label='Bounding box of catchment shape as specified in control file') # bounding box
-plt.plot(grid_lon_era5_points, grid_lat_era5_points, \
-         marker='o', color='r', linestyle='none', label='ERA5 data grid') # ERA5 grid points
-plt.plot(grid_lon_era5_cells, grid_lat_era5_cells, \
-         color='r', linestyle='--', label='Grid cell each ERA5 point is assumed to be representative of') # ERA5 grid cells (vertical)
-plt.plot(np.transpose(grid_lon_era5_cells), np.transpose(grid_lat_era5_cells), \
-         color='r', linestyle='--') # ERA5 grid cells (horizontal)
-
-# grid spacing indicating ERA5 grid points
-ax.xaxis.set_major_locator(plticker.MultipleLocator(base=0.25))
-ax.yaxis.set_major_locator(plticker.MultipleLocator(base=0.25))
-ax.grid(which='major', axis='both', linestyle='-', color=[0.9,0.9,0.9])
-ax.axis('equal')
-
-# fix up a legend without duplicates
-handles, labels = plt.gca().get_legend_handles_labels()
-temp = {k:v for k,v in zip(labels, handles)}
-plt.legend(temp.values(), temp.keys(), loc='best')
-
-# save
-plt.savefig('test.png', bbox_inches='tight')
-addToChart('Shape Chart', 'test.png', 1)
+legend_info = {
+'legend_title': 'Scalar Canopy Wat (kg m-2)', 
+'legend_position': 'bottomleft',
+'scale': 'logarithmic'
+}
+addLegendToGeoChart('Chart1', layer_name, legend_info)
+drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
 result_array = sorted(result_array, key=lambda x: x['order'], reverse=False)
 print(';##;')
 print(result_array)

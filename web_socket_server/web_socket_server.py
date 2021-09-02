@@ -103,7 +103,6 @@ async def python_code_processing(websocket, path):
                 await notify_client(json.dumps({ 'output': final_output, 'error': '', 'return_div':data_return_div, 'markup':'', 'message_type': 'stacked_call', 'user_id': user_id}), user_id)
                 continue
 
-
             
             sent_output = ''
             sent_error = ''

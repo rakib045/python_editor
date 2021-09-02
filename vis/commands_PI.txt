@@ -139,4 +139,4 @@ plt.legend(temp.values(), temp.keys(), loc='best')
 
 # save
 plt.savefig('test.png', bbox_inches='tight')
-addToChart('Chart 1', 'test.png', 1)
+addToChart('Chart 1', 'test.png')
