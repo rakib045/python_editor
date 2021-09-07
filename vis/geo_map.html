@@ -9,7 +9,8 @@
         -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="Style/leaflet-sidebar.css" />
+    <link rel="stylesheet" href="Style/geo_map/feature_library/leaflet-sidebar.css" />
+    <link rel="stylesheet" href="Style/geo_map/chart/box-heatmap.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
    
     
@@ -25,13 +26,14 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.6.2/d3.min.js" integrity="sha512-L2eTGYYQqzK5YozYyUVrJKj2ZRnHE3QzV1+1yY6VXHExStF3potRZyEcD/B6sTOe04xYxB21QNLmVTQFcgwovg==" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3-queue.v3.min.js"></script>
-    <script src="Scripts/leaflet-sidebar.js"></script>
-    <script src="Scripts/easyPrint.js"></script>
-    <script src="Scripts/box-heatmap.js"></script>
-    <script src="Scripts/time_series_line_chart.js"></script>
-    <script src="Scripts/animated-line-chart.js"></script>
-    <script src="Scripts/showMetaData.js"></script>
-    <script src="Scripts/geo_map_lib.js"></script>
+    <script src="Scripts/geo_map/feature_library/leaflet-sidebar.js"></script>
+    <script src="Scripts/geo_map/feature_library/easyPrint.js"></script>
+
+    <script src="Scripts/geo_map/chart/box-heatmap.js"></script>
+    <script src="Scripts/geo_map/chart/time_series_line_chart.js"></script>
+    <script src="Scripts/geo_map/chart/animated-line-chart.js"></script>
+    <script src="Scripts/geo_map/library/showMetaData.js"></script>
+    <script src="Scripts/geo_map/library/geo_map_lib.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     
@@ -62,24 +64,7 @@
             opacity: 0.7;
         }
 
-      rect.bordered {
-        stroke: black;
-        stroke-width:2px;   
-      }
-
-      text.mono {
-        font-size: 9pt;
-        font-family: Consolas, courier;
-        fill: #aaa;
-      }
-
-      text.axis-workweek {
-        fill: #000;
-      }
-
-      text.axis-worktime {
-        fill: #000;
-      }
+      
 
       body {
             padding: 0;
@@ -110,18 +95,7 @@
             pointer-events: none;
             }
 
-        div.tooltip1 {
-            position: absolute;
-            text-align: center;
-            width: 100px;
-            height: 60px;
-            padding: 2px;
-            font: 12px sans-serif;
-            background: white;
-            border: 2px solid black;
-            border-radius: 5px;
-            pointer-events: none;
-            }
+        
 
             .easyPrintHolder .a3CssClass { 
                 background-image: url(data:image/svg+xml;utf8;base64,PD9...go=);
@@ -131,7 +105,7 @@
 <style>
 .area {
   fill: #00AA8D;
-  opacity: 0.6,
+  opacity: 0.6;
   clip-path: url(#clip);
 }
 

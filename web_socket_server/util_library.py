@@ -7,6 +7,7 @@ import shutil as sutil
 
 result_array = []
 #path_url = "http://206.12.95.141/AdvancedVis/"
+#physical_path = "/var/www/AdvancedVis/"
 path_url = "http://localhost:8000/"
 physical_path = "../vis/"
 

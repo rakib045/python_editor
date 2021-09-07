@@ -236,7 +236,10 @@
                             { "id" : "CatchmentBasin__bow_river_catchment_ScalarSWE", "parent" : "CatchmentBasin", "text" : "bow_river_catchment_ScalarSWE.txt", "icon" : "jstree-file", "data" : "/SampleCode/CatchmentBasin/bow_river_catchment_ScalarSWE.txt" },
 
                             { "id" : "RiverFlowCatchmentBasin", "parent" : "#", "text" : "Sample River Flow and Catchment Basin", "data" : "" },
-                            { "id" : "RiverFlowCatchmentBasin__bow_rvr_kwt_routed_runoff_and_swe", "parent" : "RiverFlowCatchmentBasin", "text" : "bow_rvr_kwt_routed_runoff_and_swe.txt", "icon" : "jstree-file", "data" : "/SampleCode/RiverFlowCatchmentBasin/bow_rvr_kwt_routed_runoff_and_swe.txt" }
+                            { "id" : "RiverFlowCatchmentBasin__bow_rvr_kwt_routed_runoff_and_swe", "parent" : "RiverFlowCatchmentBasin", "text" : "bow_rvr_kwt_routed_runoff_and_swe.txt", "icon" : "jstree-file", "data" : "/SampleCode/RiverFlowCatchmentBasin/bow_rvr_kwt_routed_runoff_and_swe.txt" },
+
+                            { "id" : "WouterCode", "parent" : "#", "text" : "Wouter's Code", "data" : "" },
+                            { "id" : "WouterCode__2_ERA5_down_lat_long_and_catchment_shp", "parent" : "WouterCode", "text" : "2_ERA5_down_lat_long_and_catchment_shp.txt", "icon" : "jstree-file", "data" : "/SampleCode/WouterCode/2_ERA5_down_lat_long_and_catchment_shp.txt" }
                         ]
                     } 
                 });
@@ -361,7 +364,7 @@
                             //output_console.value += d.error;
                             output_div.innerHTML = d.error;
                         }
-                        if(d.output){
+                        else if(d.output){
                             //status_info.setAttribute("class", "badge bg-success");
                             //status_info.innerHTML = "Code executed";
 
