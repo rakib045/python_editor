@@ -317,8 +317,11 @@ legend_info = {
 'scale': 'logarithmic'
 }
 addLegendToGeoChart('Chart1', layer_name, legend_info)
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', 'average')
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', 'average')
+chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}
+chart_option_linechart = {'aggreagation_type' : 'average'} 
+
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', chart_option_heatmap)
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', chart_option_linechart)
 drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
 
 
@@ -336,8 +339,12 @@ legend_info = {
 }
 
 addLegendToGeoChart('Chart1', layer_name, legend_info)
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', 'average')
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', 'average')
+
+chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}
+chart_option_linechart = {'aggreagation_type' : 'average'} 
+
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', chart_option_heatmap)
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', chart_option_linechart)
 drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
 
 
@@ -354,6 +361,11 @@ legend_info = {
 'scale': 'logarithmic'
 }
 addLegendToGeoChart('Chart1', layer_name, legend_info)
+chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}
+chart_option_linechart = {'aggreagation_type' : 'average'} 
+
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', chart_option_heatmap)
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', chart_option_linechart)
 drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
 
 

@@ -1,0 +1,127 @@
+#Actual Filename - 1_mizuRoute_and_summa_shapefiles.ipynb
+#Link for Wouter's Code - https://github.com/CH-Earth/summaWorkflow_public/blob/master/7_visualization/1_mizuRoute_and_summa_shapefiles.ipynb
+
+
+import pyproj
+import numpy as np
+import geopandas as gpd
+from pathlib import Path
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+
+
+# Easy access to control file folder
+controlFolder = Path('')
+
+# Store the name of the 'active' file in a variable
+controlFile = 'control_active.txt'
+
+# Function to extract a given setting from the control file
+def read_from_control( file, setting ):
+    
+    # Open 'control_active.txt' and ...
+    with open(file) as contents:
+        for line in contents:
+            
+            # ... find the line with the requested setting
+            if setting in line and not line.startswith('#'):
+                break
+    
+    # Extract the setting's value
+    substring = line.split('|',1)[1]      # Remove the setting's name (split into 2 based on '|', keep only 2nd part)
+    substring = substring.split('#',1)[0] # Remove comments, does nothing if no '#' is found
+    substring = substring.strip()         # Remove leading and trailing whitespace, tabs, newlines
+       
+    # Return this value    
+    return substring
+
+
+# Function to specify a default path
+def make_default_path(suffix):
+    
+    # Get the root path
+    rootPath = Path( read_from_control(controlFolder/controlFile,'root_path') )
+    
+    # Get the domain folder
+    domainName = read_from_control(controlFolder/controlFile,'domain_name')
+    domainFolder = 'domain_' + domainName
+    
+    # Specify the forcing path
+    defaultPath = rootPath / domainFolder / suffix
+    
+    return defaultPath
+
+
+hm_catchment = gpd.read_file('shapefiles\\catchment\\bow_distributed_elevation_zone.shp')
+rm_catchment = gpd.read_file('shapefiles\\river_basins\\bow_distributed.shp')
+rm_river = gpd.read_file('shapefiles\\river_network\\bow_river_network_from_merit_hydro.shp')
+
+crs = pyproj.CRS.from_proj4("+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m no_defs")
+
+# remap
+hm_catchment = hm_catchment.to_crs(crs)
+rm_catchment = rm_catchment.to_crs(crs)
+rm_river = rm_river.to_crs(crs)
+
+# Find the GRU identifier
+hm_gruid = read_from_control(controlFolder/controlFile,'catchment_shp_gruid')
+# Select the columns we're after
+hm_grus_only = hm_catchment[[hm_gruid,'geometry']]
+# Dissolve HRU delineation
+hm_grus_only = hm_grus_only.dissolve(by=hm_gruid)
+
+
+# Create a distinct colormap for river segments
+def get_cmap(n, name='tab20'):
+    '''Returns a function that maps each index in 0, 1, ..., n-1 to a distinct 
+    RGB color; the keyword argument name must be a standard mpl colormap name.'''
+    return plt.cm.get_cmap(name, n)
+
+n_river = len(rm_river) # number of reaches
+cm_river = get_cmap(n_river) # get the colormap
+col_river = cm_river(range(0,n_river)) # convert to array
+np.random.shuffle(col_river)
+
+fig, axs = plt.subplots(1,2,figsize=(20,10))
+plt.tight_layout()
+plt.rcParams.update({'font.size': 12})
+
+# --- mizuRoute
+axId = 1
+rm_catchment.plot(ax=axs[axId],facecolor='none',edgecolor='k',linewidth=2)
+rm_river.plot(ax=axs[axId],color=col_river,linewidth=4)
+
+# custom legend
+lines = [Line2D([0], [0], color='k', lw=2),
+         Line2D([0], [0], color=col_river[1], lw=2)]
+label = ['mizuRoute HRUs',
+         'Stream segments']
+axs[axId].legend(lines,label);
+
+# title
+axs[axId].set_title('(b) mizuRoute catchments and stream network');
+axs[axId].set_frame_on(False)
+
+
+# --- summa
+axId = 0
+#hruColor = (105/256,105/256,105/256,1)
+hruColor = (229/256,148/256,0/256,1)
+hm_catchment.plot(ax=axs[axId],facecolor='none',edgecolor=hruColor)
+hm_grus_only.plot(ax=axs[axId],facecolor='none',edgecolor='k',linewidth=2) 
+
+# custom legend
+lines = [Line2D([0], [0], color='k', lw=2),
+         Line2D([0], [0], color=hruColor, lw=2)]
+label = ['SUMMA GRUs',
+         'SUMMA HRUs']
+axs[axId].legend(lines,label);
+
+# title
+axs[axId].set_title('(a) SUMMA catchments and subcatchments');
+axs[axId].set_frame_on(False)
+
+# save
+plt.savefig('test.png', bbox_inches='tight')
+
+addToChart('Chart 1', 'test.png')

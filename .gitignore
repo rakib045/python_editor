@@ -3,3 +3,4 @@ __pycache__/*
 data_preprocessing/RData/*
 .vscode/settings.json
 .vscode/launch.json
+web_socket_server/simulations/*

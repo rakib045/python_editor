@@ -112,7 +112,7 @@ def addAnimationToGeoChart(chart_name, year_from, year_to, animation_info):
     result_array.append(data_array)
     return
 
-def addOptionButtonToGeoChart(chart_name, layer_name, button_display_text, chart_type, aggregation_type):
+def addOptionButtonToGeoChart(chart_name, layer_name, button_display_text, chart_type, chart_option):
     global result_array
     data_array = {}
     data_array["to"] = chart_name.replace(' ','')
@@ -121,7 +121,7 @@ def addOptionButtonToGeoChart(chart_name, layer_name, button_display_text, chart
     data_array["layer_name"] = layer_name
     data_array["display_text"] = button_display_text
     data_array["chart_type"] = chart_type
-    data_array["aggregation_type"] = aggregation_type
+    data_array["chart_option"] = chart_option
     result_array.append(data_array)
     return
 

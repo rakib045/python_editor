@@ -251,9 +251,13 @@
     //map_library.grade_list_array[layer_name] = [10.1, 20, 50, 60, 80, 100, 150, 200, 250];
     legend_library.legend_title_list[layer_name] = "Scalar SWE (kg m-2)";
     legend_library.legend_pos_list[layer_name] = "bottomleft";   
-    map_library.button_display_list[layer_name] = ["Show Total", "Show Average"];
+    map_library.button_display_list[layer_name] = ["Show Average", "Show Average"];
     map_library.button_chart_type[layer_name] = ["Heatmap", "LineChart"];
-    map_library.button_aggregation_type[layer_name] = ["average", "average"];
+
+    chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}; 
+    chart_option_line = {'aggreagation_type' : 'average'}; 
+    map_library.button_chart_option[layer_name] = [chart_option_heatmap, chart_option_line];
+
     map_library.drawMap(layer_name, 'jeoJSONs/bow_river_catchment.json', 'scalarSWE', 'HRU_ID', 'average');
     
     

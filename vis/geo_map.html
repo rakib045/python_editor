@@ -310,12 +310,12 @@
                                 map_library.button_display_list[charts[index].layer_name] = [];
                             if (map_library.button_chart_type[charts[index].layer_name] == undefined)
                                 map_library.button_chart_type[charts[index].layer_name] = [];
-                            if (map_library.button_aggregation_type[charts[index].layer_name] == undefined)
-                                map_library.button_aggregation_type[charts[index].layer_name] = [];
+                            if (map_library.button_chart_option[charts[index].layer_name] == undefined)
+                                map_library.button_chart_option[charts[index].layer_name] = [];
 
                             map_library.button_display_list[charts[index].layer_name].push(charts[index].display_text);
                             map_library.button_chart_type[charts[index].layer_name].push(charts[index].chart_type);
-                            map_library.button_aggregation_type[charts[index].layer_name].push(charts[index].aggregation_type);
+                            map_library.button_chart_option[charts[index].layer_name].push(charts[index].chart_option);
                         }
                         if(charts[index].hasOwnProperty('draw') && charts[index].draw == 1){
                             map_library.drawMap(charts[index].layer_name, charts[index].json_filename, charts[index].variable_name, 

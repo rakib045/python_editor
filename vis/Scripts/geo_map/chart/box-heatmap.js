@@ -1,6 +1,6 @@
 
 
-function drawHistoryHeatMapChart(seg_id, layer_name, year_range, aggregate_val='average'){
+function drawHistoryHeatMapChart(seg_id, layer_name, year_range, chart_option){
     //alert(seg_id);
     
 
@@ -10,7 +10,20 @@ function drawHistoryHeatMapChart(seg_id, layer_name, year_range, aggregate_val='
         console.log(data);
 
         var processed_data = [];
-        var start_month = "Nov";
+        var start_month = "Jan";
+        var aggregate_val = "average";
+
+        if(chart_option.start_year != undefined)
+            year_range[0] = chart_option.start_year;
+
+        if(chart_option.end_year != undefined)
+            year_range[1] = chart_option.end_year;
+
+        if(chart_option.start_month != undefined)
+            start_month = chart_option.start_month;
+        
+        if(chart_option.aggreagation_type != undefined)
+            aggregate_val = chart_option.aggreagation_type;
 
         //var year_list = Object.keys(data);
         var month_list_labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

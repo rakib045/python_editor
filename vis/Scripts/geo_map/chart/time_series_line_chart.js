@@ -1,14 +1,17 @@
 
 
 
-function drawHistoryLineChartChart(seg_id, layer_name, year_range, aggregate_val='average'){
+function drawHistoryLineChartChart(seg_id, layer_name, year_range, chart_option){
     //alert('Line Series');
 
    
     var divWidth = 400;
     var divHeight = 400;
     //var year_range = year_range;
-    //var aggregate_val = aggregate_val;
+    var aggregate_val = "average";
+
+    if(chart_option.aggreagation_type != undefined)
+            aggregate_val = chart_option.aggreagation_type;
     
     var svg = d3.select("#metric-modal").append("svg").attr('width', divWidth).attr('height', divHeight),
     margin = {top: 20, right: 20, bottom: 110, left: 40},

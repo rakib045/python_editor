@@ -54,9 +54,12 @@ addLegendToGeoChart('Chart1', layer_name, legend_info)
 # param 2 : layer_name - string - name of the layer
 # param 3 : button_display_text - string - Text of the button
 # parma 4 : chart_type - string - Type of the chart (e.g. Heatmap, LineChart) 
-# parma 4 : aggregation_type - string - Type of the aggreagation (e.g. average, sum) 
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', 'average')
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', 'average')
+# parma 4 : chart_option - object - Different things like aggreagation type, starting month, starting & ending year
+chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}
+chart_option_linechart = {'aggreagation_type' : 'average'} 
+
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', chart_option_heatmap)
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', chart_option_linechart)
 
 # Draw the chart 
 # param 1 : chart_name - string - name of the chart
@@ -102,9 +105,11 @@ addLegendToGeoChart('Chart1', layer_name, legend_info)
 # param 2 : layer_name - string - name of the layer
 # param 3 : button_display_text - string - Text of the button
 # parma 4 : chart_type - string - Type of the chart (e.g. Heatmap, LineChart) 
-# parma 4 : aggregation_type - string - Type of the aggreagation (e.g. average, sum) 
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', 'average')
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', 'average')
+chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}
+chart_option_linechart = {'aggreagation_type' : 'average'}
+
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', chart_option_heatmap)
+addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', chart_option_linechart)
 
 # Draw the chart 
 # param 1 : chart_name - string - name of the chart

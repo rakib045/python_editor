@@ -66,7 +66,7 @@ var map_library = {
 
     'button_display_list': {},
     'button_chart_type': {},
-    'button_aggregation_type': {},
+    'button_chart_option': {},
 
     'default_color_list': [ "#b2df8a", "#a6cee3", "#cab2d6", "#fdbf6f", "#fb9a99", "#33a02c", "#1f78b4", "#6a3d9a", "#ff7f00", "#e31a1c"],
     //'default_color_list': [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'],
@@ -286,7 +286,7 @@ var map_library = {
                 for(var i=0; i<map_library.button_display_list[layer_name].length; i++)
                 {
                     html_str += "<h5><button onclick=\"showMetaDataInfo("+ d.feature.properties.id + ", '" + layer_name + "', '" 
-                            + map_library.button_chart_type[layer_name][i] + "', '" + map_library.button_aggregation_type[layer_name][i]
+                            + i
                             + "')\">" 
                             + map_library.button_display_list[layer_name][i] + "</button></h5><br/>";
                 }

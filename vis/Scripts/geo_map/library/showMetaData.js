@@ -1,8 +1,10 @@
-function showMetaDataInfo(seg_id, layer_name, chart_type, aggregation_type){
+function showMetaDataInfo(seg_id, layer_name, index){
 
     var sidebar = map_library.sidebar;
     var year_range = [animation_library.start_year, animation_library.end_year];
-    var aggregate_val = aggregation_type;
+    var aggregate_val = 'average';
+    if(map_library.button_chart_option[layer_name][index].aggreagation_type != undefined)
+        aggregate_val = map_library.button_chart_option[layer_name][index].aggreagation_type;
 
     sidebar.open('home');
     
@@ -27,10 +29,10 @@ function showMetaDataInfo(seg_id, layer_name, chart_type, aggregation_type){
         $('#meta_info_div').html(meta_data_str);
     });
 
-    if(chart_type == 'Heatmap')
-        drawHistoryHeatMapChart(seg_id, layer_name, year_range, aggregate_val);
-    else if (chart_type == 'LineChart')
-        drawHistoryLineChartChart(seg_id, layer_name, year_range, aggregate_val);
+    if(map_library.button_chart_type[layer_name][index] == 'Heatmap')
+        drawHistoryHeatMapChart(seg_id, layer_name, year_range, map_library.button_chart_option[layer_name][index]);
+    else if (map_library.button_chart_type[layer_name][index] == 'LineChart')
+        drawHistoryLineChartChart(seg_id, layer_name, year_range, map_library.button_chart_option[layer_name][index]);
 }
 
 function appendHTMLTextForMetadata(label_name, value, isNumber){

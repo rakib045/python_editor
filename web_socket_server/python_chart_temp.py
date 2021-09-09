@@ -1,120 +1,186 @@
 from util_library import *
-# Initialize a Geo map with an unique name of the map
-# function : initGeoMap
-# param : chart_name - string - name of the chart
-initGeoMap('Chart1')
+#Actual Filename - HRU_mean_streamflow.ipynb
+#Link for Wouter's Code - https://github.com/CH-Earth/summaWorkflow_public/blob/master/7_visualization/HRU_mean_streamflow.ipynb
 
-# Define Animation control once at the beginning and add it into Geo map with chart name
-# function : addAnimationToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : year_from - int - start year of the animation (e.g. 1 Jan 2008)
-# param 3 : year_to - int - end year of the animation (e.g. 31 Dec 2013)
-# param 4 : animation_info - object(python Dictionary) - 
-#             'title' -> Title of the animation panel
-#             'position' -> Position of the animation panel (bottomright, bottomleft, topright, topleft)
-
-animation_info = {
-       'title': 'My Animation',
-       'position': 'bottomright',
-}
-addAnimationToGeoChart('Chart1', 2008, 2013, animation_info)
-
-# Define layer name and corresponding variable
-layer_name = 'Scalar SWE'
-variable_name = 'scalarSWE'
-
-# Define Color List for a specific layer of the Geo map with chart name
-# function : addColorListToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : color_list - array of string - list of all colors
-color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
-addColorListToGeoChart('Chart1', layer_name, color_list)
+# modules
+import os
+import numpy as np
+import xarray as xr
+import geopandas as gpd
+from pathlib import Path
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 
-# Define Legend Info for a specific layer of the Geo map with chart name
-# function : addLegendToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : legend_info - object(python Dictionary) - 
-#             'legend_title' -> Title of the legend
-#             'legend_position' -> Position of the legend (bottomright, bottomleft, topright, topleft)
-#             'scale'(optional) -> Scales of the legend (default - linear)
-#             'grade_list'(optional) - array of number - defined the grades of the scale specifically
-
-legend_info = {
-'legend_title': 'Scalar SWE (kg m-2)', 
-'legend_position': 'bottomleft',
-'scale': 'logarithmic'
-}
-addLegendToGeoChart('Chart1', layer_name, legend_info)
-
-# Define Option Button for a specific layer of the Geo map with chart name (Right click of a shape and pop up options)
-# function : addOptionButtonToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : button_display_text - string - Text of the button
-# parma 4 : chart_type - string - Type of the chart (e.g. Heatmap, LineChart) 
-# parma 4 : aggregation_type - string - Type of the aggreagation (e.g. average, sum) 
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', 'average')
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', 'average')
-
-# Draw the chart 
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : json_filename - string - path of geo json
-# parma 4 : variable_name - string - name of the variable
-# parma 5 : connecting_id - string - name of the connecting id in geo json (e.g. HRU_ID, COMID)
-# parma 6 : aggregation_type - string - Type of the aggreagation (e.g. average, sum) 
-drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
+controlFolder = Path('')
+controlFile = 'control_active.txt'
 
 
-# Define layer name and corresponding variable
-layer_name = 'Average KWTroutedRunoff'
-variable_name = 'KWTroutedRunoff'
+# Function to extract a given setting from the control file
+def read_from_control( file, setting ):
+    
+    # Open 'control_active.txt' and ...
+    for line in open(file):
+        
+        # ... find the line with the requested setting
+        if setting in line and not line.startswith('#'):
+            break
+    
+    # Extract the setting's value
+    substring = line.split('|',1)[1]      # Remove the setting's name (split into 2 based on '|', keep only 2nd part)
+    substring = substring.split('#',1)[0] # Remove comments, does nothing if no '#' is found
+    substring = substring.strip()         # Remove leading and trailing whitespace, tabs, newlines
+    
+    # Return this value    
+    return substring
 
-# Define Color List for a specific layer of the Geo map with chart name
-# function : addColorListToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : color_list - array of string - list of all colors
-color_list = ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc5735', '#ed4624', '#e31a1c', '#bd0026', '#800026']
-addColorListToGeoChart('Chart1', layer_name, color_list)
+# Function to specify a default path
+def make_default_path(suffix):
+    
+    # Get the root path
+    rootPath = Path( read_from_control(controlFolder/controlFile,'root_path') )
+    
+    # Get the domain folder
+    domainName = read_from_control(controlFolder/controlFile,'domain_name')
+    domainFolder = 'domain_' + domainName
+    
+    # Specify the forcing path
+    defaultPath = rootPath / domainFolder / suffix
+    
+    return defaultPath
 
-# Define Legend Info for a specific layer of the Geo map with chart name
-# function : addLegendToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : legend_info - object(python Dictionary) - 
-#             'legend_title' -> Title of the legend
-#             'legend_position' -> Position of the legend (bottomright, bottomleft, topright, topleft)
-#             'scale'(optional) -> Scales of the legend (default - linear)
-#             'grade_list'(optional) - array of number - defined the grades of the scale specifically
-legend_info = {
-'legend_title': 'Average KWTroutedRunoff (m3/s)', 
-'legend_position': 'bottomleft',
-'grade_list': [5, 10, 20, 40, 60, 90, 120, 150, 200]
-}
-addLegendToGeoChart('Chart1', layer_name, legend_info)
 
-# Define Option Button for a specific layer of the Geo map with chart name (Right click of a shape and pop up options)
-# function : addOptionButtonToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : button_display_text - string - Text of the button
-# parma 4 : chart_type - string - Type of the chart (e.g. Heatmap, LineChart) 
-# parma 4 : aggregation_type - string - Type of the aggreagation (e.g. average, sum) 
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', 'average')
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', 'average')
+# Find the GRU and HRU identifiers
+hm_gruid = read_from_control(controlFolder/controlFile,'catchment_shp_gruid')
+hm_hruid = read_from_control(controlFolder/controlFile,'catchment_shp_hruid')
 
-# Draw the chart 
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : json_filename - string - path of geo json
-# parma 4 : variable_name - string - name of the variable
-# parma 5 : connecting_id - string - name of the connecting id in geo json (e.g. HRU_ID, COMID)
-# parma 6 : aggregation_type - string - Type of the aggreagation (e.g. average, sum) 
-drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
+seg_id = read_from_control(controlFolder/controlFile,'river_network_shp_segid')
+experiment_id = read_from_control(controlFolder/controlFile,'experiment_id')
+
+
+
+# Specify the variable of interest
+mizu_output_path = 'simulations\\'+ experiment_id +'\\mizuRoute\\'
+mizu_output_name = 'run1*.nc'
+plot_var = 'KWTroutedRunoff'
+
+
+# catchment shapefile
+shp_catchment = gpd.read_file('shapefiles\\catchment_intersection\\with_dem\\catchment_with_merit_dem.shp')
+
+# river shapefile
+shp_river = gpd.read_file('shapefiles\\river_network\\bow_river_network_from_merit_hydro.shp')
+
+
+# mizuRoute simulations
+mizu_files = [mizu_output_path + '\\' + file for file in os.listdir(mizu_output_path) if file.endswith('.nc')] # find all files
+sim = xr.merge( xr.open_dataset(file) for file in mizu_files) # open all files into a single dataset
+
+# Define in which month the water year starts
+water_year_start = 'Oct' # Assumed to be on the 1st of the month
+
+# Convert month the number 
+months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+start_month = months.index(water_year_start) + 1 # add 1 to account for 0-based indexing in Python
+
+# Add a water year variable for grouping
+sim['water_year'] = sim['time'].dt.year # set initial year
+
+# Overwrite the year for months that are part of the water year that started last calendar year
+sim['water_year'].loc[sim['time'].dt.month < start_month] -= 1
+
+# Select only complete water years
+complete_water_years = (sim['water_year'] > min(sim['water_year'])) & (sim['water_year'] < max(sim['water_year']))
+
+# Find the mean water-year streamflow per HRU
+plot_dat = sim[plot_var].sel(time=complete_water_years).groupby(sim['water_year'].sel(time=complete_water_years)).mean(dim='time').mean(dim='water_year')
+
+# Match the accummulated values to the correct stream IDs in the shapefile
+seg_ids_shp = shp_river[seg_id] # stream segment order in shapefile
+shp_river['plot_var'] = plot_dat.sel(seg=np.where(sim['reachID'].values == seg_ids_shp.values.astype('int'))[0])
+
+# Create a shapefile with only GRU boundaries for overlay
+hm_grus_only = shp_catchment[[hm_gruid,'geometry']] # keep only the gruId and geometry
+hm_grus_only = hm_grus_only.dissolve(by=hm_gruid) # Dissolve HRU delineation
+
+# Get the units of our plotting variable
+units = sim[plot_var].units
+
+# Set a colormap
+cmap_q  = 'Blues'
+cmap_elev = 'Greys_r'
+
+fig, axs = plt.subplots(1,2,figsize=(20,10))
+plt.tight_layout()
+plt.rcParams.update({'font.size': 14})
+
+# --- mean flow
+axId = 0
+
+# Data
+shp_catchment.plot(ax=axs[axId], column='elev_mean',edgecolor='k', cmap = cmap_elev, legend=False)
+hm_grus_only.plot(ax=axs[axId],facecolor='none',edgecolor='k',linewidth=2) 
+shp_river.plot(ax=axs[axId], column='plot_var', cmap=cmap_q,linewidth=3)
+
+# Custom colorbars
+cax = fig.add_axes([0.46, 0.1, 0.02, 0.5])
+vmin,vmax = shp_catchment['elev_mean'].min(),shp_catchment['elev_mean'].max()
+sm = plt.cm.ScalarMappable(cmap=cmap_elev, norm=plt.Normalize(vmin=vmin, vmax=vmax))
+sm._A = []
+cbr = fig.colorbar(sm, cax=cax)
+
+cax = fig.add_axes([0.52, 0.1, 0.02, 0.5])
+vmin,vmax = shp_river['plot_var'].min(),shp_river['plot_var'].max()
+sm = plt.cm.ScalarMappable(cmap=cmap_q, norm=plt.Normalize(vmin=vmin, vmax=vmax))
+sm._A = []
+cbr = fig.colorbar(sm, cax=cax)
+
+# Custom legend
+lines = [Line2D([0], [0], color='k', lw=2),
+         Line2D([0], [0], color='k', lw=1)]
+label = ['SUMMA GRUs',
+         'SUMMA HRUs']
+axs[axId].legend(lines,label,loc='lower left');
+
+# Chart junk
+axs[axId].set_title('(a) HRU elevation [m.a.s.l] and mean annual Q [{}]'.format(units));
+axs[axId].set_frame_on(False)
+
+# disable second plot for the moment
+axs[1].set_visible(False)
+
+# backup for later development
+'''
+# --- SWE
+axId = 1
+
+# Data
+shp.plot(ax=axs[axId], column='plot_var',edgecolor='k', cmap = cmap_swe, legend=False);
+hm_grus_only.plot(ax=axs[axId],facecolor='none',edgecolor='k',linewidth=2) 
+
+# Custom legend
+lines = [Line2D([0], [0], color='k', lw=2),
+         Line2D([0], [0], color='k', lw=1)]
+label = ['SUMMA GRUs',
+         'SUMMA HRUs']
+axs[axId].legend(lines,label,loc='lower left');
+
+# Custom colorbar
+cax = fig.add_axes([0.96, 0.1, 0.02, 0.5])
+vmin,vmax = shp['plot_var'].min(),shp['plot_var'].max()
+sm = plt.cm.ScalarMappable(cmap=cmap_swe, norm=plt.Normalize(vmin=vmin, vmax=vmax))
+sm._A = []
+cbr = fig.colorbar(sm, cax=cax)
+
+# Chart junk
+axs[axId].set_title('(b) Simulated mean maximum water-year Snow Water Equivalent [{}]'.format(units));
+axs[axId].set_frame_on(False)
+'''
+
+# Save 
+plt.savefig('test.png', bbox_inches='tight')
+
+addToChart('Chart 1', 'test.png')
 result_array = sorted(result_array, key=lambda x: x['order'], reverse=False)
 print(';##;')
 print(result_array)

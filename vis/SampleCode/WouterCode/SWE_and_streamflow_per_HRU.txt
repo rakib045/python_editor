@@ -1,0 +1,207 @@
+#Actual Filename - SWE_and_streamflow_per_HRU.ipynb
+#Link for Wouter's Code - https://github.com/CH-Earth/summaWorkflow_public/blob/master/7_visualization/SWE_and_streamflow_per_HRU.ipynb
+
+
+# modules
+import os
+import numpy as np
+import xarray as xr
+import geopandas as gpd
+from pathlib import Path
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+
+
+controlFolder = Path('')
+controlFile = 'control_active.txt'
+
+
+# Function to extract a given setting from the control file
+def read_from_control( file, setting ):
+    
+    # Open 'control_active.txt' and ...
+    for line in open(file):
+        
+        # ... find the line with the requested setting
+        if setting in line and not line.startswith('#'):
+            break
+    
+    # Extract the setting's value
+    substring = line.split('|',1)[1]      # Remove the setting's name (split into 2 based on '|', keep only 2nd part)
+    substring = substring.split('#',1)[0] # Remove comments, does nothing if no '#' is found
+    substring = substring.strip()         # Remove leading and trailing whitespace, tabs, newlines
+    
+    # Return this value    
+    return substring
+
+# Function to specify a default path
+def make_default_path(suffix):
+    
+    # Get the root path
+    rootPath = Path( read_from_control(controlFolder/controlFile,'root_path') )
+    
+    # Get the domain folder
+    domainName = read_from_control(controlFolder/controlFile,'domain_name')
+    domainFolder = 'domain_' + domainName
+    
+    # Specify the forcing path
+    defaultPath = rootPath / domainFolder / suffix
+    
+    return defaultPath
+
+
+# Find the GRU and HRU identifiers
+hm_gruid = read_from_control(controlFolder/controlFile,'catchment_shp_gruid')
+hm_hruid = read_from_control(controlFolder/controlFile,'catchment_shp_hruid')
+
+seg_id = read_from_control(controlFolder/controlFile,'river_network_shp_segid')
+experiment_id = read_from_control(controlFolder/controlFile,'experiment_id')
+
+
+
+# Specify the output file name and variable of interest
+summa_output_name = experiment_id + '_day.nc'
+summa_plot_var = 'scalarSWE'
+
+
+# Specify the variable of interest
+mizu_output_path = 'simulations\\'+ experiment_id +'\\mizuRoute\\'
+mizu_output_name = 'run1*.nc'
+mizu_plot_var = 'KWTroutedRunoff'
+
+
+# catchment shapefile
+shp_catchment = gpd.read_file('shapefiles\\catchment\\bow_distributed_elevation_zone.shp')
+
+# river shapefile
+shp_river = gpd.read_file('shapefiles\\river_network\\bow_river_network_from_merit_hydro.shp')
+
+# catchment with DEM
+shp_elev = gpd.read_file('shapefiles\\catchment_intersection\\with_dem\\catchment_with_merit_dem.shp')
+
+# SUMMA simulations
+sim_summa = xr.open_dataset('simulations\\'+ experiment_id +'\\SUMMA\\' + summa_output_name)
+
+
+# mizuRoute simulations
+mizu_files = [mizu_output_path + '\\' + file for file in os.listdir(mizu_output_path) if file.endswith('.nc')] # find all files
+sim_mizu = xr.merge( xr.open_dataset(file) for file in mizu_files) # open all files into a single dataset
+
+# Define in which month the water year starts
+water_year_start = 'Oct' # Assumed to be on the 1st of the month
+
+# Convert month the number 
+months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+start_month = months.index(water_year_start) + 1 # add 1 to account for 0-based indexing in Python
+
+# Add a water year variable for grouping
+sim_summa['water_year'] = sim_summa['time'].dt.year # set initial year
+sim_mizu['water_year'] = sim_mizu['time'].dt.year # set initial year
+
+# Overwrite the year for months that are part of the water year that started last calendar year
+sim_summa['water_year'].loc[sim_summa['time'].dt.month < start_month] -= 1
+sim_mizu['water_year'].loc[sim_mizu['time'].dt.month < start_month] -= 1
+
+# Select only complete water years
+complete_water_years_summa = (sim_summa['water_year'] > min(sim_summa['water_year'])) & (sim_summa['water_year'] < max(sim_summa['water_year']))
+complete_water_years_mizu = (sim_mizu['water_year'] > min(sim_mizu['water_year'])) & (sim_mizu['water_year'] < max(sim_mizu['water_year']))
+
+# Find the mean maximum water-year SWE per HRU
+plot_dat_summa = sim_summa[summa_plot_var].sel(time=complete_water_years_summa).groupby(sim_summa['water_year'].sel(time=complete_water_years_summa)).max(dim='time').mean(dim='water_year')
+
+# Find the mean water-year streamflow per HRU
+plot_dat_mizu = sim_mizu[mizu_plot_var].sel(time=complete_water_years_mizu).groupby(sim_mizu['water_year'].sel(time=complete_water_years_mizu)).mean(dim='time').mean(dim='water_year')
+
+# Match the accummulated values to the correct HRU IDs in the SUMMA shapefile
+hru_ids_shp = shp_catchment[hm_hruid] # hru order in shapefile
+shp_catchment['plot_var'] = plot_dat_summa.sel(hru=hru_ids_shp.values)
+
+
+# Match the accummulated values to the correct stream IDs in the shapefile
+seg_ids_shp = shp_river[seg_id] # stream segment order in shapefile
+shp_river['plot_var'] = plot_dat_mizu.sel(seg=np.where(sim_mizu['reachID'].values == seg_ids_shp.values.astype('int'))[0])
+
+# Get the units of our plotting variable
+units_summa = sim_summa[summa_plot_var].units
+units_mizu = sim_mizu[mizu_plot_var].units
+
+# Create a shapefile with only GRU boundaries for overlay
+hm_grus_only = shp_catchment[[hm_gruid,'geometry']] # keep only the gruId and geometry
+hm_grus_only = hm_grus_only.dissolve(by=hm_gruid) # Dissolve HRU delineation
+
+outlet_lat,outlet_lon = 51.167,-115.555
+
+def add_outlet(ax,lat,lon):
+    ax.plot(lon,lat,linestyle='None',marker='o',color='r',markersize=10,label='outlet')
+    return
+
+# Set a colormap
+cmap_elev = 'terrain'
+cmap_q = 'Blues'
+cmap_swe = 'pink'
+
+fig, axs = plt.subplots(1,2,figsize=(20,10))
+plt.tight_layout()
+plt.rcParams.update({'font.size': 14})
+
+# --- elevation
+axId = 0
+
+# Data
+shp_elev.plot(ax=axs[axId], column='elev_mean',edgecolor='k', cmap = cmap_elev, legend=False)
+hm_grus_only.plot(ax=axs[axId],facecolor='none',edgecolor='k',linewidth=2) 
+add_outlet(axs[axId],outlet_lat,outlet_lon)
+
+# Custom colorbar
+cax = fig.add_axes([0.46, 0.1, 0.02, 0.5])
+vmin,vmax = shp_elev['elev_mean'].min(),shp_elev['elev_mean'].max()
+sm = plt.cm.ScalarMappable(cmap=cmap_elev, norm=plt.Normalize(vmin=vmin, vmax=vmax))
+sm._A = []
+cbr = fig.colorbar(sm, cax=cax)
+
+
+# Custom legend
+lines = [Line2D([0], [0], color='k', lw=2),
+         Line2D([0], [0], color='k', lw=1),
+         Line2D([0], [0], color='r', linestyle='None', marker='.', markersize=10, lw=2)]
+label = ['SUMMA GRUs',
+         'SUMMA HRUs',
+         'Outlet']
+axs[axId].legend(lines,label,loc='lower left');
+
+# Chart junk
+axs[axId].set_title('(a) Mean HRU elevation derived from MERIT DEM [m.a.s.l]');
+axs[axId].set_frame_on(False)
+
+
+# --- mean flow
+axId = 1
+
+# Data
+shp_catchment.plot(ax=axs[axId], column='plot_var',edgecolor='k', cmap = cmap_swe, legend=False)
+hm_grus_only.plot(ax=axs[axId],facecolor='none',edgecolor='k',linewidth=2) 
+shp_river.plot(ax=axs[axId], column='plot_var', cmap=cmap_q,linewidth=5)
+add_outlet(axs[axId],outlet_lat,outlet_lon)
+
+# Custom colorbars
+cax = fig.add_axes([0.96, 0.1, 0.02, 0.5])
+vmin,vmax = shp_catchment['plot_var'].min(),shp_catchment['plot_var'].max()
+sm = plt.cm.ScalarMappable(cmap=cmap_swe, norm=plt.Normalize(vmin=vmin, vmax=vmax))
+sm._A = []
+cbr = fig.colorbar(sm, cax=cax)
+
+cax = fig.add_axes([1.02, 0.1, 0.02, 0.5])
+vmin,vmax = shp_river['plot_var'].min(),shp_river['plot_var'].max()
+sm = plt.cm.ScalarMappable(cmap=cmap_q, norm=plt.Normalize(vmin=vmin, vmax=vmax))
+sm._A = []
+cbr = fig.colorbar(sm, cax=cax)
+
+# Chart junk
+axs[axId].set_title('(b) Mean annual max SWE [{}] and mean annual Q [{}]'.format(units_summa,units_mizu));
+axs[axId].set_frame_on(False)
+
+# Save 
+plt.savefig('test.png', bbox_inches='tight', transparent=True)
+
+
+addToChart('Chart 1', 'test.png')
