@@ -1,6 +1,6 @@
 
 
-function drawHistoryHeatMapChart(seg_id, layer_name, year_range, chart_option){
+function drawHistoryHeatMapChart(div_name, seg_id, layer_name, year_range, chart_option){
     //alert(seg_id);
     
 
@@ -12,6 +12,7 @@ function drawHistoryHeatMapChart(seg_id, layer_name, year_range, chart_option){
         var processed_data = [];
         var start_month = "Jan";
         var aggregate_val = "average";
+        var chart_title = ' ';
 
         if(chart_option.start_year != undefined)
             year_range[0] = chart_option.start_year;
@@ -24,6 +25,8 @@ function drawHistoryHeatMapChart(seg_id, layer_name, year_range, chart_option){
         
         if(chart_option.aggreagation_type != undefined)
             aggregate_val = chart_option.aggreagation_type;
+        if(chart_option.chart_title != undefined)
+            chart_title = chart_option.chart_title;
 
         //var year_list = Object.keys(data);
         var month_list_labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -91,22 +94,24 @@ function drawHistoryHeatMapChart(seg_id, layer_name, year_range, chart_option){
 
         console.log(processed_data);
 
-        drawHM_BoxChart(seg_id, layer_name, processed_data, year_list_labels, month_list_labels);
+        drawHM_BoxChart(div_name, seg_id, layer_name, processed_data, year_list_labels, month_list_labels, chart_title);
     });
    
 }
 
-function drawHM_BoxChart(seg_id, layer_name, data, y_axis_labels, x_axis_labels){
+function drawHM_BoxChart(div_name, seg_id, layer_name, data, y_axis_labels, x_axis_labels, chart_title){
 
     var margin = { top: 20, right: 10, bottom: 30, left: 50 },
-    width = 800 - margin.left - margin.right,
+    width = 700 - margin.left - margin.right,
     height = 210 - margin.top - margin.bottom,
     gridSize = Math.floor(width / 24),
     legendElementWidth = gridSize,
     buckets = 10,
     colors = map_library.color_list_array[layer_name];
 
-    var svg = d3.select("#historyHeatMap").append("svg")
+    var chart_title = d3.select(div_name).append("h4").text(chart_title).attr('style', 'text-align: center;padding: 10px;');
+
+    var svg = d3.select(div_name).append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")

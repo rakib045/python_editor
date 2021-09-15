@@ -1,4 +1,3 @@
-from util_library import *
 # Initialize a Geo map with an unique name of the map
 # function : initGeoMap
 # param : chart_name - string - name of the chart
@@ -198,6 +197,3 @@ addSidebarOptionToGeoChart(chart_name, layer_name, sidebar2_option2_line_1)
 # parma 5 : connecting_id - string - name of the connecting id in geo json (e.g. HRU_ID, COMID)
 # parma 6 : aggregation_type - string - Type of the aggreagation (e.g. average, sum) 
 drawGeoChart(chart_name, layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
-result_array = sorted(result_array, key=lambda x: x['order'], reverse=False)
-print(';##;')
-print(result_array)

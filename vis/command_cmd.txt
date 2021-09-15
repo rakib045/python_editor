@@ -179,7 +179,6 @@ drawChart(chart_name='Chart 1')
 initGeoMap('Chart1')
 
 
-
 animation_info = {
        'title': 'My Animation',
        'position': 'bottomright',
@@ -198,8 +197,6 @@ legend_info = {
 }
 addLegendToGeoChart('Chart1', layer_name, legend_info)
 drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
-
-
 
 
 layer_name = 'Average KWTroutedRunoff'
@@ -236,36 +233,46 @@ drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_n
 
 redrawGeoChart('Chart1')
 
+----------------------------------------------------------------------------------------------------------
 
-
-
-initGeoMap('Chart1')
+chart_name = 'Chart1'
+initGeoMap(chart_name)
 
 animation_info = {
        'title': 'My Animation',
        'position': 'bottomright',
 }
-addAnimationToGeoChart('Chart1', 2009, 2013, animation_info)
+addAnimationToGeoChart(chart_name, 2009, 2013, animation_info)
 
 layer_name = 'Average IRFroutedRunoff'
 variable_name = 'IRFroutedRunoff'
+
 color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
-addColorListToGeoChart('Chart1', layer_name, color_list)
+addColorListToGeoChart(chart_name, layer_name, color_list)
 
 legend_info = {
 'legend_title': 'Average IRFroutedRunoff (m3/s)', 
 'legend_position': 'bottomleft',
 'grade_list': [5, 10, 20, 40, 60, 90, 120, 150, 200]
 }
-addLegendToGeoChart('Chart1', layer_name, legend_info)
-drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
+addLegendToGeoChart(chart_name, layer_name, legend_info)
+
+
+sidebar_chart_option_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of IRFroutedRunoff', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}; 
+sidebar_chart_option_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of IRFroutedRunoff', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar_chart_option_heatmap)
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar_chart_option_line_1)
+
+drawGeoChart(chart_name, layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
+
 
 
 layer_name = 'Average KWTroutedRunoff'
+layer_name_1 = 'Total dlayRunoff'
 variable_name = 'KWTroutedRunoff'
 
 color_list = ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc5735', '#ed4624', '#e31a1c', '#bd0026', '#800026']
-addColorListToGeoChart('Chart1', layer_name, color_list)
+addColorListToGeoChart(chart_name, layer_name, color_list)
 
 legend_info = {
 'legend_title': 'Average KWTroutedRunoff (m3/s)', 
@@ -273,25 +280,42 @@ legend_info = {
 'grade_list': [5, 10, 20, 40, 60, 90, 120, 150, 200]
 }
 
-addLegendToGeoChart('Chart1', layer_name, legend_info)
-drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
+addLegendToGeoChart(chart_name, layer_name, legend_info)
+
+sidebar_chart_option_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of KWTroutedRunoff', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}; 
+sidebar_chart_option_line_0 = {'chart_title': 'Monthly Average of Total dlayRunoff', 'chart_type': 'Heatmap', 'layer_name': layer_name_1, 'title': 'LineChart', 'aggreagation_type' : 'average'};
+sidebar_chart_option_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of KWTroutedRunoff', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
+
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar_chart_option_heatmap)
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar_chart_option_line_0)
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar_chart_option_line_1)
+
+drawGeoChart(chart_name, layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
 
 
 
-layer_name = 'Total dlayRunoff '
+
 variable_name = 'dlayRunoff'
 
 color_list = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00']
-addColorListToGeoChart('Chart1', layer_name, color_list)
+addColorListToGeoChart(chart_name, layer_name_1, color_list)
 
 legend_info = {
 'legend_title': 'Total dlayRunoff (m3/s)', 
 'legend_position': 'bottomleft',
 'grade_list': [5, 18, 30, 40]
 }
+addLegendToGeoChart(chart_name, layer_name_1, legend_info)
 
-addLegendToGeoChart('Chart1', layer_name, legend_info)
-drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'sum')
+sidebar_chart_option_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of KWTroutedRunoff', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}; 
+sidebar_chart_option_line_0 = {'chart_title': 'Monthly Average of Total dlayRunoff', 'chart_type': 'Heatmap', 'layer_name': layer_name_1, 'title': 'LineChart', 'aggreagation_type' : 'average'};
+sidebar_chart_option_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of KWTroutedRunoff', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
+
+addSidebarOptionToGeoChart(chart_name, layer_name_1, sidebar_chart_option_heatmap)
+addSidebarOptionToGeoChart(chart_name, layer_name_1, sidebar_chart_option_line_0)
+addSidebarOptionToGeoChart(chart_name, layer_name_1, sidebar_chart_option_line_1)
+
+drawGeoChart(chart_name, layer_name_1, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'sum')
 
 
 
@@ -299,38 +323,51 @@ drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_n
 ####################################################################################################
 
 
-initGeoMap('Chart1')
+chart_name = 'Chart1'
+initGeoMap(chart_name)
+
 animation_info = {
        'title': 'My Animation',
        'position': 'bottomright',
 }
-addAnimationToGeoChart('Chart1', 2008, 2013, animation_info)
+addAnimationToGeoChart(chart_name, 2009, 2013, animation_info)
 
 layer_name = 'Scalar SWE'
+layer_name_1 = 'Scalar Canopy Wat'
+
 variable_name = 'scalarSWE'
 color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
-addColorListToGeoChart('Chart1', layer_name, color_list)
+addColorListToGeoChart(chart_name, layer_name, color_list)
 
 legend_info = {
 'legend_title': 'Scalar SWE (kg m-2)', 
 'legend_position': 'bottomleft',
 'scale': 'logarithmic'
 }
-addLegendToGeoChart('Chart1', layer_name, legend_info)
-chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}
-chart_option_linechart = {'aggreagation_type' : 'average'} 
+addLegendToGeoChart(chart_name, layer_name, legend_info)
 
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', chart_option_heatmap)
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', chart_option_linechart)
-drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
+#chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}
+#chart_option_linechart = {'aggreagation_type' : 'average'} 
+#addOptionButtonToGeoChart(chart_name, layer_name, 'Show Average HeatMap', 'Heatmap', chart_option_heatmap)
+#addOptionButtonToGeoChart(chart_name, layer_name, 'Show Average Line Chart', 'LineChart', chart_option_linechart)
+
+sidebar1_option1_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2009, 'end_year': 2013}; 
+sidebar1_option2_line_0 = {'chart_title': 'Monthly Average of Scalar Canopy WAT', 'chart_type': 'Heatmap', 'layer_name': layer_name_1, 'title': 'LineChart', 'aggreagation_type' : 'average'};
+sidebar1_option3_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_option1_heatmap)
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_option2_line_0)
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_option3_line_1)
+
+drawGeoChart(chart_name, layer_name, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
 
 
 
 layer_name = 'Average KWTroutedRunoff'
+
 variable_name = 'KWTroutedRunoff'
 
 color_list = ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc5735', '#ed4624', '#e31a1c', '#bd0026', '#800026']
-addColorListToGeoChart('Chart1', layer_name, color_list)
+addColorListToGeoChart(chart_name, layer_name, color_list)
 
 legend_info = {
 'legend_title': 'Average KWTroutedRunoff (m3/s)', 
@@ -338,34 +375,40 @@ legend_info = {
 'grade_list': [5, 10, 20, 40, 60, 90, 120, 150, 200]
 }
 
-addLegendToGeoChart('Chart1', layer_name, legend_info)
+addLegendToGeoChart(chart_name, layer_name, legend_info)
 
-chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}
-chart_option_linechart = {'aggreagation_type' : 'average'} 
+#chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}
+#chart_option_linechart = {'aggreagation_type' : 'average'} 
+#addOptionButtonToGeoChart(chart_name, layer_name, 'Show Average HeatMap', 'Heatmap', chart_option_heatmap)
+#addOptionButtonToGeoChart(chart_name, layer_name, 'Show Average Line Chart', 'LineChart', chart_option_linechart)
 
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', chart_option_heatmap)
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', chart_option_linechart)
-drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
+sidebar2_option1_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of IRFroutedRunoff', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2009, 'end_year': 2013}; 
+sidebar2_option2_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of IRFroutedRunoff', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar2_option1_heatmap)
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar2_option2_line_1)
+
+drawGeoChart(chart_name, layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
 
 
 
-
-layer_name = 'Scalar Canopy Wat'
 variable_name = 'scalarCanopyWat'
 color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
-addColorListToGeoChart('Chart1', layer_name, color_list)
+addColorListToGeoChart(chart_name, layer_name_1, color_list)
 
 legend_info = {
 'legend_title': 'Scalar Canopy Wat (kg m-2)', 
 'legend_position': 'bottomleft',
 'scale': 'logarithmic'
 }
-addLegendToGeoChart('Chart1', layer_name, legend_info)
-chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}
-chart_option_linechart = {'aggreagation_type' : 'average'} 
+addLegendToGeoChart(chart_name, layer_name_1, legend_info)
 
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average HeatMap', 'Heatmap', chart_option_heatmap)
-addOptionButtonToGeoChart('Chart1', layer_name, 'Show Average Line Chart', 'LineChart', chart_option_linechart)
-drawGeoChart('Chart1', layer_name, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
+sidebar3_option1_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2009, 'end_year': 2013}; 
+sidebar3_option2_line_0 = {'chart_title': 'Monthly Average of Scalar Canopy WAT', 'chart_type': 'Heatmap', 'layer_name': layer_name_1, 'title': 'LineChart', 'aggreagation_type' : 'average'};
+sidebar3_option3_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
+addSidebarOptionToGeoChart(chart_name, layer_name_1, sidebar3_option1_heatmap)
+addSidebarOptionToGeoChart(chart_name, layer_name_1, sidebar3_option2_line_0)
+addSidebarOptionToGeoChart(chart_name, layer_name_1, sidebar3_option3_line_1)
+
+drawGeoChart(chart_name, layer_name_1, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
 
 

@@ -1,7 +1,7 @@
 
 
 
-function drawHistoryLineChartChart(seg_id, layer_name, year_range, chart_option){
+function drawHistoryLineChartChart(div_name, seg_id, layer_name, year_range, chart_option){
     //alert('Line Series');
 
    
@@ -9,11 +9,15 @@ function drawHistoryLineChartChart(seg_id, layer_name, year_range, chart_option)
     var divHeight = 400;
     //var year_range = year_range;
     var aggregate_val = "average";
+    var chart_title = "";
 
     if(chart_option.aggreagation_type != undefined)
-            aggregate_val = chart_option.aggreagation_type;
+        aggregate_val = chart_option.aggreagation_type;
+    if(chart_option.chart_title != undefined)
+        chart_title = chart_option.chart_title;
     
-    var svg = d3.select("#metric-modal").append("svg").attr('width', divWidth).attr('height', divHeight),
+    var chart_title = d3.select(div_name).append("h4").text(chart_title).attr('style', 'text-align: center;padding: 10px;');
+    var svg = d3.select(div_name).append("svg").attr('width', divWidth).attr('height', divHeight),
     margin = {top: 20, right: 20, bottom: 110, left: 40},
     margin2 = {top: 320, right: 20, bottom: 20, left: 40},
     width = +svg.attr("width") - margin.left - margin.right,

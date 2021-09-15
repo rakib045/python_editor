@@ -1,17 +1,15 @@
-function showMetaDataInfo(seg_id, layer_name, index){
+function showMetaDataInfo(seg_id, layer_name){
 
     var sidebar = map_library.sidebar;
     var year_range = [animation_library.start_year, animation_library.end_year];
     var aggregate_val = 'average';
-    if(map_library.button_chart_option[layer_name][index].aggreagation_type != undefined)
-        aggregate_val = map_library.button_chart_option[layer_name][index].aggreagation_type;
-
-    sidebar.open('home');
+    //if(map_library.button_chart_option[layer_name][index].aggreagation_type != undefined)
+    //    aggregate_val = map_library.button_chart_option[layer_name][index].aggreagation_type;
     
     $('#segment_info').html(data_library.connecting_id_list[layer_name] + ': ' + seg_id );
     var meta_data_str = "";
 
-    $('#historyHeatMap').html('');
+    
 
     d3.json("Data/MetaData/" + data_library.connecting_id_list[layer_name] + "_" + seg_id + ".json").then(function(d) {
         var data = d.data;
@@ -29,10 +27,61 @@ function showMetaDataInfo(seg_id, layer_name, index){
         $('#meta_info_div').html(meta_data_str);
     });
 
-    if(map_library.button_chart_type[layer_name][index] == 'Heatmap')
-        drawHistoryHeatMapChart(seg_id, layer_name, year_range, map_library.button_chart_option[layer_name][index]);
-    else if (map_library.button_chart_type[layer_name][index] == 'LineChart')
-        drawHistoryLineChartChart(seg_id, layer_name, year_range, map_library.button_chart_option[layer_name][index]);
+    sidebar.open('home');
+
+    var total_tab = sidebar._tabitems.length;
+    for(var i = 0; i<(total_tab-1); i++)
+        sidebar.removePanel('sidebar_id_' + i);
+
+    // Filling empty chart option
+    for(var i=0; i < map_library.sidebar_option[layer_name].length; i++)
+    {
+        if(map_library.sidebar_option[layer_name][i].tab_no == undefined)
+            map_library.sidebar_option[layer_name][i].tab_no = 0;
+        if(map_library.sidebar_option[layer_name][i].layer_name == undefined)
+            map_library.sidebar_option[layer_name][i].layer_name = layer_name;
+    }
+
+
+    map_library.sidebar_option[layer_name] = map_library.sidebar_option[layer_name].sort((a, b) => (a.tab_no > b.tab_no) ? 1 : -1);
+
+    var temp_array_index = [];
+    var index = 0;
+    for(var i=0; i < map_library.sidebar_option[layer_name].length; i++)
+    {
+        if(temp_array_index.indexOf(map_library.sidebar_option[layer_name][i].tab_no) == -1)
+        {
+            var panelContent = {
+                id: 'sidebar_id_' + index,                     // UID, used to access the panel
+                tab: '<i class="fa fa-gear"></i>',  // content can be passed as HTML string,
+                pane: '<div id=\'sidebar_chart_' + map_library.sidebar_option[layer_name][i].tab_no + '\'></div>',        // DOM elements can be passed, too
+                title: map_library.sidebar_option[layer_name][i].title,              // an optional pane header
+                position: 'top'                  // optional vertical alignment, defaults to 'top'
+            };
+            sidebar.addPanel(panelContent);
+            temp_array_index.push(map_library.sidebar_option[layer_name][i].tab_no);
+            index++;
+        }
+
+        if(map_library.sidebar_option[layer_name][i].chart_type == 'Heatmap')
+            drawHistoryHeatMapChart('#sidebar_chart_' + map_library.sidebar_option[layer_name][i].tab_no, 
+                seg_id, map_library.sidebar_option[layer_name][i].layer_name, 
+                year_range, map_library.sidebar_option[layer_name][i]);
+        else if (map_library.sidebar_option[layer_name][i].chart_type == 'LineChart')
+            drawHistoryLineChartChart('#sidebar_chart_' + map_library.sidebar_option[layer_name][i].tab_no, 
+                seg_id, map_library.sidebar_option[layer_name][i].layer_name, year_range, 
+                map_library.sidebar_option[layer_name][i]);
+        
+        
+
+    }
+
+    //$('#historyHeatMap').html('');
+
+    //if(map_library.button_chart_type[layer_name][index] == 'Heatmap')
+    //    drawHistoryHeatMapChart(seg_id, layer_name, year_range, map_library.button_chart_option[layer_name][index]);
+    //else if (map_library.button_chart_type[layer_name][index] == 'LineChart')
+    //    drawHistoryLineChartChart(seg_id, layer_name, year_range, map_library.button_chart_option[layer_name][index]);
 }
 
 function appendHTMLTextForMetadata(label_name, value, isNumber){

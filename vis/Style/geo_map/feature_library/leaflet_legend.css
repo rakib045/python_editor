@@ -1,0 +1,10 @@
+.leaflet-control-container .info.legend .accordion-button{
+    padding: 5px;
+}
+.leaflet-control-container .info.legend .accordion-button:focus{
+    box-shadow: none !important;
+}
+
+.leaflet-control-container .info.legend .accordion-body{
+    padding: 5px;
+}

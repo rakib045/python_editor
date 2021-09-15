@@ -68,6 +68,8 @@ var map_library = {
     'button_chart_type': {},
     'button_chart_option': {},
 
+    'sidebar_option': {},
+
     'default_color_list': [ "#b2df8a", "#a6cee3", "#cab2d6", "#fdbf6f", "#fb9a99", "#33a02c", "#1f78b4", "#6a3d9a", "#ff7f00", "#e31a1c"],
     //'default_color_list': [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'],
 
@@ -125,7 +127,9 @@ var map_library = {
      * @version 1.0
      */
     'initializeSideBar': function(){
-        map_library.sidebar = L.control.sidebar({ container: 'sidebar' }).addTo(map_library.map);
+        map_library.sidebar = L.control.sidebar({ 
+            container: 'sidebar' 
+        }).addTo(map_library.map);
         //.open('home');
     },
     
@@ -276,22 +280,56 @@ var map_library = {
                     map_library.layers_list_array[layer_name].addLayer(layer);
 
                     // Binding click event
-                    //layer.on('click', function (e) {
-                    //    showMetaDataInfo( map_library.sidebar ,feature.properties.id, layer_name, [animation_library.start_year, animation_library.end_year], map_library.aggregate_val_list[layer_name]);
-                    //});
+                    layer.on('click', function (e) {
+                        showMetaDataInfo( feature.properties.id, layer_name);
+                    });
                 }
             })
-            .bindPopup(function (d) {
+            //.bindPopup(function (d) {
+                /*
+                L.Control.Watermark = L.Control.extend({
+                    onAdd: function(map) {
+                        var p = L.DomUtil.create('p');
+                
+                        p.innerHTML = 'Hi I am here';
+                        p.style.width = '200px';
+                
+                        return p;
+                    },
+                
+                    onRemove: function(map) {
+                        // Nothing to do here
+                    }
+                });
+                
+                L.control.watermark = function(opts) {
+                    return new L.Control.Watermark(opts);
+                }
+                
+                L.control.watermark({ position: 'topleft' }).addTo(map_library.map);
+                
+                */
+                //return "";
+            //})
+            .on('contextmenu', function(d) {
+                /*
+                var data = d.sourceTarget;
                 var html_str = "<div>";
                 for(var i=0; i<map_library.button_display_list[layer_name].length; i++)
                 {
-                    html_str += "<h5><button onclick=\"showMetaDataInfo("+ d.feature.properties.id + ", '" + layer_name + "', '" 
+                    html_str += "<h5><button onclick=\"showMetaDataInfo("+ data.feature.properties.id + ", '" + layer_name + "', '" 
                             + i
                             + "')\">" 
                             + map_library.button_display_list[layer_name][i] + "</button></h5><br/>";
                 }
                 html_str += "</div>";
-                return  html_str;
+                //return  html_str;
+
+                L.popup()
+                .setLatLng(d.latlng)
+                .setContent(html_str)
+                .openOn(map_library.map);
+                */
             })
         // Adding it into the geo map
         .addTo(map_library.map);
@@ -602,12 +640,34 @@ var legend_library = {
             
             // This method will trigger while adding this legend
             legend_library.legend_control_list[control_class_name].onAdd = function(m){
+                control_class_name = control_class_name.replaceAll(' ', '');
                 var div = L.DomUtil.create('div', 'info legend '+ control_class_name);
+                /*
                 div.innerHTML += "<p>"+ title +"</p>"
                 for(var i=0; i<color_list.length; i++)
                 {
                     div.innerHTML += '<div style="margin-bottom: 4px;"><i style="background:' + color_list[i] + '; opacity:1"></i>' + legend_text[i] + '</div>';
                 }
+                */
+                html_str = "<div class='accordion' id='accordionExample_" + control_class_name + "'>";
+                html_str += "<div class='accordion-item'>";
+                html_str += "<p class='accordion-header' id='headingOne_'" + control_class_name + ">";
+                html_str += "<button class='accordion-button' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+control_class_name+"' aria-expanded='true' aria-controls='collapseOne_"+control_class_name+"'>";
+                html_str += title;
+                html_str += "</button></p>";
+                html_str += "<div id='collapseOne_"+control_class_name+"' class='accordion-collapse collapse show' aria-labelledby='headingOne_"+control_class_name+"' data-bs-parent='#accordionExample_"+control_class_name+"'>";
+                html_str += "<div class='accordion-body'>";
+                
+                for(var i=0; i<color_list.length; i++)
+                {
+                    html_str += '<div style="margin-bottom: 4px;"><i style="background:' + color_list[i] + '; opacity:1"></i>' + legend_text[i] + '</div>';
+                }
+                
+                html_str += "</div>";
+                html_str += "</div>";
+                html_str += "</div>";
+                html_str += "</div>";
+                div.innerHTML += html_str;
                 return div;
             }
             // Legend is added to the geo map

@@ -125,6 +125,16 @@ def addOptionButtonToGeoChart(chart_name, layer_name, button_display_text, chart
     result_array.append(data_array)
     return
 
+def addSidebarOptionToGeoChart(chart_name, layer_name, sidebar_option):
+    global result_array
+    data_array = {}
+    data_array["to"] = chart_name.replace(' ','')
+    data_array["order"] = 1000
+    data_array["sidebar_info"] = 1
+    data_array["layer_name"] = layer_name
+    data_array["sidebar_option"] = sidebar_option
+    result_array.append(data_array)
+    return
 
 
 
