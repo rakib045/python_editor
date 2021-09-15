@@ -52,9 +52,9 @@ def make_default_path(suffix):
     return defaultPath
 
 
-hm_catchment = gpd.read_file('shapefiles\\catchment\\bow_distributed_elevation_zone.shp')
-rm_catchment = gpd.read_file('shapefiles\\river_basins\\bow_distributed.shp')
-rm_river = gpd.read_file('shapefiles\\river_network\\bow_river_network_from_merit_hydro.shp')
+hm_catchment = gpd.read_file('shapefiles/catchment/bow_distributed_elevation_zone.shp')
+rm_catchment = gpd.read_file('shapefiles/river_basins/bow_distributed.shp')
+rm_river = gpd.read_file('shapefiles/river_network/bow_river_network_from_merit_hydro.shp')
 
 crs = pyproj.CRS.from_proj4("+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m no_defs")
 

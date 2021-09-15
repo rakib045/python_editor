@@ -1,203 +1,131 @@
 from util_library import *
-# Initialize a Geo map with an unique name of the map
-# function : initGeoMap
-# param : chart_name - string - name of the chart
-chart_name = 'Chart1'
-initGeoMap(chart_name)
-
-# Define Animation control once at the beginning and add it into Geo map with chart name
-# function : addAnimationToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : year_from - int - start year of the animation (e.g. 1 Jan 2008)
-# param 3 : year_to - int - end year of the animation (e.g. 31 Dec 2013)
-# param 4 : animation_info - object(python Dictionary) - 
-#             'title' -> Title of the animation panel
-#             'position' -> Position of the animation panel (bottomright, bottomleft, topright, topleft)
-animation_info = {
-       'title': 'My Animation',
-       'position': 'bottomright',
-}
-addAnimationToGeoChart(chart_name, 2009, 2013, animation_info)
-
-# Define layer name and corresponding variable
-layer_name = 'Scalar SWE'
-layer_name_1 = 'Scalar Canopy Wat'
-variable_name = 'scalarSWE'
-
-# Define Color List for a specific layer of the Geo map with chart name
-# function : addColorListToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : color_list - array of string - list of all colors
-color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
-addColorListToGeoChart(chart_name, layer_name, color_list)
+#Actual Filename - 1_mizuRoute_and_summa_shapefiles.ipynb
+#Link for Wouter's Code - https://github.com/CH-Earth/summaWorkflow_public/blob/master/7_visualization/1_mizuRoute_and_summa_shapefiles.ipynb
 
 
-# Define Legend Info for a specific layer of the Geo map with chart name
-# function : addLegendToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : legend_info - object(python Dictionary) - 
-#             'legend_title' -> Title of the legend
-#             'legend_position' -> Position of the legend (bottomright, bottomleft, topright, topleft)
-#             'scale'(optional) -> Scales of the legend (default - linear)
-#             'grade_list'(optional) - array of number - defined the grades of the scale specifically
-
-legend_info = {
-'legend_title': 'Scalar SWE (kg m-2)', 
-'legend_position': 'bottomleft',
-'scale': 'logarithmic'
-}
-addLegendToGeoChart(chart_name, layer_name, legend_info)
-
-# Define Legend Info for a specific layer of the Geo map with chart name
-# function : addLegendToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : sidebar_option - object(python Dictionary) - 
-#             'tab_no (optional)' -> Number - The numeric number of the tab in sidebar, we can put multiple chart in the same tab using this. Default is 0.
-#             'chart_title (optional)' -> String - Title of the chart
-#             'chart_type -> String - The type of chart like heatmap or linechart
-#             'layer_name' -> String - Name of the layer
-#             'title (optional)' -> String - Title of the tab of the sidebar
-#             'aggregation_type' - string - Type of the aggreagation (e.g. average, sum) 
-#             'start_month' - string - Name of the month
-#             'start_year' - Number - The start of the year 
-#             'end_year' - Number - The end of the year
-sidebar1_option1_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2009, 'end_year': 2013}; 
-sidebar1_option2_line_0 = {'chart_title': 'Monthly Average of Scalar Canopy WAT', 'chart_type': 'Heatmap', 'layer_name': layer_name_1, 'title': 'LineChart', 'aggreagation_type' : 'average'};
-sidebar1_option3_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
-addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_option1_heatmap)
-addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_option2_line_0)
-addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_option3_line_1)
-
-# Draw the chart 
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : json_filename - string - path of geo json
-# parma 4 : variable_name - string - name of the variable
-# parma 5 : connecting_id - string - name of the connecting id in geo json (e.g. HRU_ID, COMID)
-# parma 6 : aggregation_type - string - Type of the aggreagation (e.g. average, sum) 
-drawGeoChart(chart_name, layer_name, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
+import pyproj
+import numpy as np
+import geopandas as gpd
+from pathlib import Path
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 
-variable_name = 'scalarCanopyWat'
+# Easy access to control file folder
+controlFolder = Path('')
 
-# Define Color List for a specific layer of the Geo map with chart name
-# function : addColorListToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : color_list - array of string - list of all colors
-color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
-addColorListToGeoChart(chart_name, layer_name_1, color_list)
+# Store the name of the 'active' file in a variable
+controlFile = 'control_active.txt'
 
-
-# Define Legend Info for a specific layer of the Geo map with chart name
-# function : addLegendToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : legend_info - object(python Dictionary) - 
-#             'legend_title' -> Title of the legend
-#             'legend_position' -> Position of the legend (bottomright, bottomleft, topright, topleft)
-#             'scale'(optional) -> Scales of the legend (default - linear)
-#             'grade_list'(optional) - array of number - defined the grades of the scale specifically
-
-legend_info = {
-'legend_title': 'Scalar Canopy Wat (kg m-2)', 
-'legend_position': 'bottomleft',
-'scale': 'logarithmic'
-}
-addLegendToGeoChart(chart_name, layer_name_1, legend_info)
-
-# Define Legend Info for a specific layer of the Geo map with chart name
-# function : addLegendToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : sidebar_option - object(python Dictionary) - 
-#             'tab_no (optional)' -> Number - The numeric number of the tab in sidebar, we can put multiple chart in the same tab using this. Default is 0.
-#             'chart_title (optional)' -> String - Title of the chart
-#             'chart_type -> String - The type of chart like heatmap or linechart
-#             'layer_name' -> String - Name of the layer
-#             'title (optional)' -> String - Title of the tab of the sidebar
-#             'aggregation_type' - string - Type of the aggreagation (e.g. average, sum) 
-#             'start_month' - string - Name of the month
-#             'start_year' - Number - The start of the year 
-#             'end_year' - Number - The end of the year
-sidebar3_option1_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2009, 'end_year': 2013}; 
-sidebar3_option2_line_0 = {'chart_title': 'Monthly Average of Scalar Canopy WAT', 'chart_type': 'Heatmap', 'layer_name': layer_name_1, 'title': 'LineChart', 'aggreagation_type' : 'average'};
-sidebar3_option3_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
-addSidebarOptionToGeoChart(chart_name, layer_name_1, sidebar3_option1_heatmap)
-addSidebarOptionToGeoChart(chart_name, layer_name_1, sidebar3_option2_line_0)
-addSidebarOptionToGeoChart(chart_name, layer_name_1, sidebar3_option3_line_1)
-
-# Draw the chart 
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : json_filename - string - path of geo json
-# parma 4 : variable_name - string - name of the variable
-# parma 5 : connecting_id - string - name of the connecting id in geo json (e.g. HRU_ID, COMID)
-# parma 6 : aggregation_type - string - Type of the aggreagation (e.g. average, sum) 
-drawGeoChart(chart_name, layer_name_1, 'jeoJSONs/bow_river_catchment.json', variable_name, 'HRU_ID', 'average')
+# Function to extract a given setting from the control file
+def read_from_control( file, setting ):
+    
+    # Open 'control_active.txt' and ...
+    with open(file) as contents:
+        for line in contents:
+            
+            # ... find the line with the requested setting
+            if setting in line and not line.startswith('#'):
+                break
+    
+    # Extract the setting's value
+    substring = line.split('|',1)[1]      # Remove the setting's name (split into 2 based on '|', keep only 2nd part)
+    substring = substring.split('#',1)[0] # Remove comments, does nothing if no '#' is found
+    substring = substring.strip()         # Remove leading and trailing whitespace, tabs, newlines
+       
+    # Return this value    
+    return substring
 
 
-
-# Define layer name and corresponding variable
-layer_name = 'Average KWTroutedRunoff'
-variable_name = 'KWTroutedRunoff'
-
-# Define Color List for a specific layer of the Geo map with chart name
-# function : addColorListToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : color_list - array of string - list of all colors
-color_list = ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc5735', '#ed4624', '#e31a1c', '#bd0026', '#800026']
-addColorListToGeoChart(chart_name, layer_name, color_list)
-
-# Define Legend Info for a specific layer of the Geo map with chart name
-# function : addLegendToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : legend_info - object(python Dictionary) - 
-#             'legend_title' -> Title of the legend
-#             'legend_position' -> Position of the legend (bottomright, bottomleft, topright, topleft)
-#             'scale'(optional) -> Scales of the legend (default - linear)
-#             'grade_list'(optional) - array of number - defined the grades of the scale specifically
-legend_info = {
-'legend_title': 'Average KWTroutedRunoff (m3/s)', 
-'legend_position': 'bottomleft',
-'grade_list': [5, 10, 20, 40, 60, 90, 120, 150, 200]
-}
-addLegendToGeoChart(chart_name, layer_name, legend_info)
-
-# Define Legend Info for a specific layer of the Geo map with chart name
-# function : addLegendToGeoChart
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : sidebar_option - object(python Dictionary) - 
-#             'tab_no (optional)' -> Number - The numeric number of the tab in sidebar, we can put multiple chart in the same tab using this. Default is 0.
-#             'chart_title (optional)' -> String - Title of the chart
-#             'chart_type -> String - The type of chart like heatmap or linechart
-#             'layer_name' -> String - Name of the layer
-#             'title (optional)' -> String - Title of the tab of the sidebar
-#             'aggregation_type' - string - Type of the aggreagation (e.g. average, sum) 
-#             'start_month' - string - Name of the month
-#             'start_year' - Number - The start of the year 
-#             'end_year' - Number - The end of the year
-
-sidebar2_option1_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of IRFroutedRunoff', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2009, 'end_year': 2013}; 
-sidebar2_option2_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of IRFroutedRunoff', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
-addSidebarOptionToGeoChart(chart_name, layer_name, sidebar2_option1_heatmap)
-addSidebarOptionToGeoChart(chart_name, layer_name, sidebar2_option2_line_1)
+# Function to specify a default path
+def make_default_path(suffix):
+    
+    # Get the root path
+    rootPath = Path( read_from_control(controlFolder/controlFile,'root_path') )
+    
+    # Get the domain folder
+    domainName = read_from_control(controlFolder/controlFile,'domain_name')
+    domainFolder = 'domain_' + domainName
+    
+    # Specify the forcing path
+    defaultPath = rootPath / domainFolder / suffix
+    
+    return defaultPath
 
 
-# Draw the chart 
-# param 1 : chart_name - string - name of the chart
-# param 2 : layer_name - string - name of the layer
-# param 3 : json_filename - string - path of geo json
-# parma 4 : variable_name - string - name of the variable
-# parma 5 : connecting_id - string - name of the connecting id in geo json (e.g. HRU_ID, COMID)
-# parma 6 : aggregation_type - string - Type of the aggreagation (e.g. average, sum) 
-drawGeoChart(chart_name, layer_name, 'jeoJSONs/bow_river_network.json', variable_name, 'COMID', 'average')
+hm_catchment = gpd.read_file('shapefiles/catchment/bow_distributed_elevation_zone.shp')
+rm_catchment = gpd.read_file('shapefiles/river_basins/bow_distributed.shp')
+rm_river = gpd.read_file('shapefiles/river_network/bow_river_network_from_merit_hydro.shp')
+
+crs = pyproj.CRS.from_proj4("+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m no_defs")
+
+# remap
+hm_catchment = hm_catchment.to_crs(crs)
+rm_catchment = rm_catchment.to_crs(crs)
+rm_river = rm_river.to_crs(crs)
+
+# Find the GRU identifier
+hm_gruid = read_from_control(controlFolder/controlFile,'catchment_shp_gruid')
+# Select the columns we're after
+hm_grus_only = hm_catchment[[hm_gruid,'geometry']]
+# Dissolve HRU delineation
+hm_grus_only = hm_grus_only.dissolve(by=hm_gruid)
+
+
+# Create a distinct colormap for river segments
+def get_cmap(n, name='tab20'):
+    '''Returns a function that maps each index in 0, 1, ..., n-1 to a distinct 
+    RGB color; the keyword argument name must be a standard mpl colormap name.'''
+    return plt.cm.get_cmap(name, n)
+
+n_river = len(rm_river) # number of reaches
+cm_river = get_cmap(n_river) # get the colormap
+col_river = cm_river(range(0,n_river)) # convert to array
+np.random.shuffle(col_river)
+
+fig, axs = plt.subplots(1,2,figsize=(20,10))
+plt.tight_layout()
+plt.rcParams.update({'font.size': 12})
+
+# --- mizuRoute
+axId = 1
+rm_catchment.plot(ax=axs[axId],facecolor='none',edgecolor='k',linewidth=2)
+rm_river.plot(ax=axs[axId],color=col_river,linewidth=4)
+
+# custom legend
+lines = [Line2D([0], [0], color='k', lw=2),
+         Line2D([0], [0], color=col_river[1], lw=2)]
+label = ['mizuRoute HRUs',
+         'Stream segments']
+axs[axId].legend(lines,label);
+
+# title
+axs[axId].set_title('(b) mizuRoute catchments and stream network');
+axs[axId].set_frame_on(False)
+
+
+# --- summa
+axId = 0
+#hruColor = (105/256,105/256,105/256,1)
+hruColor = (229/256,148/256,0/256,1)
+hm_catchment.plot(ax=axs[axId],facecolor='none',edgecolor=hruColor)
+hm_grus_only.plot(ax=axs[axId],facecolor='none',edgecolor='k',linewidth=2) 
+
+# custom legend
+lines = [Line2D([0], [0], color='k', lw=2),
+         Line2D([0], [0], color=hruColor, lw=2)]
+label = ['SUMMA GRUs',
+         'SUMMA HRUs']
+axs[axId].legend(lines,label);
+
+# title
+axs[axId].set_title('(a) SUMMA catchments and subcatchments');
+axs[axId].set_frame_on(False)
+
+# save
+plt.savefig('test.png', bbox_inches='tight')
+
+addToChart('Chart 1', 'test.png')
 result_array = sorted(result_array, key=lambda x: x['order'], reverse=False)
 print(';##;')
 print(result_array)

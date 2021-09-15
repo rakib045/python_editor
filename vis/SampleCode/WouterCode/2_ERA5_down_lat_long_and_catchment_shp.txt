@@ -49,7 +49,7 @@ def make_default_path(suffix):
     return defaultPath
 
 
-shp = gpd.read_file('shapefiles\\catchment\\bow_distributed_elevation_zone.shp')
+shp = gpd.read_file('shapefiles/catchment/bow_distributed_elevation_zone.shp')
 # function to round coordinates of a bounding box to ERA5s 0.25 degree resolution
 def round_coords_to_ERA5(coords):
     

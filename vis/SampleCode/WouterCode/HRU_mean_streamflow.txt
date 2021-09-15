@@ -59,20 +59,20 @@ experiment_id = read_from_control(controlFolder/controlFile,'experiment_id')
 
 
 # Specify the variable of interest
-mizu_output_path = 'simulations\\'+ experiment_id +'\\mizuRoute\\'
+mizu_output_path = 'simulations/'+ experiment_id +'/mizuRoute/'
 mizu_output_name = 'run1*.nc'
 plot_var = 'KWTroutedRunoff'
 
 
 # catchment shapefile
-shp_catchment = gpd.read_file('shapefiles\\catchment_intersection\\with_dem\\catchment_with_merit_dem.shp')
+shp_catchment = gpd.read_file('shapefiles/catchment_intersection/with_dem/catchment_with_merit_dem.shp')
 
 # river shapefile
-shp_river = gpd.read_file('shapefiles\\river_network\\bow_river_network_from_merit_hydro.shp')
+shp_river = gpd.read_file('shapefiles/river_network/bow_river_network_from_merit_hydro.shp')
 
 
 # mizuRoute simulations
-mizu_files = [mizu_output_path + '\\' + file for file in os.listdir(mizu_output_path) if file.endswith('.nc')] # find all files
+mizu_files = [mizu_output_path + '/' + file for file in os.listdir(mizu_output_path) if file.endswith('.nc')] # find all files
 sim = xr.merge( xr.open_dataset(file) for file in mizu_files) # open all files into a single dataset
 
 # Define in which month the water year starts
