@@ -24,6 +24,8 @@ function previewMetaDataInfo(seg_id, layer_name, feature){
     button_str += "<button width='10px' height='10px' style='background-color: "+selection_color+";border: 1px solid black;width: 10px;height: 25px;margin-right: 5px;float: right;' disabled=''></button>"
     button_str += "<a onclick=\'addToSideBar("+seg_id + ',\"' + layer_name +"\",\"" + selection_color + "\")\'";
     button_str += "class='btn btn-outline-primary' target='_blank' title='Pin to Sidebar'><i class='fa fa-thumb-tack'></i></a>";
+    button_str += "<a onclick=\'addComparisonTable("+seg_id + ',\"' + layer_name +"\",\"" + selection_color + "\")\'";
+    button_str += "class='btn btn-outline-primary' target='_blank' title='Add to Comparison Table' style='margin-left: 5px;'><i class='fa fa-files-o'></i></a>";
     button_str += "</div>";
     sidebar_library.addHTMLToSideBar('preview', button_str);
 
@@ -113,6 +115,8 @@ function addToSideBar(seg_id, layer_name, color){
     button_str += "<button width='10px' height='10px' style='background-color: "+color+";border: 1px solid black;width: 10px;height: 25px;margin-right: 5px;float: right;' disabled=''></button>"
     button_str += "<a onclick=\'removeFromSideBar("+seg_id + ',\"' + layer_name +"\",\"" + color + "\")\'";
     button_str += "class='btn btn-outline-danger' target='_blank' title='Unpin to Sidebar'><i class='fa fa-ban'></i></a>";
+    button_str += "<a onclick=\'addComparisonTable("+seg_id + ',\"' + layer_name +"\",\"" + color + "\")\'";
+    button_str += "class='btn btn-outline-primary' target='_blank' title='Add to Comparison Table' style='margin-left: 5px;'><i class='fa fa-files-o'></i></a>";
     button_str += "</div>";
     sidebar_library.addHTMLToSideBar(seg_id, button_str);
 
@@ -177,6 +181,43 @@ function addToSideBar(seg_id, layer_name, color){
                     year_range, sidebar_library.sidebar_option[layer_name][i]);
         }
 
+    });
+
+}
+
+function addComparisonTable(seg_id, layer_name, color){
+
+    d3.json("Data/" + data_library.variable_name_list[layer_name] + "/Monthly/id_" + seg_id + ".json").then(function(d) {
+        var data = d.data;
+        var aggregate_val = "average";
+
+        console.log(data);
+
+        var processed_data = {'name': 'ID-' + seg_id, 'color': color};
+
+        var month_list = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+        
+        var year_list = Object.keys(data);
+        
+        var temp_array = [];
+
+        for(var year_index=0; year_index<(year_list.length);year_index++){
+            
+            for(var month_index=0; month_index < month_list.length; month_index++){
+                
+                var obj = {};
+                obj['date'] = year_list[year_index] + " " + month_list[month_index];
+                obj['value'] = data[year_list[year_index]][month_index][aggregate_val];
+                temp_array.push(obj);                              
+            }
+        }
+
+        processed_data['values'] = temp_array;
+        sidebar_library.comparison_chart_data.push(processed_data);
+        $('#comparisonChart').html('');
+        drawMultiSeriesLineChart();
+        //$('#accordionExample_comparisonChart').collapse('show');
+        
     });
 
 }

@@ -231,7 +231,7 @@ var map_library = {
                             else
                                 data_library.list_geo_json_data[layer_name].features = data_library.list_geo_json_data[layer_name].features.concat(file.features);
                         });
-                        console.log(data_library.list_geo_json_data[layer_name]);
+                        //console.log(data_library.list_geo_json_data[layer_name]);
                         
                         data_library.list_geo_json_data[layer_name].features.forEach(function(data){
                             // For each shape file, it loads its corresponding variable data
@@ -862,9 +862,9 @@ var data_library = {
             if(data_library.list_json_files[layer_name].length < data_library.file_count)
             {               
                 
-                console.log(data_library.minVal);
-                console.log(data_library.maxVal);
-                //console.log(data_library.variable_data[layer_name].length);
+                //console.log(data_library.minVal);
+                //console.log(data_library.maxVal);
+                
 
                 loadingModal.hide();
                 // Check user passed any color_list_array or choose default
@@ -950,7 +950,7 @@ var sidebar_library = {
     'preview_geofeature' : null,
     //'color_list' : [{'color':'red', 'available':true}, {'color':'blue', 'available':true}, {'color':'green', 'available':true}, {'color':'purple', 'available':true},],
     'color_list' : [
-        {'color':'#e31a1c', 'available':true}, {'color':'#ff7f00', 'available':true}, {'color':'#33a02c', 'available':true}, {'color':'#6a3d9a', 'available':true}, {'color':'#d95f02', 'available':true}, 
+        {'color':'#e31a1c', 'available':true}, {'color':'#1f78b4', 'available':true}, {'color':'#33a02c', 'available':true}, {'color':'#6a3d9a', 'available':true}, {'color':'#ff7f00', 'available':true}, 
         {'color':'#8dd3c7', 'available':true}, {'color':'#fb8072', 'available':true}, {'color':'#b3de69', 'available':true}, {'color':'#fccde5', 'available':true}, {'color':'#d9d9d9', 'available':true}, 
         {'color':'#a6cee3', 'available':true}, {'color':'#b2df8a', 'available':true}, {'color':'#fb9a99', 'available':true}, {'color':'#fdbf6f', 'available':true}, {'color':'#cab2d6', 'available':true},
         {'color':'#ffffb3', 'available':true}, {'color':'#bebada', 'available':true}, {'color':'#80b1d3', 'available':true}, {'color':'#fdb462', 'available':true}, {'color':'#bc80bd', 'available':true}
@@ -958,6 +958,7 @@ var sidebar_library = {
 
     'pinned_feature_list' : [],
     'sidebar_option': {},
+    'comparison_chart_data' : [],
 
     /**
      * @desc Initialize the leaflet Side Bar.
@@ -1008,9 +1009,9 @@ var sidebar_library = {
         html_str += "<div class='accordion-item'>";
         html_str += "<p class='accordion-header' id='headingOne_"+ section_id +"'>";
         if(collapsed)
-            html_str += "<button class='accordion-button' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+ section_id +"' aria-expanded='true' aria-controls='collapseOne_comparisonChart'>";
+            html_str += "<button class='accordion-button' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+ section_id +"' aria-expanded='true' aria-controls='collapseOne_"+ section_id +"'>";
         else
-            html_str += "<button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+ section_id +"' aria-expanded='false' aria-controls='collapseOne_comparisonChart'>";
+            html_str += "<button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+ section_id +"' aria-expanded='false' aria-controls='collapseOne_"+ section_id +"'>";
         html_str += section_title;
         html_str += "</button></p>";
         if(collapsed)

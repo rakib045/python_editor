@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="Style/geo_map/feature_library/leaflet-sidebar.css" />
     <link rel="stylesheet" href="Style/geo_map/feature_library/leaflet_legend.css" />
     <link rel="stylesheet" href="Style/geo_map/feature_library/leaflet_comparison-chart.css" />
-    <link rel="stylesheet" href="Style/geo_map/chart/multi-series-line-chart.css" />
+    <!--<link rel="stylesheet" href="Style/geo_map/chart/multi-series-line-chart.css" /> -->
 
     <link rel="stylesheet" href="Style/geo_map/chart/box-heatmap.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
@@ -30,6 +30,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.6.2/d3.min.js" integrity="sha512-L2eTGYYQqzK5YozYyUVrJKj2ZRnHE3QzV1+1yY6VXHExStF3potRZyEcD/B6sTOe04xYxB21QNLmVTQFcgwovg==" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="Scripts/geo_map/feature_library/leaflet-sidebar.js"></script>
     <script src="Scripts/geo_map/feature_library/easyPrint.js"></script>
 
@@ -39,6 +40,7 @@
     <script src="Scripts/geo_map/chart/animated-line-chart.js"></script>
     <script src="Scripts/geo_map/library/showMetaData.js"></script>
     <script src="Scripts/geo_map/library/geo_map_lib.js"></script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     
@@ -124,6 +126,27 @@
   cursor: move;
   fill: none;
   pointer-events: all;
+}
+
+svg {
+  font-family: Sans-Serif, Arial;
+}
+
+.line {
+  stroke-width: 2;
+  fill: none;
+}
+
+.axis path {
+  stroke: black;
+}
+
+.text {
+  font-size: 12px;
+}
+
+.title-text {
+  font-size: 12px;
 }
 </style>
    
