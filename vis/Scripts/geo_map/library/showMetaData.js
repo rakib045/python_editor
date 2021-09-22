@@ -1,6 +1,210 @@
+function previewMetaDataInfo(seg_id, layer_name, feature){
+    
+    if(sidebar_library.preview_geofeature != null)
+        sidebar_library.preview_geofeature.removeFrom(map_library.map);
+
+    var selection_color = sidebar_library.color_list[0].color;
+    for(var i=0; i<sidebar_library.color_list.length; i++)
+        if(sidebar_library.color_list[i].available){
+            selection_color = sidebar_library.color_list[i].color;
+            break;
+        }
+        
+    var geoFeature = L.geoJson(feature, {
+        style: function (feature) {            
+            return {'color': selection_color, opacity: 0.85, weight : 3, fillOpacity: 0};
+        }
+    }).addTo(map_library.map);
+
+    //var bounding_points = geoFeature.getBounds();
+    //L.rectangle(bounding_points, {color: selection_color, weight: 1, fillOpacity: 0.1}).addTo(map_library.map);
+    sidebar_library.preview_geofeature = geoFeature;
+    sidebar_library.preview_feature = feature;
+    var button_str = "<div>";
+    button_str += "<button width='10px' height='10px' style='background-color: "+selection_color+";border: 1px solid black;width: 10px;height: 25px;margin-right: 5px;float: right;' disabled=''></button>"
+    button_str += "<a onclick=\'addToSideBar("+seg_id + ',\"' + layer_name +"\",\"" + selection_color + "\")\'";
+    button_str += "class='btn btn-outline-primary' target='_blank' title='Pin to Sidebar'><i class='fa fa-thumb-tack'></i></a>";
+    button_str += "</div>";
+    sidebar_library.addHTMLToSideBar('preview', button_str);
+
+    var section_preview_div = sidebar_library.appendSectionToPanelIntoSideBar('preview', 'Shape Details', 1000);
+    var year_range = [animation_library.start_year, animation_library.end_year];
+    var aggregate_val = 'average';
+
+    var meta_data_str = "";
+
+    // Filling empty chart option
+    for(var i=0; i < sidebar_library.sidebar_option[layer_name].length; i++)
+    {
+        if(sidebar_library.sidebar_option[layer_name][i].section_id == undefined)
+            sidebar_library.sidebar_option[layer_name][i].section_id = 0;
+        if(sidebar_library.sidebar_option[layer_name][i].layer_name == undefined)
+            sidebar_library.sidebar_option[layer_name][i].layer_name = layer_name;
+    }
+
+    d3.json("Data/MetaData/" + data_library.connecting_id_list[layer_name] + "_" + seg_id + ".json").then(function(d) {
+        var data = d.data;
+
+        sidebar_library.openPanelIntoSideBar('preview');
+
+        meta_data_str += appendHTMLTextForMetadata('Primary ID', seg_id, true);
+        meta_data_str += "<div>Variable Name : " + data_library.variable_name_list[layer_name] + "</div>";
+        meta_data_str += "<div>Layer Name : " + layer_name + "</div>";
+        meta_data_str += appendHTMLTextForMetadata('GRU ID', data.GRU_ID, false);
+        meta_data_str += appendHTMLTextForMetadata('HRU ID', data.HRU_ID, true);
+        meta_data_str += appendHTMLTextForMetadata('Length', data.Length, true);
+        meta_data_str += appendHTMLTextForMetadata('Flow Accumulation', data.flow_acc, true);
+        meta_data_str += appendHTMLTextForMetadata('Lake Name', data.Lake_name, false);
+        meta_data_str += appendHTMLTextForMetadata('Lake Area', data.Lake_area, true);
+        meta_data_str += appendHTMLTextForMetadata('HRU Area', data.HRU_area, true);
+        meta_data_str += appendHTMLTextForMetadata('Center Latitude', data.center_lat, true);
+        meta_data_str += appendHTMLTextForMetadata('Center Longitude', data.center_lon, true);
+
+        $('#' + section_preview_div).html(meta_data_str);
+
+        sidebar_library.sidebar_option[layer_name] = sidebar_library.sidebar_option[layer_name].sort((a, b) => (a.section_id > b.section_id) ? 1 : -1);
+
+        var temp_array_index = [];
+        var index = 0;
+        var div_id = "";
+        for(var i=0; i < sidebar_library.sidebar_option[layer_name].length; i++)
+        {            
+            if(temp_array_index.indexOf(sidebar_library.sidebar_option[layer_name][i].section_id) == -1)
+            {
+                div_id = sidebar_library.appendSectionToPanelIntoSideBar('preview', sidebar_library.sidebar_option[layer_name][i].title, 
+                    sidebar_library.sidebar_option[layer_name][i].section_id);                
+                temp_array_index.push(sidebar_library.sidebar_option[layer_name][i].section_id);
+                index++;
+            }
+
+            var chart_id = div_id + "_" + sidebar_library.sidebar_option[layer_name][i].section_id + i;
+            $('#'+div_id).append("<div id='"+ chart_id +"'></div>");
+
+            if(sidebar_library.sidebar_option[layer_name][i].chart_type == 'Heatmap')
+                drawHistoryHeatMapChart('#' + chart_id, seg_id, sidebar_library.sidebar_option[layer_name][i].layer_name, 
+                    year_range, sidebar_library.sidebar_option[layer_name][i]);
+            else if (sidebar_library.sidebar_option[layer_name][i].chart_type == 'LineChart')
+                drawHistoryLineChartChart('#' + chart_id, seg_id, sidebar_library.sidebar_option[layer_name][i].layer_name, 
+                    year_range, sidebar_library.sidebar_option[layer_name][i]);
+            
+            
+
+        }
+
+    });
+
+}
+
+function addToSideBar(seg_id, layer_name, color){
+    console.log(seg_id + layer_name + color);
+
+    for(var i=0; i<sidebar_library.color_list.length; i++)
+        if(sidebar_library.color_list[i].color == color){
+            sidebar_library.color_list[i].available = false;
+            break;
+        }
+
+    sidebar_library.addPanelIntoSideBar(seg_id, 'Segment ID - ' + seg_id, 'fa-thumb-tack', color);
+    var obj = {'seg_id': seg_id, 'geofeature': sidebar_library.preview_geofeature}
+    sidebar_library.pinned_feature_list.push(obj);
+    sidebar_library.preview_geofeature = null;
+
+    var button_str = "<div>";
+    button_str += "<button width='10px' height='10px' style='background-color: "+color+";border: 1px solid black;width: 10px;height: 25px;margin-right: 5px;float: right;' disabled=''></button>"
+    button_str += "<a onclick=\'removeFromSideBar("+seg_id + ',\"' + layer_name +"\",\"" + color + "\")\'";
+    button_str += "class='btn btn-outline-danger' target='_blank' title='Unpin to Sidebar'><i class='fa fa-ban'></i></a>";
+    button_str += "</div>";
+    sidebar_library.addHTMLToSideBar(seg_id, button_str);
+
+
+    var section_preview_div = sidebar_library.appendSectionToPanelIntoSideBar(seg_id, 'Shape Details', 1000);
+    var year_range = [animation_library.start_year, animation_library.end_year];
+
+    var meta_data_str = "";
+
+    // Filling empty chart option
+    for(var i=0; i < sidebar_library.sidebar_option[layer_name].length; i++)
+    {
+        if(sidebar_library.sidebar_option[layer_name][i].section_id == undefined)
+            sidebar_library.sidebar_option[layer_name][i].section_id = 0;
+        if(sidebar_library.sidebar_option[layer_name][i].layer_name == undefined)
+            sidebar_library.sidebar_option[layer_name][i].layer_name = layer_name;
+    }
+
+    d3.json("Data/MetaData/" + data_library.connecting_id_list[layer_name] + "_" + seg_id + ".json").then(function(d) {
+        var data = d.data;
+
+        sidebar_library.openPanelIntoSideBar(seg_id);
+
+        meta_data_str += appendHTMLTextForMetadata('Primary ID', seg_id, true);
+        meta_data_str += "<div>Variable Name : " + data_library.variable_name_list[layer_name] + "</div>";
+        meta_data_str += "<div>Layer Name : " + layer_name + "</div>";
+        meta_data_str += appendHTMLTextForMetadata('GRU ID', data.GRU_ID, false);
+        meta_data_str += appendHTMLTextForMetadata('HRU ID', data.HRU_ID, true);
+        meta_data_str += appendHTMLTextForMetadata('Length', data.Length, true);
+        meta_data_str += appendHTMLTextForMetadata('Flow Accumulation', data.flow_acc, true);
+        meta_data_str += appendHTMLTextForMetadata('Lake Name', data.Lake_name, false);
+        meta_data_str += appendHTMLTextForMetadata('Lake Area', data.Lake_area, true);
+        meta_data_str += appendHTMLTextForMetadata('HRU Area', data.HRU_area, true);
+        meta_data_str += appendHTMLTextForMetadata('Center Latitude', data.center_lat, true);
+        meta_data_str += appendHTMLTextForMetadata('Center Longitude', data.center_lon, true);
+
+        $('#' + section_preview_div).html(meta_data_str);
+
+        sidebar_library.sidebar_option[layer_name] = sidebar_library.sidebar_option[layer_name].sort((a, b) => (a.section_id > b.section_id) ? 1 : -1);
+
+        var temp_array_index = [];
+        var index = 0;
+        var div_id = "";
+        for(var i=0; i < sidebar_library.sidebar_option[layer_name].length; i++)
+        {            
+            if(temp_array_index.indexOf(sidebar_library.sidebar_option[layer_name][i].section_id) == -1)
+            {
+                div_id = sidebar_library.appendSectionToPanelIntoSideBar(seg_id, sidebar_library.sidebar_option[layer_name][i].title, 
+                    sidebar_library.sidebar_option[layer_name][i].section_id);                
+                temp_array_index.push(sidebar_library.sidebar_option[layer_name][i].section_id);
+                index++;
+            }
+
+            var chart_id = div_id + "_" + sidebar_library.sidebar_option[layer_name][i].section_id + i;
+            $('#'+div_id).append("<div id='"+ chart_id +"'></div>");
+
+            if(sidebar_library.sidebar_option[layer_name][i].chart_type == 'Heatmap')
+                drawHistoryHeatMapChart('#' + chart_id, seg_id, sidebar_library.sidebar_option[layer_name][i].layer_name, 
+                    year_range, sidebar_library.sidebar_option[layer_name][i]);
+            else if (sidebar_library.sidebar_option[layer_name][i].chart_type == 'LineChart')
+                drawHistoryLineChartChart('#' + chart_id, seg_id, sidebar_library.sidebar_option[layer_name][i].layer_name, 
+                    year_range, sidebar_library.sidebar_option[layer_name][i]);
+        }
+
+    });
+
+}
+
+function removeFromSideBar(seg_id, layer_name, color){
+    //alert(seg_id);
+    // Removing selection shape from map
+    for(var i=0; i<sidebar_library.pinned_feature_list.length; i++){
+        if(sidebar_library.pinned_feature_list[i].seg_id == seg_id){
+            sidebar_library.pinned_feature_list[i].geofeature.removeFrom(map_library.map);
+        }
+    }
+    // Making color available
+    for(var i=0; i<sidebar_library.color_list.length; i++)
+        if(sidebar_library.color_list[i].color == color){
+            sidebar_library.color_list[i].available = true;
+            break;
+        }
+
+    sidebar_library.openPanelIntoSideBar('preview');
+
+    // Removing tab from sidebar
+    sidebar_library.removePanelIntoSideBar(seg_id);
+}
+
 function showMetaDataInfo(seg_id, layer_name){
 
-    var sidebar = map_library.sidebar;
+    var sidebar = sidebar_library.sidebar;
     var year_range = [animation_library.start_year, animation_library.end_year];
     var aggregate_val = 'average';
     //if(map_library.button_chart_option[layer_name][index].aggreagation_type != undefined)
@@ -14,8 +218,11 @@ function showMetaDataInfo(seg_id, layer_name){
     d3.json("Data/MetaData/" + data_library.connecting_id_list[layer_name] + "_" + seg_id + ".json").then(function(d) {
         var data = d.data;
 
+        meta_data_str += appendHTMLTextForMetadata('Primary ID', seg_id, true);
         meta_data_str += "<div>Variable Name : " + data_library.variable_name_list[layer_name] + "</div>";
         meta_data_str += "<div>Layer Name : " + layer_name + "</div>";
+        meta_data_str += appendHTMLTextForMetadata('GRU ID', data.GRU_ID, true);
+        meta_data_str += appendHTMLTextForMetadata('HRU ID', data.HRU_ID, true);        
         meta_data_str += appendHTMLTextForMetadata('Length', data.Length, true);
         meta_data_str += appendHTMLTextForMetadata('Flow Accumulation', data.flow_acc, true);
         meta_data_str += appendHTMLTextForMetadata('Lake Name', data.Lake_name, false);
@@ -27,7 +234,7 @@ function showMetaDataInfo(seg_id, layer_name){
         $('#meta_info_div').html(meta_data_str);
     });
 
-    sidebar.open('home');
+    //sidebar.open('home');
 
     var total_tab = sidebar._tabitems.length;
     for(var i = 0; i<(total_tab-1); i++)

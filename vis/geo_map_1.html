@@ -11,6 +11,9 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="Style/geo_map/feature_library/leaflet-sidebar.css" />
     <link rel="stylesheet" href="Style/geo_map/feature_library/leaflet_legend.css" />
+    <link rel="stylesheet" href="Style/geo_map/feature_library/leaflet_comparison-chart.css" />
+    <link rel="stylesheet" href="Style/geo_map/chart/multi-series-line-chart.css" />
+
     <link rel="stylesheet" href="Style/geo_map/chart/box-heatmap.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
    
@@ -30,6 +33,7 @@
     <script src="Scripts/geo_map/feature_library/leaflet-sidebar.js"></script>
     <script src="Scripts/geo_map/feature_library/easyPrint.js"></script>
 
+    <script src="Scripts/geo_map/chart/multi-series-line-chart.js"></script>
     <script src="Scripts/geo_map/chart/box-heatmap.js"></script>
     <script src="Scripts/geo_map/chart/time_series_line_chart.js"></script>
     <script src="Scripts/geo_map/chart/animated-line-chart.js"></script>
@@ -127,19 +131,20 @@
 <body>
     <div id="sidebar" class="leaflet-sidebar collapsed">
 
-        <!-- nav tabs -->
+        <!--
         <div class="leaflet-sidebar-tabs">
-            <!-- top aligned tabs -->
+            
             <ul role="tablist">
                 <li><a href="#home" role="tab"><i class="fa fa-bars active"></i></a></li>
             </ul>
         </div>
 
-        <!-- panel content -->
+        
+        
         <div class="leaflet-sidebar-content">
             <div class="leaflet-sidebar-pane" id="home">
                 <h1 class="leaflet-sidebar-header">
-                    Details
+                    Preview Segment
                     <span class="leaflet-sidebar-close"><i class="fa fa-caret-left" style="padding-top: 12px;"></i></span>
                 </h1>
 
@@ -149,9 +154,9 @@
                 </div>
 
             </div>
-            <!--<div id="historyHeatMap"></div>-->
             <div id="metric-modal"></div>
         </div>
+        -->
     </div>
 
     <div id="mapid">
@@ -265,16 +270,16 @@
     //map_library.button_display_list[layer_name] = ["Show Average", "Show Average"];
     //map_library.button_chart_type[layer_name] = ["Heatmap", "LineChart"];
 
-    //chart_option_heatmap = {'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}; 
-    //chart_option_line = {'aggreagation_type' : 'average'}; 
+    //chart_option_heatmap = {'aggregation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}; 
+    //chart_option_line = {'aggregation_type' : 'average'}; 
     //map_library.button_chart_option[layer_name] = [chart_option_heatmap, chart_option_line];
 
 
-    sidebar_chart_option_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}; 
-    sidebar_chart_option_line_0 = {'chart_title': 'Monthly Average of Scalar Canopy WAT', 'chart_type': 'Heatmap', 'layer_name': layer_name_1, 'title': 'LineChart', 'aggreagation_type' : 'average'};
-    sidebar_chart_option_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
+    sidebar_chart_option_heatmap = {'section_id': 0, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Scalar SWE vs Scalar Canopy WAT', 'aggregation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}; 
+    sidebar_chart_option_line_0 = {'chart_title': 'Monthly Average of Scalar Canopy WAT', 'chart_type': 'Heatmap', 'layer_name': layer_name_1, 'title': 'Scalar SWE vs Scalar Canopy WAT', 'aggregation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013};
+    sidebar_chart_option_line_1 = {'section_id': 1, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'Average of Scalar SWE', 'aggregation_type' : 'average'}; 
 
-    map_library.sidebar_option[layer_name] = [sidebar_chart_option_heatmap, sidebar_chart_option_line_0, sidebar_chart_option_line_1];
+    sidebar_library.sidebar_option[layer_name] = [sidebar_chart_option_heatmap, sidebar_chart_option_line_0, sidebar_chart_option_line_1];
 
     map_library.drawMap(layer_name, 'jeoJSONs/bow_river_catchment.json', 'scalarSWE', 'HRU_ID', 'average');
     
@@ -288,11 +293,11 @@
     legend_library.legend_pos_list[layer_name_1] = "bottomleft";   
     
 
-    sidebar_chart_option_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}; 
-    sidebar_chart_option_line_0 = {'chart_title': 'Monthly Average of Scalar Canopy WAT', 'chart_type': 'Heatmap', 'layer_name': layer_name_1, 'title': 'LineChart', 'aggreagation_type' : 'average'};
-    sidebar_chart_option_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
+    sidebar_chart_option_heatmap = {'section_id': 0, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Scalar SWE vs Scalar Canopy WAT', 'aggregation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}; 
+    sidebar_chart_option_line_0 = {'chart_title': 'Monthly Average of Scalar Canopy WAT', 'chart_type': 'Heatmap', 'layer_name': layer_name_1, 'title': 'Scalar SWE vs Scalar Canopy WAT', 'aggregation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013};
+    sidebar_chart_option_line_1 = {'section_id': 1, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'Average of Scalar SWE', 'aggregation_type' : 'average'}; 
 
-    map_library.sidebar_option[layer_name_1] = [sidebar_chart_option_heatmap, sidebar_chart_option_line_0, sidebar_chart_option_line_1];
+    sidebar_library.sidebar_option[layer_name_1] = [sidebar_chart_option_heatmap, sidebar_chart_option_line_0, sidebar_chart_option_line_1];
 
     map_library.drawMap(layer_name_1, 'jeoJSONs/bow_river_catchment.json', 'scalarCanopyWat', 'HRU_ID', 'average');
 
@@ -356,6 +361,12 @@
                             map_library.button_display_list[charts[index].layer_name].push(charts[index].display_text);
                             map_library.button_chart_type[charts[index].layer_name].push(charts[index].chart_type);
                             map_library.button_chart_option[charts[index].layer_name].push(charts[index].chart_option);
+                        }
+                        if(charts[index].hasOwnProperty('sidebar_info')){
+                            if (sidebar_library.sidebar_option[charts[index].layer_name] == undefined)
+                                sidebar_library.sidebar_option[charts[index].layer_name] = [];
+
+                            sidebar_library.sidebar_option[charts[index].layer_name].push(charts[index].sidebar_option);
                         }
                         if(charts[index].hasOwnProperty('draw') && charts[index].draw == 1){
                             map_library.drawMap(charts[index].layer_name, charts[index].json_filename, charts[index].variable_name, 

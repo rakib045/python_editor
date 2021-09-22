@@ -27,7 +27,7 @@ variable_name = 'scalarSWE'
 # param 1 : chart_name - string - name of the chart
 # param 2 : layer_name - string - name of the layer
 # param 3 : color_list - array of string - list of all colors
-color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#82d183', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
+color_list = ['#ffffe5', '#f7fcb9', '#d9f0a3', '#addd8e', '#93D284', '#78c679', '#41ab5d', '#238443', '#006837', '#004529']
 addColorListToGeoChart(chart_name, layer_name, color_list)
 
 # Define Legend Info for a specific layer of the Geo map with chart name
@@ -52,7 +52,7 @@ addLegendToGeoChart(chart_name, layer_name, legend_info)
 # param 1 : chart_name - string - name of the chart
 # param 2 : layer_name - string - name of the layer
 # param 3 : sidebar_option - object(python Dictionary) - 
-#             'tab_no (optional)' -> Number - The numeric number of the tab in sidebar, we can put multiple chart in the same tab using this. Default is 0.
+#             'section_id (optional)' -> Number - The numeric number of the tab in sidebar, we can put multiple chart in the same tab using this. Default is 0.
 #             'chart_title (optional)' -> String - Title of the chart
 #             'chart_type -> String - The type of chart like heatmap or linechart
 #             'layer_name' -> String - Name of the layer
@@ -61,11 +61,11 @@ addLegendToGeoChart(chart_name, layer_name, legend_info)
 #             'start_month' - string - Name of the month
 #             'start_year' - Number - The start of the year 
 #             'end_year' - Number - The end of the year
-sidebar1_option1_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2009, 'end_year': 2013}; 
-sidebar1_option3_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
+sidebar1_section1_heatmap = {'section_id': 0, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Scalar SWE vs Scalar Canopy WAT', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2008, 'end_year': 2013}; 
+sidebar1_section2_line_1 = {'section_id': 1, 'chart_title': 'Monthly Average of Scalar SWE', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'Average of Scalar SWE', 'aggreagation_type' : 'average'}; 
 
-addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_option1_heatmap)
-addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_option3_line_1)
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_section1_heatmap)
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_section2_line_1)
 
 # Draw the chart 
 # param 1 : chart_name - string - name of the chart

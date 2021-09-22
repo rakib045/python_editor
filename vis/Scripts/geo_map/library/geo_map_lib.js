@@ -21,19 +21,7 @@ var map_library = {
      */
     'map': null,
 
-    /**
-     * @desc This variable holds the leaflet sidebar object
-     * @memberof Map Library
-     * @var {object} sidebar
-     * @defaultvalue null
-     * @example 
-     * map_library.sidebar = L.control.sidebar({ container: 'sidebar' });
-     * or
-     * var sidebarObj = map_library.sidebar;
-     * @author Rakib Hasan
-     * @version 1.0
-     */
-    'sidebar': null,
+    
 
     /**
      * @desc This variable holds the leaflet printer control object
@@ -68,7 +56,7 @@ var map_library = {
     'button_chart_type': {},
     'button_chart_option': {},
 
-    'sidebar_option': {},
+    'comparison_panel' : {},
 
     'default_color_list': [ "#b2df8a", "#a6cee3", "#cab2d6", "#fdbf6f", "#fb9a99", "#33a02c", "#1f78b4", "#6a3d9a", "#ff7f00", "#e31a1c"],
     //'default_color_list': [ '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b', '#02214f', '#000000'],
@@ -110,27 +98,15 @@ var map_library = {
         });
         L.control.layers(map_library.baseLayers).addTo(map_library.map);
         
-        map_library.initializeSideBar();
+        var map_width = document.getElementById('mapid').clientWidth;
+        var comparisonChart_width = 0.6;
+        map_library.initializeComparisonPanel(map_width, comparisonChart_width);
+
+        sidebar_library.initializeSideBar();
         //animation_library.initializeAnimationControl('anim_1', 'Animation Panel', 'bottomright');
         map_library.initializePrinterControl();
         
-    },
-
-    /**
-     * @desc Initialize the leaflet Side Bar.
-     * @memberof Map Library
-     * @function initializeSideBar
-     * @returns {void}
-     * @example 
-     * map_library.initializeSideBar();
-     * @author Rakib Hasan
-     * @version 1.0
-     */
-    'initializeSideBar': function(){
-        map_library.sidebar = L.control.sidebar({ 
-            container: 'sidebar' 
-        }).addTo(map_library.map);
-        //.open('home');
+        
     },
     
     /* Initialize the leaflet Printer Control */
@@ -144,6 +120,38 @@ var map_library = {
       		hideControlContainer: false,
             className: 'a3CssClass'
 		}).addTo(map_library.map);
+    },
+
+    'initializeComparisonPanel': function(map_width, comparisonChart_width){
+
+        map_library.comparison_panel = L.control({position: 'topleft'});
+        map_library.comparison_panel.onAdd = function(d){
+            var div = L.DomUtil.create('div', 'info legend comparison-chart');
+            var div_width = map_width*comparisonChart_width;
+            var left_margin_width = (map_width-div_width)/2;
+            var left_margin_width = 50;
+            //div.setAttribute('width', div_width + 'px');
+            div.setAttribute('style', 'margin-left:'+left_margin_width + 'px; min-width:' + div_width + 'px');
+
+            html_str = "<div class='accordion' id='accordionExample_comparisonChart'>";
+            html_str += "<div class='accordion-item'>";
+            html_str += "<p class='accordion-header' id='headingOne_comparisonChart'>";
+            html_str += "<button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_comparisonChart' aria-expanded='false' aria-controls='collapseOne_comparisonChart'>";
+            html_str += "TIme Series Comparison Chart";
+            html_str += "</button></p>";
+            html_str += "<div id='collapseOne_comparisonChart' class='accordion-collapse collapse' aria-labelledby='headingOne_comparisonChart' data-bs-parent='#accordionExample_comparisonChart'>";
+            html_str += "<div class='accordion-body'>";
+            html_str += "<div id='comparisonChart'></div>";
+            html_str += "</div>";
+            html_str += "</div>";
+            html_str += "</div>";
+            html_str += "</div>";
+            div.innerHTML += html_str;
+            return div;
+        };
+
+        map_library.comparison_panel.addTo(map_library.map); 
+        map_library.drawTimeSeriesComparisonChart();
     },
 
     /* Draw Maps with geojsons and their corresponding variable data */
@@ -281,7 +289,8 @@ var map_library = {
 
                     // Binding click event
                     layer.on('click', function (e) {
-                        showMetaDataInfo( feature.properties.id, layer_name);
+                        //showMetaDataInfo( feature.properties.id, layer_name);
+                        previewMetaDataInfo(feature.properties.id, layer_name, feature);
                     });
                 }
             })
@@ -385,10 +394,11 @@ var map_library = {
         theDate.setDate(theDate.getDate() + day);
 
         $('#infoAnimation').html((day+1) + "/365 day of " + year + " (" + theDate.toDateString() + ")");
+    },
+
+    'drawTimeSeriesComparisonChart': function(){
+        drawMultiSeriesLineChart();
     }
-
-    
-
 };
 
 /**
@@ -652,10 +662,12 @@ var legend_library = {
                 html_str = "<div class='accordion' id='accordionExample_" + control_class_name + "'>";
                 html_str += "<div class='accordion-item'>";
                 html_str += "<p class='accordion-header' id='headingOne_'" + control_class_name + ">";
-                html_str += "<button class='accordion-button' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+control_class_name+"' aria-expanded='true' aria-controls='collapseOne_"+control_class_name+"'>";
+                //html_str += "<button class='accordion-button' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+control_class_name+"' aria-expanded='true' aria-controls='collapseOne_"+control_class_name+"'>";
+                html_str += "<button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+control_class_name+"' aria-expanded='false' aria-controls='collapseOne_"+control_class_name+"'>";                
                 html_str += title;
                 html_str += "</button></p>";
-                html_str += "<div id='collapseOne_"+control_class_name+"' class='accordion-collapse collapse show' aria-labelledby='headingOne_"+control_class_name+"' data-bs-parent='#accordionExample_"+control_class_name+"'>";
+                //html_str += "<div id='collapseOne_"+control_class_name+"' class='accordion-collapse collapse show' aria-labelledby='headingOne_"+control_class_name+"' data-bs-parent='#accordionExample_"+control_class_name+"'>";
+                html_str += "<div id='collapseOne_"+control_class_name+"' class='accordion-collapse collapse' aria-labelledby='headingOne_"+control_class_name+"' data-bs-parent='#accordionExample_"+control_class_name+"'>";                
                 html_str += "<div class='accordion-body'>";
                 
                 for(var i=0; i<color_list.length; i++)
@@ -915,6 +927,131 @@ var data_library = {
             
 
         });
+    }
+
+
+};
+
+var sidebar_library = {
+    /**
+     * @desc This variable holds the leaflet sidebar object
+     * @memberof Map Library
+     * @var {object} sidebar
+     * @defaultvalue null
+     * @example 
+     * map_library.sidebar = L.control.sidebar({ container: 'sidebar' });
+     * or
+     * var sidebarObj = map_library.sidebar;
+     * @author Rakib Hasan
+     * @version 1.0
+     */
+    'sidebar': null,
+    'preview_feature' : null,
+    'preview_geofeature' : null,
+    //'color_list' : [{'color':'red', 'available':true}, {'color':'blue', 'available':true}, {'color':'green', 'available':true}, {'color':'purple', 'available':true},],
+    'color_list' : [
+        {'color':'#e31a1c', 'available':true}, {'color':'#ff7f00', 'available':true}, {'color':'#33a02c', 'available':true}, {'color':'#6a3d9a', 'available':true}, {'color':'#d95f02', 'available':true}, 
+        {'color':'#8dd3c7', 'available':true}, {'color':'#fb8072', 'available':true}, {'color':'#b3de69', 'available':true}, {'color':'#fccde5', 'available':true}, {'color':'#d9d9d9', 'available':true}, 
+        {'color':'#a6cee3', 'available':true}, {'color':'#b2df8a', 'available':true}, {'color':'#fb9a99', 'available':true}, {'color':'#fdbf6f', 'available':true}, {'color':'#cab2d6', 'available':true},
+        {'color':'#ffffb3', 'available':true}, {'color':'#bebada', 'available':true}, {'color':'#80b1d3', 'available':true}, {'color':'#fdb462', 'available':true}, {'color':'#bc80bd', 'available':true}
+    ],
+
+    'pinned_feature_list' : [],
+    'sidebar_option': {},
+
+    /**
+     * @desc Initialize the leaflet Side Bar.
+     * @memberof Map Library
+     * @function initializeSideBar
+     * @returns {void}
+     * @example 
+     * map_library.initializeSideBar();
+     * @author Rakib Hasan
+     * @version 1.0
+     */
+    'initializeSideBar': function(){
+        sidebar_library.sidebar = L.control.sidebar({ 
+            container: 'sidebar' 
+        }).addTo(map_library.map);
+        sidebar_library.addPanelIntoSideBar('preview', 'Preview');
+        //.open('home');
+    },
+
+    'addHTMLToSideBar': function(sidebar_id, html_str){
+        $('#sidebar_div_' + sidebar_id).html(html_str);
+    },
+
+    'addPanelIntoSideBar': function(sidebar_id, title, icon_str='fa-bars', icon_color=''){
+        var str_html = "<div id='no_review_msg' style='vertical-align: middle;text-align: center;background-color: lightgray;line-height: 8;'>No preview to show</div>";
+        var panelContent = {
+            id: 'sidebar_' + sidebar_id,                     // UID, used to access the panel
+            tab: '<i class="fa ' + icon_str + '" style="color:'+icon_color+'"></i>',  // content can be passed as HTML string,
+            pane: '<div style="padding-top:10px" id=\'sidebar_div_' + sidebar_id + '\'>'+str_html+'</div>',        // DOM elements can be passed, too
+            title: title,              // an optional pane header
+            position: 'top'                  // optional vertical alignment, defaults to 'top'
+        };
+        sidebar_library.sidebar.addPanel(panelContent);
+        
+    },
+
+    'openPanelIntoSideBar': function(sidebar_id){
+        sidebar_library.sidebar.open('sidebar_' + sidebar_id);        
+    },
+
+    'removePanelIntoSideBar': function(sidebar_id){
+        sidebar_library.sidebar.removePanel('sidebar_' + sidebar_id);
+    },
+
+    'addSectionToPanelIntoSideBar': function (sidebar_id, section_title, sec_id, collapsed=true){
+        var section_id = 'section_' + sidebar_id + sec_id;
+        html_str = "<div class='accordion' id='accordionExample_"+ section_id +"' style='padding: 5px 0px;'>";
+        html_str += "<div class='accordion-item'>";
+        html_str += "<p class='accordion-header' id='headingOne_"+ section_id +"'>";
+        if(collapsed)
+            html_str += "<button class='accordion-button' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+ section_id +"' aria-expanded='true' aria-controls='collapseOne_comparisonChart'>";
+        else
+            html_str += "<button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+ section_id +"' aria-expanded='false' aria-controls='collapseOne_comparisonChart'>";
+        html_str += section_title;
+        html_str += "</button></p>";
+        if(collapsed)
+            html_str += "<div id='collapseOne_"+ section_id +"' class='accordion-collapse collapse show' aria-labelledby='headingOne_"+ section_id +"' data-bs-parent='#accordionExample_"+section_id+"'>";
+        else
+            html_str += "<div id='collapseOne_"+ section_id +"' class='accordion-collapse collapse' aria-labelledby='headingOne_"+ section_id +"' data-bs-parent='#accordionExample_"+section_id+"'>";
+        html_str += "<div class='accordion-body'>";
+        html_str += "<div id='"+ section_id +"'>Test</div>";
+        html_str += "</div>";
+        html_str += "</div>";
+        html_str += "</div>";
+        html_str += "</div>";
+        $('#no_review_msg').remove();
+        $('#sidebar_div_' + sidebar_id).html(html_str);
+        return section_id;
+    },
+
+    'appendSectionToPanelIntoSideBar': function (sidebar_id, section_title, sec_id, collapsed=true){
+        var section_id = 'section_' + sidebar_id + sec_id;
+        html_str = "<div class='accordion' id='accordionExample_"+ section_id +"' style='padding: 5px 0px;'>";
+        html_str += "<div class='accordion-item'>";
+        html_str += "<p class='accordion-header' id='headingOne_"+ section_id +"'>";
+        if(collapsed)
+            html_str += "<button style='font-weight: bold;' class='accordion-button' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+ section_id +"' aria-expanded='true' aria-controls='collapseOne_comparisonChart'>";
+        else
+            html_str += "<button style='font-weight: bold;' class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne_"+ section_id +"' aria-expanded='false' aria-controls='collapseOne_comparisonChart'>";
+        html_str += section_title;
+        html_str += "</button></p>";
+        if(collapsed)
+            html_str += "<div id='collapseOne_"+ section_id +"' class='accordion-collapse collapse show' aria-labelledby='headingOne_"+ section_id +"' data-bs-parent='#accordionExample_"+section_id+"'>";
+        else
+            html_str += "<div id='collapseOne_"+ section_id +"' class='accordion-collapse collapse' aria-labelledby='headingOne_"+ section_id +"' data-bs-parent='#accordionExample_"+section_id+"'>";
+        html_str += "<div class='accordion-body'>";
+        html_str += "<div id='"+ section_id +"'></div>";
+        html_str += "</div>";
+        html_str += "</div>";
+        html_str += "</div>";
+        html_str += "</div>";
+        $('#no_review_msg').remove();
+        $('#sidebar_div_' + sidebar_id).append(html_str);
+        return section_id;
     }
 
 

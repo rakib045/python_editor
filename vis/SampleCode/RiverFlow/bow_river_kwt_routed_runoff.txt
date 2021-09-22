@@ -51,7 +51,7 @@ addLegendToGeoChart(chart_name, layer_name, legend_info)
 # param 1 : chart_name - string - name of the chart
 # param 2 : layer_name - string - name of the layer
 # param 3 : sidebar_option - object(python Dictionary) - 
-#             'tab_no (optional)' -> Number - The numeric number of the tab in sidebar, we can put multiple chart in the same tab using this. Default is 0.
+#             'section_id (optional)' -> Number - The numeric number of the tab in sidebar, we can put multiple chart in the same tab using this. Default is 0.
 #             'chart_title (optional)' -> String - Title of the chart
 #             'chart_type -> String - The type of chart like heatmap or linechart
 #             'layer_name' -> String - Name of the layer
@@ -61,10 +61,10 @@ addLegendToGeoChart(chart_name, layer_name, legend_info)
 #             'start_year' - Number - The start of the year 
 #             'end_year' - Number - The end of the year
 
-sidebar2_option1_heatmap = {'tab_no': 0, 'chart_title': 'Monthly Average of IRFroutedRunoff', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2009, 'end_year': 2013}; 
-sidebar2_option2_line_1 = {'tab_no': 1, 'chart_title': 'Monthly Average of IRFroutedRunoff', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'LineChart', 'aggreagation_type' : 'average'}; 
-addSidebarOptionToGeoChart(chart_name, layer_name, sidebar2_option1_heatmap)
-addSidebarOptionToGeoChart(chart_name, layer_name, sidebar2_option2_line_1)
+sidebar1_section1_heatmap = {'section_id': 0, 'chart_title': 'Monthly Average of KWTroutedRunoff', 'chart_type': 'Heatmap', 'layer_name': layer_name, 'title': 'Monthly Average of KWTroutedRunoff in Heatmap', 'aggreagation_type' : 'average', 'start_month': 'Nov', 'start_year': 2009, 'end_year': 2013}; 
+sidebar1_section2_line = {'section_id': 1, 'chart_title': 'Monthly Average of KWTroutedRunoff', 'chart_type': 'LineChart', 'layer_name': layer_name, 'title': 'Monthly Average of KWTroutedRunoff in LineChart', 'aggreagation_type' : 'average'}; 
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_section1_heatmap)
+addSidebarOptionToGeoChart(chart_name, layer_name, sidebar1_section2_line)
 
 
 # Draw the chart 

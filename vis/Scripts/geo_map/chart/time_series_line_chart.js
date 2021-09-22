@@ -18,7 +18,7 @@ function drawHistoryLineChartChart(div_name, seg_id, layer_name, year_range, cha
     
     var chart_title = d3.select(div_name).append("h4").text(chart_title).attr('style', 'text-align: center;padding: 10px;');
     var svg = d3.select(div_name).append("svg").attr('width', divWidth).attr('height', divHeight),
-    margin = {top: 20, right: 20, bottom: 110, left: 40},
+    margin = {top: 20, right: 30, bottom: 110, left: 40},
     margin2 = {top: 320, right: 20, bottom: 20, left: 40},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
